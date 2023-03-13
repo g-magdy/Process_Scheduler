@@ -34,6 +34,7 @@ template<class ItemType>
 inline void Node<ItemType>::setNext(Node<ItemType>* ptr)
 {
 	next = ptr;
+	// this is a comment
 }
 
 template<class ItemType>
