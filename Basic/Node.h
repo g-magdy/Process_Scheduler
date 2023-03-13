@@ -46,5 +46,5 @@ inline ItemType Node<ItemType>::getData() const
 template<class ItemType>
 inline Node<ItemType>* Node<ItemType>::getNext() const
 {
-	return nullptr;
+	return next;
 }
