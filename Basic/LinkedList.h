@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 #include "Node.h" // note that when including a file from the same folder (directory)
 				  // I don't need to write "Basic/Node.h" (in fact this produces an error here)
 template <class ItemType>
@@ -13,11 +13,12 @@ public:
 	void insertEnd(const ItemType& entry);
 	int length() const;
 	void clear();
+	void printlist() const;
 	~LinkedList();
 };
 
 template<class ItemType>
-LinkedList<ItemType>::LinkedList() : headPtr(nullptr) : count(0)
+LinkedList<ItemType>::LinkedList() : headPtr(nullptr), count(0)
 {
 }
 
@@ -73,6 +74,18 @@ inline void LinkedList<ItemType>::clear()
 		delete temp;
 		count--;
 	}
+}
+
+template<class ItemType>
+inline void LinkedList<ItemType>::printlist() const
+{
+	Node<ItemType>* trav = headPtr;
+	while (trav != nullptr)
+	{
+		std::cout << trav->getData() << " -> ";
+		trav = trav->getNext();
+	}
+	std::cout << "NULL\n";
 }
 
 template<class ItemType>
