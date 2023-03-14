@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Basic\Node.h" />
     <ClInclude Include="Basic\LinkedList.h" />
+    <ClInclude Include="Basic\Queue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test130323.cpp" />
