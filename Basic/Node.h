@@ -18,9 +18,11 @@ template<class ItemType>
 inline Node<ItemType>::Node() : next(nullptr)
 {
 }
-
+//Abdelrahman Mohamed
+//I added next(nullptr) to the next constructor to avoid some errors
+//due to forgetting setNext (nullptr)
 template<class ItemType>
-inline Node<ItemType>::Node(const ItemType& entry) : data(entry)
+inline Node<ItemType>::Node(const ItemType& entry) : data(entry), next(nullptr)
 {
 }
 
