@@ -21,6 +21,9 @@ public:
     PriorityQueue(const PriorityQueue<ItemType>& original);
     bool isEmpty() const;
     void add(const ItemType& entry);
+    bool remove();
+    ItemType peek() const;
+    ~PriorityQueue();
 };
 
 template<class ItemType>
@@ -86,4 +89,30 @@ inline void PriorityQueue<ItemType>::add(const ItemType& entry)
         newNodePtr->setNext(prevPtr->getNext());
         prevPtr->setNext(newNodePtr);
     }
+}
+
+template<class ItemType>
+inline bool PriorityQueue<ItemType>::remove()
+{
+    if (isEmpty())
+        return false;
+    else
+    {
+        Node<ItemType>* toDeletePtr = head;
+        head = head->getNext();
+        delete toDeletePtr;
+    }
+}
+
+template<class ItemType>
+inline ItemType PriorityQueue<ItemType>::peek() const
+{
+    return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
+}
+
+template<class ItemType>
+inline PriorityQueue<ItemType>::~PriorityQueue()
+{
+    while (!isEmpty())
+        remove();
 }
