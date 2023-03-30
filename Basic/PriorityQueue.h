@@ -1,4 +1,7 @@
 #pragma once
+
+#include <iostream> /// (will be removed) only for using std::cout to print queue 
+
 #include "Node.h"
 #include "PriorityQueueInterface.h"
 template <class ItemType>
@@ -23,6 +26,7 @@ public:
     void add(const ItemType& entry);
     bool remove();
     ItemType peek() const;
+    void show() const; /// Only for testing
     ~PriorityQueue();
 };
 
@@ -101,6 +105,7 @@ inline bool PriorityQueue<ItemType>::remove()
         Node<ItemType>* toDeletePtr = head;
         head = head->getNext();
         delete toDeletePtr;
+        return true;
     }
 }
 
@@ -108,6 +113,18 @@ template<class ItemType>
 inline ItemType PriorityQueue<ItemType>::peek() const
 {
     return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
+}
+
+template<class ItemType>
+inline void PriorityQueue<ItemType>::show() const
+{
+    Node <ItemType>* trav = head;
+    while (trav != nullptr)
+    {
+        std::cout << trav->getData() << " -> ";
+        trav = trav->getNext();
+    }
+    std::cout << "NULL\n";
 }
 
 template<class ItemType>
