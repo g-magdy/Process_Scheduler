@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Basic\Node.h" />
     <ClInclude Include="Basic\LinkedList.h" />
+    <ClInclude Include="Basic\PriorityQueue.h" />
     <ClInclude Include="Basic\PriorityQueueInterface.h" />
     <ClInclude Include="Basic\Queue.h" />
     <ClInclude Include="Basic\stack.h" />
