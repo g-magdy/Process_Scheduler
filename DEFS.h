@@ -16,3 +16,10 @@ enum CPU_TYPE
 	RR_T,
 	NoCPU
 };
+
+template<typename T>
+struct Pair
+{
+	T first;
+	T second;
+};
