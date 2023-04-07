@@ -1,5 +1,4 @@
 #include "Node.h"
-#include <iostream>
 
 template<typename itemType>
 class Queue
@@ -15,6 +14,24 @@ public:
 	}
 	Queue(const Queue& second)
 	{
+		front = back = nullptr; //giving initial values
+
+		// equaling the itemCount
+		itemCount = second.itemCount;
+
+		// making a pointer to copy all the elements of the second Queue
+		Node<itemType>* copyPtr = second.front;
+
+		while (copyPtr)
+		{
+			push(copyPtr->getData());
+			copyPtr = copyPtr->getNext();
+		}
+	}
+	void operator = (const Queue& second)
+	{
+		front = back = nullptr; //giving initial values
+
 		// equaling the itemCount
 		itemCount = second.itemCount;
 
