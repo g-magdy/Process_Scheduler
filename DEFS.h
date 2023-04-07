@@ -8,3 +8,11 @@ enum ProcessState
 	IO,			// in the block(I/O)
 	TERM 		// is in the terminated list
 };
+
+enum CPU_TYPE
+{
+	FCFS_T,
+	SJF_T,
+	RR_T,
+	NoCPU
+};
