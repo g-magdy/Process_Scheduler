@@ -133,8 +133,11 @@
     <ClInclude Include="Basic\PriorityQueueInterface.h" />
     <ClInclude Include="Basic\Queue.h" />
     <ClInclude Include="Basic\stack.h" />
+    <ClInclude Include="Components\Process.h" />
+    <ClInclude Include="DEFS.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Process.cpp" />
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>
