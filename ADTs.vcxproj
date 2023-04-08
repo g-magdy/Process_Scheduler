@@ -135,9 +135,13 @@
     <ClInclude Include="Basic\stack.h" />
     <ClInclude Include="Components\Process.h" />
     <ClInclude Include="DEFS.h" />
+    <ClInclude Include="Components\Processor.h" />
+    <ClInclude Include="FCFSprocessor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\Process.cpp" />
+    <ClCompile Include="Components\Processor.cpp" />
+    <ClCompile Include="FCFSprocessor.cpp" />
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>
