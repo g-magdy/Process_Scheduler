@@ -16,8 +16,6 @@ public:
 	{
 		front = back = nullptr; //giving initial values
 
-		// equaling the itemCount
-		itemCount = second.itemCount;
 
 		// making a pointer to copy all the elements of the second Queue
 		Node<itemType>* copyPtr = second.front;

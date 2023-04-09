@@ -42,7 +42,13 @@
     <ClInclude Include="Components\Processor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FCFSprocessor.h">
+    <ClInclude Include="Components\FCFSprocessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\RRprocessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SJFprocessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,7 +65,13 @@
     <ClCompile Include="Components\Processor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FCFSprocessor.cpp">
+    <ClCompile Include="Components\FCFSprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\RRprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SJFprocessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

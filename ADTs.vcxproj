@@ -133,15 +133,19 @@
     <ClInclude Include="Basic\PriorityQueueInterface.h" />
     <ClInclude Include="Basic\Queue.h" />
     <ClInclude Include="Basic\stack.h" />
+    <ClInclude Include="Components\FCFSprocessor.h" />
     <ClInclude Include="Components\Process.h" />
+    <ClInclude Include="Components\RRprocessor.h" />
+    <ClInclude Include="Components\SJFprocessor.h" />
     <ClInclude Include="DEFS.h" />
     <ClInclude Include="Components\Processor.h" />
-    <ClInclude Include="FCFSprocessor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\FCFSprocessor.cpp" />
     <ClCompile Include="Components\Process.cpp" />
     <ClCompile Include="Components\Processor.cpp" />
-    <ClCompile Include="FCFSprocessor.cpp" />
+    <ClCompile Include="Components\RRprocessor.cpp" />
+    <ClCompile Include="Components\SJFprocessor.cpp" />
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>

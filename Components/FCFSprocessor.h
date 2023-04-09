@@ -1,7 +1,16 @@
 #pragma once
-#include"Components/Processor.h"
-class FCFSprocessor :public Processor
+#include"Processor.h"
+#include"../Basic/Queue.h"
+class FCFSprocessor:public Processor
 {
-
+private:
+	Queue<Process*> RDYlist;
+	
+public:
+	FCFSprocessor(CPU_TYPE type);
+	virtual void scheduleAlgo();				//do the operation of the CPU
+	virtual void pullFromRDY(Process*& p) ;
+	virtual void pushToRDY(Process* & p);
+	virtual void updateCPUstate();
 };
 
