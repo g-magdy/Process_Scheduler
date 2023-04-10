@@ -146,6 +146,7 @@
     <ClCompile Include="Components\Processor.cpp" />
     <ClCompile Include="Components\RRprocessor.cpp" />
     <ClCompile Include="Components\SJFprocessor.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>
