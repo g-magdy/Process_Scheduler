@@ -5,12 +5,11 @@
 #include "Basic/PriorityQueue.h"
 #include "Components/Process.h"
 
+
 using namespace std;
 int main()
 {
-	Process *p = new Process("65", 5, 7);
-
-	cout << *p;
+	
 
 	return 0;
 }
