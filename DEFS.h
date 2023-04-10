@@ -17,10 +17,11 @@ enum CPU_TYPE
 	NoCPU
 };
 
-enum CUP_STATE {
+enum CPU_STATE {
 	Busy,		//MEAN the procssor is excuting a process
 	IDLE		//mean the reay list is empty 
 };
+
 template<typename T>
 struct Pair
 {
