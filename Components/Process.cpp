@@ -74,7 +74,7 @@ int Process::getCT() const
 	return CT;
 }
 
-void Process::updateFCT(int n = 1)
+void Process::updateFCT(int n)
 {
 	FCT += n;
 }
