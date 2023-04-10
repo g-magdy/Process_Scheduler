@@ -35,5 +35,5 @@ enum CPU_STATE
 //int randomPercent() //returns a value from 0 to 100
 //{
 //    srand(time(NULL));
-//    return rand() % 101;
+//    return rand() % 100;
 //}
