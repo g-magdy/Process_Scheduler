@@ -22,6 +22,13 @@ enum CPU_STATE {
 	IDLE		//mean the reay list is empty 
 };
 
+enum RunninMode
+{
+	Interactive,
+	StepByStep,
+	Silent
+};
+
 template<typename T>
 struct Pair
 {
