@@ -56,3 +56,4 @@ public:
 	bool operator <= (const Process& second);	  // compares between two processes in terms of cpu time
 };
 
+std::ostream& operator << (std::ostream& out, const Process& p);

@@ -130,3 +130,9 @@ bool Process::operator<=(const Process& second)
 {
 	return CPUT <= second.CPUT;
 }
+
+std::ostream& operator<<(std::ostream& out, const Process& p)
+{
+	out << p.getID();
+	return out;
+}
