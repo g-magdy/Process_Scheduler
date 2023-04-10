@@ -12,6 +12,7 @@ void FCFSprocessor::scheduleAlgo()
 		ptr->updateFCT();			//if there is a running process update it 
 	else
 	{
+		//check if the queue is not empty 
 		pullFromRDY(ptr);			//get new process from ready list
 
 		setRunnignProcess(ptr);		//set this process as runing process
