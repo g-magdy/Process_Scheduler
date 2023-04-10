@@ -1,10 +1,10 @@
 /*
-#include "ProcessScheduler.h"
+#include "Scheduler.h"
 
 int main()
 {
 
-	ProcessScheduler ProScheduler;
+	Scheduler ProScheduler;
 
 	ProScheduler.startUP();
 
