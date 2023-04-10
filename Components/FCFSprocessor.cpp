@@ -1,6 +1,6 @@
 #include "FCFSprocessor.h"
 
-FCFSprocessor::FCFSprocessor(CPU_TYPE type=FCFS_T):Processor(type)
+FCFSprocessor::FCFSprocessor(CPU_TYPE type):Processor(type)
 {
 }
 
@@ -33,12 +33,12 @@ void FCFSprocessor::scheduleAlgo()
 }
 
 
-void FCFSprocessor::pullFromRDY(Process*& p)
+void FCFSprocessor::pullFromRDY(Process* & p)
 {
 	RDYlist.pop(p);
 }
 
-void FCFSprocessor::pushToRDY(Process* & p)
+void FCFSprocessor::pushToRDY(Process* p)
 {
 	RDYlist.push(p);
 }
