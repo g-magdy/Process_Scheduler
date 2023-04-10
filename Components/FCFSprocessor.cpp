@@ -9,7 +9,7 @@ void FCFSprocessor::scheduleAlgo()
 	Process*ptr=getRunnignProcess();
 
 	if (ptr)						// you should set running process with null after each deletion
-		ptr->updateFCT();			//if there is a running process update it 
+		ptr->updateFinishedCPUT();			//if there is a running process update it 
 	else
 	{
 		//check if the queue is not empty 
@@ -23,7 +23,7 @@ void FCFSprocessor::scheduleAlgo()
 
 		ptr->setProcessState(RUN);	//change the state of the new added process
 
-		ptr->updateFCT();			//increament the CPU time of this process
+		ptr->updateFinishedCPUT();			//increament the CPU time of this process
 
 		ptr->setHandlingCPU(FCFS_T);	
 		//ptr->setRT();

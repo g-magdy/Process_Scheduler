@@ -1,9 +1,9 @@
 #include "Process.h"
 
-Process::Process(std::string id, int inAT, int ct) : AT(inAT), ID(id), CT(ct)
+Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPUT(ct)
 {
-	RT = TT = TRT = WT = -1; // they are not givn real values yet
-	FCT = 0;
+	ResponseT = TerminationT = TurnRoundT = WaitingT = -1; // they are not givn real values yet
+	FinishedCPUT = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
 	myChild = nullptr;
@@ -14,13 +14,13 @@ Process::Process(const Process& origin)
 	ID = origin.ID;
 	currentState = origin.currentState;
 	handlingCPU = origin.handlingCPU;
-	AT = origin.AT;
-	RT = origin.RT;
-	CT = origin.CT;
-	FCT = origin.FCT;
-	TT = origin.TT;
-	TRT = origin.TRT;
-	WT = origin.WT;
+	ArrivalT = origin.ArrivalT;
+	ResponseT = origin.ResponseT;
+	CPUT = origin.CPUT;
+	FinishedCPUT = origin.FinishedCPUT;
+	TerminationT = origin.TerminationT;
+	TurnRoundT = origin.TurnRoundT;
+	WaitingT = origin.WaitingT;
 	IOList = origin.IOList;
 	myChild = nullptr;      //what should I set this to ?
 }
@@ -54,56 +54,56 @@ CPU_TYPE Process::getHandlingCPU() const
 	return handlingCPU;
 }
 
-int Process::getAT() const
+int Process::getArrivalT() const
 {
-	return AT;
+	return ArrivalT;
 }
 
-void Process::setRT(int rt)
+void Process::setResponseT(int rt)
 {
-	RT = rt;
+	ResponseT = rt;
 }
 
-int Process::getRT() const
+int Process::getResponseT() const
 {
-	return RT;
+	return ResponseT;
 }
 
-int Process::getCT() const
+int Process::getCPUT() const
 {
-	return CT;
+	return CPUT;
 }
 
-void Process::updateFCT(int n)
+void Process::updateFinishedCPUT(int n)
 {
-	FCT += n;
+	FinishedCPUT += n;
 }
 
-int Process::getFCT() const
+int Process::getFinishedCPUT() const
 {
-	return FCT;
+	return FinishedCPUT;
 }
 
-void Process::setTT(int tt)
+void Process::setTerminationT(int tt)
 {
-	TT = tt;
-	TRT = TT - AT;
-	WT = TRT - CT;
+	TerminationT = tt;
+	TurnRoundT = TerminationT - ArrivalT;
+	WaitingT = TurnRoundT - CPUT;
 }
 
-int Process::getTT() const
+int Process::getTerminationT() const
 {
-	return TT;
+	return TerminationT;
 }
 
-int Process::getTRT() const
+int Process::getTurnRoundT() const
 {
-	return TRT;
+	return TurnRoundT;
 }
 
-int Process::getWT() const
+int Process::getWaitingT() const
 {
-	return WT;
+	return WaitingT;
 }
 
 Process* Process::getMyChild()
@@ -113,20 +113,20 @@ Process* Process::getMyChild()
 
 bool Process::operator>(const Process& second)
 {
-	return (CT > second.CT);
+	return (CPUT > second.CPUT);
 }
 
 bool Process::operator<(const Process& second)
 {
-	return CT < second.CT;
+	return CPUT < second.CPUT;
 }
 
 bool Process::operator>=(const Process& second)
 {
-	return CT >= second.CT;
+	return CPUT >= second.CPUT;
 }
 
 bool Process::operator<=(const Process& second)
 {
-	return CT <= second.CT;
+	return CPUT <= second.CPUT;
 }
