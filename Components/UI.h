@@ -9,6 +9,6 @@ private:
 public:
 	void print(std::string sr);     // Prints a string given to it with no extra spaces or "endl"
 	RunninMode startUP();			//this will be implemented in phase 2
-	void printConsole();			//this might be int the private if the UI is the one responsble
+	void showStatus();			//this might be int the private if the UI is the one responsble
 									// for running the console
 };

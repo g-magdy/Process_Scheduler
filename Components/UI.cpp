@@ -5,7 +5,7 @@ void UI::print(std::string sr)
 	std::cout << sr;
 }
 
-void UI::printConsole()
+void UI::showStatus()
 {
 	std::cout << "Current Timestep: " << pScheduler->getTimeStep() << std::endl;
 	std::cout << "------------------ RDY processes ------------------" << std::endl;
