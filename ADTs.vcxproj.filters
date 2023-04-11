@@ -51,6 +51,9 @@
     <ClInclude Include="Components\SJFprocessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test130323.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
