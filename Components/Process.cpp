@@ -106,6 +106,11 @@ int Process::getWaitingT() const
 	return WaitingT;
 }
 
+void Process::addIORquest(Pair<int>& ioPair)
+{
+	IOList.push(ioPair);
+}
+
 Process* Process::getMyChild()
 {
 	return myChild;

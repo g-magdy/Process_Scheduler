@@ -48,8 +48,10 @@ public:
 																
 	int getWaitingT() const;									 // watting time getter
 																
+	void addIORquest(Pair<int>&);								 // Adds an IO request pair to the IOList 
+	
 	Process* getMyChild();										 // gets the child of the Process
-																
+
 	bool operator > (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator < (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator >= (const Process& second);					 // compares between two processes in terms of cpu time
