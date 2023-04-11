@@ -5,8 +5,8 @@ enum ProcessState
 	NEW,		// in the new list
 	READY,		// in the ready list of a processor
 	RUN,		// is bein run by a processor
-	Blocked,
-	IO,			// in the block(I/O)
+	Blocked,	// is in the Blocked list waiting its turn for IO
+	IO,			// is being served the IO it requested
 	TERM 		// is in the terminated list
 };
 
