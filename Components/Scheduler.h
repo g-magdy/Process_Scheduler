@@ -5,6 +5,9 @@
 #include "../Components/SJFprocessor.h"
 #include "../Components/RRprocessor.h"
 #include "../Components/UI.h"
+
+class UI;
+
 class Scheduler
 {
 private:

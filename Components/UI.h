@@ -2,6 +2,9 @@
 #include <iostream>
 #include "../DEFS.h"
 #include "Scheduler.h"
+
+class Scheduler;
+
 class UI
 {
 private:
