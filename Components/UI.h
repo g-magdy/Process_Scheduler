@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
 #include "../DEFS.h"
+#include "Scheduler.h"
 class UI
 {
 private:
-	//Scheduler* pScheduler;        // A Pointer to the Scheduler
+	Scheduler* pScheduler;        // A Pointer to the Scheduler
 
 public:
 	void print(std::string sr);     // Prints a string given to it with no extra spaces or "endl"
