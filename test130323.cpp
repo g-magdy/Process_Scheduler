@@ -15,12 +15,7 @@ void List_test(List<string>* listPtr)
 	{
 		listPtr->insertEnd(items[i]);
 	}
-	
-template<typename T>
-void print(T* ob)
-{
-	std::cout << *ob;
-}
+
 
 	cout << "printing then clearing list using remove front while it is not emty ::\n";
 	while (!listPtr->isEmpty())
@@ -39,8 +34,22 @@ void print(T* ob)
 	}
 	cout << "Is empty : " << listPtr->isEmpty() << " (should be 0)\n";
 	cout << "Count : " << listPtr->getCount() << " (should be 6)\n\n";
-	
-using namespace std;
+
+	cout << "clearing list using remove last while it is not emty ::\n";
+	while (!listPtr->isEmpty())
+	{
+		listPtr->removeLast();
+	}
+	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
+	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
+}
+
+template<typename T>
+void print(T* ob)
+{
+	std::cout << *ob;
+}
+
 int main()
 {
 	Process* p = new Process("83", 8, 12);
@@ -53,17 +62,6 @@ int main()
 	myq.push(r);
 	myq.print();
 
-	cout << "clearing list using remove last while it is not emty ::\n";
-	while (!listPtr->isEmpty())
-	{
-		listPtr->removeLast();
-	}
-	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
-	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
-}
-
-int main()
-{
 	List<string>* mylist;
 	mylist = new List<string>();
 	List_test(mylist);
