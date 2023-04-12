@@ -1,6 +1,5 @@
-
+#pragma once
 #include "Node.h"
-
 template<typename itemType>
 class Queue
 {
@@ -13,7 +12,7 @@ public:
 		front = back = nullptr;
 		itemCount = 0;
 	}
-	Queue(const Queue& second)
+	Queue(const Queue<itemType>& second)
 	{
 		front = back = nullptr; //giving initial values
 
@@ -27,7 +26,7 @@ public:
 			copyPtr = copyPtr->getNext();
 		}
 	}
-	void operator = (const Queue& second)
+	void operator = (const Queue<itemType>& second)
 	{
 		front = back = nullptr; //giving initial values
 
@@ -101,7 +100,7 @@ public:
 
 		return true;
 	}
-	bool empty()
+	bool empty() const
 	{
 		return itemCount == 0;
 	}
@@ -113,7 +112,7 @@ public:
 		//what should I return if front was null?
 		return 0;
 	}
-	itemType Back()
+	itemType Back() const
 	{
 		if (back)
 			return back->getData();
@@ -121,11 +120,11 @@ public:
 		//what should I return if back was null?
 		return 0;
 	}
-	int size()
+	int size() const
 	{
 		return itemCount;
 	}
-	void print()
+	void print() const
 	{
 		if (empty())
 			return;

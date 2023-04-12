@@ -21,12 +21,12 @@ CPU_TYPE Processor::getMyType()
 	return CPUtype;
 }
 
-CUP_STATE Processor::getCPYstate()
+CPU_STATE Processor::getCPYstate()
 {
 	return CPUstate;
 }
 
-void Processor::setCPUstate(CUP_STATE state)
+void Processor::setCPUstate(CPU_STATE state)
 {
 	CPUstate = state;
 }
