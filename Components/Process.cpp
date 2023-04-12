@@ -25,9 +25,7 @@ Process::Process(const Process& origin)
 	myChild = nullptr;      //what should I set this to ?
 }
 
-Process::Process()
-{
-}
+
 
 std::string Process::getID() const
 {

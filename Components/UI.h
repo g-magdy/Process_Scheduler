@@ -1,10 +1,14 @@
 #pragma once
 #include <iostream>
 #include "../DEFS.h"
+#include "Scheduler.h"
+
+class Scheduler;
+
 class UI
 {
 private:
-	//Scheduler* pScheduler;        // A Pointer to the Scheduler
+	Scheduler* pScheduler;        // A Pointer to the Scheduler
 
 public:
 	RunninMode startUP();			//this will be implemented in phase 2

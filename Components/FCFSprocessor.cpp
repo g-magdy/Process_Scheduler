@@ -1,7 +1,8 @@
 #include "FCFSprocessor.h"
 
-FCFSprocessor::FCFSprocessor(CPU_TYPE type):Processor(type)
+FCFSprocessor::FCFSprocessor()
 {
+	setCPUtype(FCFS_T);
 }
 
 void FCFSprocessor::scheduleAlgo()
@@ -17,7 +18,7 @@ void FCFSprocessor::scheduleAlgo()
 
 		setRunnignProcess(ptr);		//set this process as runing process
 
-		updateCPUstate();			//undate CPU state 
+		/*updateCPUstate();*/			//undate CPU state 
 
 		updateTotalCpuTime();		// increament total CPU time of this processor by 1
 
@@ -25,7 +26,6 @@ void FCFSprocessor::scheduleAlgo()
 
 		ptr->updateFinishedCPUT();			//increament the CPU time of this process
 
-		ptr->setHandlingCPU(FCFS_T);	
 		//ptr->setRT();
 		
 	}
@@ -41,18 +41,18 @@ void FCFSprocessor::pullFromRDY(Process* & p)
 
 void FCFSprocessor::pushToRDY(Process* p)
 {
-	RDYlist.push(p);
+	RDYlist.push( p);
 }
 
 void FCFSprocessor::updateCPUstate()
 {
 	if (getRunnignProcess())	//if there is a running process 
 		setCPUstate(Busy);
-
-	if (RDYlist.empty())	//if the list is empty
+	bool f=RDYlist.empty();
+	if (f)	//if the list is empty
 	{
 		setCPUstate(IDLE);
 	}
-	
+	return;
 		
 }

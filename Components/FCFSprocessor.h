@@ -7,7 +7,7 @@ private:
 	Queue<Process*> RDYlist;
 	
 public:
-	FCFSprocessor(CPU_TYPE type = FCFS_T);
+	FCFSprocessor();
 	virtual void scheduleAlgo();				//do the operation of the CPU
 	virtual void pullFromRDY(Process* & p) ;
 	virtual void pushToRDY(Process* p);
