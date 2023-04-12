@@ -1,9 +1,8 @@
 #include "Processor.h"
 
-Processor::Processor(CPU_TYPE type)
+Processor::Processor()
 {
 	totalCPUtime = 0;
-	CPUtype = type;
 	runningProcess = nullptr;
 }
 
@@ -12,7 +11,7 @@ Process* Processor::getRunnignProcess()
 	return runningProcess;
 }
 
-void Processor::setRunnignProcess(Process* &runProcess)
+void Processor::setRunnignProcess(Process* runProcess)
 {
 	runningProcess = runProcess;
 }
@@ -32,7 +31,7 @@ void Processor::setCPUstate(CUP_STATE state)
 	CPUstate = state;
 }
 
-void Processor::updateTotalCpuTime(int time=1)
+void Processor::updateTotalCpuTime(int time)
 {
 	totalCPUtime += time;
 }
@@ -41,8 +40,13 @@ int Processor::getTotalCpuTime()
 {
 	return totalCPUtime;
 }
+//
+//void Processor::pushToBLK(Process* p)
+//{
+//	(*BLKptr).push(p);
+//}
 
-void Processor::pushToBLK(Process* p)
+void Processor::setCPUtype(CPU_TYPE type)
 {
-	(*BLKptr).push(p);
+	CPUtype = type;
 }

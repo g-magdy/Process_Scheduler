@@ -1,3 +1,4 @@
+
 #include "Node.h"
 
 template<typename itemType>
