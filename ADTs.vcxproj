@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Basic\Node.h" />
-    <ClInclude Include="Basic\List.h" />
+    <ClInclude Include="Basic\LinkedList.h" />
     <ClInclude Include="Basic\PriorityQueue.h" />
     <ClInclude Include="Basic\PriorityQueueInterface.h" />
     <ClInclude Include="Basic\Queue.h" />
@@ -136,18 +136,17 @@
     <ClInclude Include="Components\FCFSprocessor.h" />
     <ClInclude Include="Components\Process.h" />
     <ClInclude Include="Components\RRprocessor.h" />
-    <ClInclude Include="Components\Scheduler.h" />
     <ClInclude Include="Components\SJFprocessor.h" />
     <ClInclude Include="Components\UI.h" />
     <ClInclude Include="DEFS.h" />
     <ClInclude Include="Components\Processor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Basic\Queue.cpp" />
     <ClCompile Include="Components\FCFSprocessor.cpp" />
     <ClCompile Include="Components\Process.cpp" />
     <ClCompile Include="Components\Processor.cpp" />
     <ClCompile Include="Components\RRprocessor.cpp" />
-    <ClCompile Include="Components\Scheduler.cpp" />
     <ClCompile Include="Components\SJFprocessor.cpp" />
     <ClCompile Include="Components\UI.cpp" />
     <ClCompile Include="main.cpp" />

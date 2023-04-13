@@ -26,6 +26,11 @@ public:
 	void print() const;
 	// [PLEASE CHECK that the list is not empty before calling it]: returns a copy of the first element (data of head)
 	ItemType front() const;
+	// Deallocates the first element from the list if exists
+	bool removeFront();
+	// Deallocates the last element from the list if exists
+	bool removeLast();
+
 
 	~List();
 };
@@ -107,6 +112,53 @@ template<class ItemType>
 inline ItemType List<ItemType>::front() const
 {
 	return head->getData();
+}
+
+template<class ItemType>
+inline bool List<ItemType>::removeFront()
+{
+	if (isEmpty())
+		return false;
+
+	if (head == tail) // a single element exists
+	{
+		delete head;
+		head = tail = nullptr;
+	}
+	else
+	{
+		Node<ItemType>* toDel = head;
+		head = head->getNext();
+		delete toDel;
+	}
+	count--;
+	return true;
+}
+
+template<class ItemType>
+inline bool List<ItemType>::removeLast()
+{
+	if (isEmpty())
+		return false;
+
+	if (head == tail) // only one element
+	{
+		delete head;
+		head = tail = nullptr;
+	}
+	else
+	{
+		Node<ItemType>* trav = head;
+		while (trav->getNext() != tail) // stop when trav points to the one before last
+			trav = trav->getNext();
+		
+		trav->setNext(nullptr); // mark new end
+		Node<ItemType>* toDel = tail;
+		delete toDel;
+		tail = trav; // now tail has moved to the one before last
+	}
+	count--;
+	return true;
 }
 
 template<class ItemType>

@@ -1,5 +1,8 @@
 #pragma once
 #include "Node.h"
+
+class Process;
+
 template<typename itemType>
 class Queue
 {
@@ -124,18 +127,10 @@ public:
 	{
 		return itemCount;
 	}
-	void print() const
-	{
-		if (empty())
-			return;
-
-		Node<itemType>* cur = front;
-		while (cur)
-		{
-			std::cout << "[" << cur->getData() << "]-->";
-			cur = cur->getNext();
-		}
-		std::cout << "NULL";
-	}
+	void print() const;
 };
+
+template<>
+void Queue<Process*>::print() const;
+
 
