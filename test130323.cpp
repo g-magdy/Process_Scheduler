@@ -5,50 +5,50 @@
 #include "Basic/PriorityQueue.h"
 #include "Components/Process.h"
 
-//using namespace std;
-//
-//void List_test(List<string>* listPtr)
-//{
-//	string items[] = { "one", "two", "three", "four", "five", "six" };
-//
-//	for (int i = 0; i < 6; i++)
-//	{
-//		listPtr->push_back(items[i]);
-//	}
-//
-//
-//	cout << "printing then clearing list using remove front while it is not emty ::\n";
-//	while (!listPtr->isEmpty())
-//	{
-//		cout << listPtr->front() << " ";
-//		listPtr->pop_front();
-//	}
-//	cout << "\nIs empty : " << listPtr->isEmpty() << " (should be 1)\n";
-//	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
-//
-//	cout << "New data ..\n";
-//	for (int i = 0; i < 3; i++)
-//	{
-//		listPtr->push_front(items[i]);
-//		listPtr->push_back(items[i]);
-//	}
-//	cout << "Is empty : " << listPtr->isEmpty() << " (should be 0)\n";
-//	cout << "Count : " << listPtr->getCount() << " (should be 6)\n\n";
-//
-//	cout << "clearing list using remove last while it is not emty ::\n";
-//	while (!listPtr->isEmpty())
-//	{
-//		listPtr->pop_back();
-//	}
-//	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
-//	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
-//}
-//
-//template<typename T>
-//void print(T* ob)
-//{
-//	std::cout << *ob;
-//}
+using namespace std;
+
+void List_test(List<string>* listPtr)
+{
+	string items[] = { "one", "two", "three", "four", "five", "six" };
+
+	for (int i = 0; i < 6; i++)
+	{
+		listPtr->push_back(items[i]);
+	}
+
+
+	cout << "printing then clearing list using remove front while it is not emty ::\n";
+	while (!listPtr->isEmpty())
+	{
+		cout << listPtr->front() << " ";
+		listPtr->pop_front();
+	}
+	cout << "\nIs empty : " << listPtr->isEmpty() << " (should be 1)\n";
+	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
+
+	cout << "New data ..\n";
+	for (int i = 0; i < 3; i++)
+	{
+		listPtr->push_front(items[i]);
+		listPtr->push_back(items[i]);
+	}
+	cout << "Is empty : " << listPtr->isEmpty() << " (should be 0)\n";
+	cout << "Count : " << listPtr->getCount() << " (should be 6)\n\n";
+
+	cout << "clearing list using remove last while it is not emty ::\n";
+	while (!listPtr->isEmpty())
+	{
+		listPtr->pop_back();
+	}
+	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
+	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
+}
+
+template<typename T>
+void print(T* ob)
+{
+	std::cout << *ob;
+}
 
 int main()
 {
@@ -61,6 +61,22 @@ int main()
 	myq.push(n);
 	myq.push(r);
 	myq.print();
+	std::cout << "\nTest list : \n";
+	List<Process*>mylist;
+
+	mylist.push_back(p);
+	mylist.push_back(n);
+	mylist.push_back(r);
+	mylist.print();
+
+	List<int> l2;
+	l2.push_back(10);
+	l2.push_back(20);
+	l2.push_back(30);
+	l2.print();
+
+	List<string> * l3 = new List<string>;
+	List_test(l3);
 
 	return 0;
 }
