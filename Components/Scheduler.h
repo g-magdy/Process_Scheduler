@@ -18,19 +18,19 @@ private:
 	int currentTimeStep;
 	UI* pUI;
 public:
-	Scheduler();
-	// startUp();
-	// readInputFile();
-	// createOutputFile();
-	// update();
-	// run();
-	// createProcess();
-	// createCPU();
-	// moveToRDY();
-	// moveToBLK();
-	// moveToTRM();
-	// steal();
-	// createChild();
+	/*Scheduler();
+	startUp();
+	readInputFile(){}
+	createOutputFile()
+	update();
+	run();
+	createProcess();
+	createCPU();
+	moveToRDY();
+	moveToBLK();
+	moveToTRM();
+	steal();
+	createChild();*/
 	
 	int getTimeStep() const;
 	void printCPUs() const;

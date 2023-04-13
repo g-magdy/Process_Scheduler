@@ -1,5 +1,17 @@
 #pragma once
-class SJFprocessor
+#include"Processor.h"
+#include"../Basic/PriorityQueue.h"
+class Processor;
+class SJF:public Processor
 {
+private:
+	PriorityQueue <Process*> RDY;
+public:
+	SJF(Scheduler* pscheduler);
+	virtual void scheduleAlgo(int currentTimeStep);			
+	virtual void pullFromRDY(Process*& p);
+	virtual void pushToRDY(Process* p);
+	virtual void updateCPUstate();
 };
+
 
