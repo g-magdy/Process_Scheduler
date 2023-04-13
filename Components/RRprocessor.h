@@ -1,7 +1,8 @@
 #pragma once
 #include"Processor.h"
 #include"../Basic/Queue.h"
-class Processor;
+
+
 class RRprocessor:public Processor
 {
 private:
@@ -11,6 +12,5 @@ public:
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
 	virtual void pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);
-	virtual void updateCPUstate();
 };
 
