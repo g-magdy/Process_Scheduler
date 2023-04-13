@@ -141,6 +141,21 @@ public:
 		clear();
 	}
 
+	bool search(const ItemType& target) const
+	{
+		if (isEmpty())
+			return false;
+
+		Node<ItemType>* trav = head;
+		while (trav)
+		{
+			if (trav->getData() == target)
+				return true;
+			trav = trav->getNext();
+		}
+		return false;
+	}
+	bool find(std::string ID) const;
 };
 
 template<>
@@ -156,4 +171,10 @@ void List<Process*>::print() const
 			std::cout << ", ";
 	}
 	std::cout << "\n";
+}
+
+template<>
+bool List<Process*>::find(std::string ID) const
+{
+	return false;
 }

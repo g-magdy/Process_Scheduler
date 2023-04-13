@@ -15,33 +15,14 @@ void List_test(List<string>* listPtr)
 	{
 		listPtr->push_back(items[i]);
 	}
-
-
-	cout << "printing then clearing list using remove front while it is not emty ::\n";
-	while (!listPtr->isEmpty())
-	{
-		cout << listPtr->front() << " ";
-		listPtr->pop_front();
-	}
-	cout << "\nIs empty : " << listPtr->isEmpty() << " (should be 1)\n";
-	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
-
-	cout << "New data ..\n";
-	for (int i = 0; i < 3; i++)
-	{
-		listPtr->push_front(items[i]);
-		listPtr->push_back(items[i]);
-	}
-	cout << "Is empty : " << listPtr->isEmpty() << " (should be 0)\n";
-	cout << "Count : " << listPtr->getCount() << " (should be 6)\n\n";
-
-	cout << "clearing list using remove last while it is not emty ::\n";
-	while (!listPtr->isEmpty())
-	{
-		listPtr->pop_back();
-	}
-	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
-	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
+	cout << "Found one ? (should be 1)" << listPtr->find("one") << endl;
+	cout << "Found three ? (should be 1)" << listPtr->find("three") << endl;
+	cout << "Found six ? (should be 1)" << listPtr->find("six") << endl;
+	listPtr->pop_back();
+	listPtr->pop_front();
+	cout << " after removing front and back :: \n";
+	cout << "Found one ? (should be 0)" << listPtr->find("one") << endl;
+	cout << "Found six ? (should be 0)" << listPtr->find("six") << endl;
 }
 
 template<typename T>
