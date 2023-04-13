@@ -1,10 +1,12 @@
 #include "Processor.h"
 
-Processor::Processor()
+Processor::Processor(Scheduler* pscheduler)
 {
 	totalCPUtime = 0;
 	runningProcess = nullptr;
+	pScheduler = pscheduler;
 }
+
 
 Process* Processor::getRunnignProcess()
 {
@@ -21,7 +23,7 @@ CPU_TYPE Processor::getMyType()
 	return CPUtype;
 }
 
-CPU_STATE Processor::getCPYstate()
+CPU_STATE Processor::getCPUstate()
 {
 	return CPUstate;
 }
@@ -34,6 +36,16 @@ void Processor::setCPUstate(CPU_STATE state)
 void Processor::updateTotalCpuTime(int time)
 {
 	totalCPUtime += time;
+}
+
+void Processor::updateCPUstate()
+{
+	if (getRunnignProcess())	//if there is a running process 
+		setCPUstate(Busy);
+	else
+	{
+		setCPUstate(IDLE);		//where is it going to be idle
+	}
 }
 
 int Processor::getTotalCpuTime()
