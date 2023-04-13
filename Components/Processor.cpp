@@ -38,6 +38,16 @@ void Processor::updateTotalCpuTime(int time)
 	totalCPUtime += time;
 }
 
+void Processor::updateCPUstate()
+{
+	if (getRunnignProcess())	//if there is a running process 
+		setCPUstate(Busy);
+	else
+	{
+		setCPUstate(IDLE);		//where is it going to be idle
+	}
+}
+
 int Processor::getTotalCpuTime()
 {
 	return totalCPUtime;
