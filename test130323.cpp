@@ -13,7 +13,7 @@
 //
 //	for (int i = 0; i < 6; i++)
 //	{
-//		listPtr->insertEnd(items[i]);
+//		listPtr->push_back(items[i]);
 //	}
 //
 //
@@ -21,7 +21,7 @@
 //	while (!listPtr->isEmpty())
 //	{
 //		cout << listPtr->front() << " ";
-//		listPtr->removeFront();
+//		listPtr->pop_front();
 //	}
 //	cout << "\nIs empty : " << listPtr->isEmpty() << " (should be 1)\n";
 //	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";
@@ -29,8 +29,8 @@
 //	cout << "New data ..\n";
 //	for (int i = 0; i < 3; i++)
 //	{
-//		listPtr->insertBegin(items[i]);
-//		listPtr->insertEnd(items[i]);
+//		listPtr->push_front(items[i]);
+//		listPtr->push_back(items[i]);
 //	}
 //	cout << "Is empty : " << listPtr->isEmpty() << " (should be 0)\n";
 //	cout << "Count : " << listPtr->getCount() << " (should be 6)\n\n";
@@ -38,7 +38,7 @@
 //	cout << "clearing list using remove last while it is not emty ::\n";
 //	while (!listPtr->isEmpty())
 //	{
-//		listPtr->removeLast();
+//		listPtr->pop_back();
 //	}
 //	cout << "Is empty : " << listPtr->isEmpty() << " (should be 1)\n";
 //	cout << "Count : " << listPtr->getCount() << " (should be 0)\n\n";

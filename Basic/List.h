@@ -10,159 +10,135 @@ class List
 	Node<ItemType>* tail;
 	int count;
 public:
-	// default constructor
-	List(); // we will not use a copy constructor (No Objects are copied)
+	// default constructor : we will not use a copy constructor (No Objects are copied)
+	List() : head(nullptr), tail(nullptr), count(0)
+	{}
+
 	// inserts new entry to front of the list in O(1)
-	void insertBegin(const ItemType& entry);
+	void push_front(const ItemType& entry)
+	{
+		Node<ItemType>* novel = new Node<ItemType>(entry); // novel means new (newly created node)
+		if (head == nullptr) // the list is empty
+		{
+			head = tail = novel;
+		}
+		else
+		{
+			novel->setNext(head);
+			head = novel;
+		}
+		count++;
+	}
+
 	// inserts new entry to end of the list in O(1)
-	void insertEnd(const ItemType& entry);
+	void push_back(const ItemType& entry)
+	{
+		Node<ItemType>* novel = new Node<ItemType>(entry);
+		if (head == nullptr)
+		{
+			head = tail = novel;
+		}
+		else
+		{
+			tail->setNext(novel);
+			tail = novel;
+		}
+		count++;
+	}
+
 	// returns num of elements 
-	int getCount() const;
-	
-	bool isEmpty() const;
+	int getCount() const
+	{
+		return count;
+	}
 
-	void clear();
+	bool isEmpty() const
+	{
+		return (count == 0);
+	}
+
+	void clear()
+	{
+		if (head == nullptr)
+			return;
+
+		Node <ItemType>* temp; // to destruct node
+		while (head != nullptr)
+		{
+			temp = head;
+			head = head->getNext();
+			delete temp;
+			count--;
+		}
+	}
+
 	// prints elements from head to tail separated with spaces and moves to new line at end
-	void print() const;
+	void print() const
+	{
+		for (Node<ItemType>* trav = head; trav != nullptr; trav = trav->getNext())
+		{
+			std::cout << trav->getData();
+			if (trav->getNext())
+				std::cout << ", ";
+		}
+		std::cout << "\n";
+	}
+
 	// [PLEASE CHECK that the list is not empty before calling it]: returns a copy of the first element (data of head)
-	ItemType front() const;
+	ItemType front() const
+	{
+		return head->getData();
+	}
 	// Deallocates the first element from the list if exists
-	bool removeFront();
+	bool pop_front()
+	{
+		if (isEmpty())
+			return false;
+
+		if (head == tail) // a single element exists
+		{
+			delete head;
+			head = tail = nullptr;
+		}
+		else
+		{
+			Node<ItemType>* toDel = head;
+			head = head->getNext();
+			delete toDel;
+		}
+		count--;
+		return true;
+	}
 	// Deallocates the last element from the list if exists
-	bool removeLast();
+	bool pop_back()
+	{
+		if (isEmpty())
+			return false;
 
+		if (head == tail) // only one element
+		{
+			delete head;
+			head = tail = nullptr;
+		}
+		else
+		{
+			Node<ItemType>* trav = head;
+			while (trav->getNext() != tail) // stop when trav points to the one before last
+				trav = trav->getNext();
 
-	~List();
+			trav->setNext(nullptr); // mark new end
+			Node<ItemType>* toDel = tail;
+			delete toDel;
+			tail = trav; // now tail has moved to the one before last
+		}
+		count--;
+		return true;
+	}
+
+	~List()
+	{
+		clear();
+	}
+
 };
 
-template<class ItemType>
-List<ItemType>::List() : head(nullptr), tail(nullptr), count(0)
-{
-}
-
-template<class ItemType>
-void List<ItemType>::insertBegin(const ItemType& entry)
-{
-	Node<ItemType> * novel = new Node<ItemType>(entry); // novel means new (newly created node)
-	if (head == nullptr) // the list is empty
-	{
-		head = tail = novel;
-	}
-	else
-	{
-		novel->setNext(head);
-		head = novel;
-	}
-	count++;
-}
-
-template<class ItemType>
-void List<ItemType>::insertEnd(const ItemType& entry)
-{
-	Node<ItemType>* novel = new Node<ItemType>(entry);
-	if (head == nullptr)
-	{
-		head = tail = novel;
-	}
-	else
-	{
-		tail->setNext(novel);
-		tail = novel;
-	}
-	count++;
-}
-
-template<class ItemType>
-inline int List<ItemType>::getCount() const
-{
-	return count;
-}
-
-template<class ItemType>
-inline bool List<ItemType>::isEmpty() const
-{
-	return (count == 0);
-}
-
-template<class ItemType>
-inline void List<ItemType>::clear()
-{
-	if (head == nullptr)
-		return;
-
-	Node <ItemType>* temp; // to destruct node
-	while (head != nullptr)
-	{
-		temp = head;
-		head = head->getNext();
-		delete temp;
-		count--;
-	}
-}
-
-template<class ItemType>
-inline void List<ItemType>::print() const
-{
-	for (Node<ItemType>* trav = head; trav != nullptr; trav = trav->getNext())
-		std::cout << trav->getData() << " ";
-	std::cout << "\n";
-}
-
-template<class ItemType>
-inline ItemType List<ItemType>::front() const
-{
-	return head->getData();
-}
-
-template<class ItemType>
-inline bool List<ItemType>::removeFront()
-{
-	if (isEmpty())
-		return false;
-
-	if (head == tail) // a single element exists
-	{
-		delete head;
-		head = tail = nullptr;
-	}
-	else
-	{
-		Node<ItemType>* toDel = head;
-		head = head->getNext();
-		delete toDel;
-	}
-	count--;
-	return true;
-}
-
-template<class ItemType>
-inline bool List<ItemType>::removeLast()
-{
-	if (isEmpty())
-		return false;
-
-	if (head == tail) // only one element
-	{
-		delete head;
-		head = tail = nullptr;
-	}
-	else
-	{
-		Node<ItemType>* trav = head;
-		while (trav->getNext() != tail) // stop when trav points to the one before last
-			trav = trav->getNext();
-		
-		trav->setNext(nullptr); // mark new end
-		Node<ItemType>* toDel = tail;
-		delete toDel;
-		tail = trav; // now tail has moved to the one before last
-	}
-	count--;
-	return true;
-}
-
-template<class ItemType>
-inline List<ItemType>::~List()
-{
-	clear();
-}
