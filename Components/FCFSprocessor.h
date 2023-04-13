@@ -12,6 +12,5 @@ public:
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
 	virtual void pullFromRDY(Process* & p) ;
 	virtual void pushToRDY(Process* p);
-	virtual void updateCPUstate();
 };
 

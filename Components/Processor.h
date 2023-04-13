@@ -25,7 +25,7 @@ public:
 	CPU_STATE getCPUstate();
 	void setCPUstate(CPU_STATE state);	//still not sure about its implementation
 	void updateTotalCpuTime(int time=1);
-	virtual void updateCPUstate()=0;
+	virtual void updateCPUstate();
 	int getTotalCpuTime();
 	void setCPUtype(CPU_TYPE type);
 };

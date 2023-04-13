@@ -17,14 +17,18 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 
 			setRunnignProcess(ptr);						//set this process as runing process
 
-			updateTotalCpuTime(ptr->getCPUT());			// increament total CPU time of this processor by the cpu time of this process
-
 			ptr->setProcessState(RUN);					//change the state of the new added process
 
 			ptr->setResponseT(currentTimeStep);
 		}
 	}
-	ptr->updateFinishedCPUT();						//increament the CPU time of this process
+	if (ptr)
+	{
+		updateTotalCpuTime();							// increament total CPU time of this processor by the cpu time of this process
+		ptr->updateFinishedCPUT();						//increament the CPU time of this process}
+	}
+	else
+		return;							
 	double randNum = rand() % 100;
 	
 	if(randNum>=1&&randNum<=15)
@@ -59,12 +63,3 @@ void FCFSprocessor::pushToRDY(Process* p)
 	//RDY.push(p);
 }
 
-void FCFSprocessor::updateCPUstate()
-{
-	if (getRunnignProcess())	//if there is a running process 
-		setCPUstate(Busy);
-	else
-	{
-		setCPUstate(IDLE);		//where is it going to be idle
-	}		
-}
