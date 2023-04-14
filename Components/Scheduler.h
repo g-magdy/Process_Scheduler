@@ -18,8 +18,8 @@ private:
 	int currentTimeStep;
 	UI* pUI;
 public:
-	/*Scheduler();
-	startUp();
+	Scheduler();
+	/*startUp();
 	readInputFile(){}
 	createOutputFile()
 	update();
@@ -31,7 +31,7 @@ public:
 	moveToTRM();
 	steal();
 	createChild();*/
-	
+	int random(int upperbound = 100) const; //returns a value from 0 to 100
 	int getTimeStep() const;
 	void printCPUs() const;
 	void printBLK() const;

@@ -1,8 +1,14 @@
 #include "Scheduler.h"
 
-//Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr)
-//{
-//}
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr)
+{
+}
+
+int Scheduler::random(int upperbound) const
+{
+	std::srand(time(NULL));
+	return std::rand() % upperbound;
+}
 
 int Scheduler::getTimeStep() const
 {

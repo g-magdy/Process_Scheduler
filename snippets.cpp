@@ -31,13 +31,6 @@ enum CPU_STATE
     BUSY
 };
 
-//#include <ctime>
-//int randomPercent() //returns a value from 0 to 100
-//{
-//    srand(time(NULL));
-//    return rand() % 100;
-//}
-
 /* // old list test
 	string items[] = { "one", "two", "three", "four", "five", "six" };
 
