@@ -1,8 +1,8 @@
 #include "Scheduler.h"
 
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr)
-{
-}
+//Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr)
+//{
+//}
 
 int Scheduler::getTimeStep() const
 {
