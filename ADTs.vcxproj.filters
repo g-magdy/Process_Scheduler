@@ -18,9 +18,6 @@
     <ClInclude Include="Basic\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Basic\LinkedList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Basic\Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,6 +51,12 @@
     <ClInclude Include="Components\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Basic\List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Scheduler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test130323.cpp">
@@ -84,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Basic\Queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Scheduler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic\List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

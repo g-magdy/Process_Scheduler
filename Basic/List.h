@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
-#include "Node.h" // note that when including a file from the same folder (directory)
-// I don't need to write "Basic/Node.h" (in fact this produces an error here)
+#include "Node.h" // note that when including a file from the same folder (directory) I don't need to write "Basic/Node.h" (in fact this produces an error here)
+class Process;
 #include "../Components/Process.h"
 
 template <class ItemType>
@@ -159,22 +159,6 @@ public:
 };
 
 template<>
-void List<Process*>::print() const
-{
-	if (isEmpty())
-		return;
-
-	for (Node<Process*>* trav = head; trav; trav = trav->getNext())
-	{
-		std::cout << *(trav->getData());
-		if (trav->getNext())
-			std::cout << ", ";
-	}
-	std::cout << "\n";
-}
-
+void List<Process*>::print() const;
 template<>
-bool List<Process*>::find(std::string ID) const
-{
-	return false;
-}
+bool List<Process*>::find(std::string ID) const;
