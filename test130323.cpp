@@ -7,28 +7,28 @@
 
 using namespace std;
 
-void List_test(List<string>* listPtr)
+void List_test(List<char>* listPtr)
 {
-	string items[] = { "one", "two", "three", "four", "five", "six" };
+	char items[] = { 'a', 'b', 'c', 'd', 'e', 'f'};
 
 	for (int i = 0; i < 6; i++)
 	{
 		listPtr->push_back(items[i]);
 	}
-	cout << "Found one ? (should be 1)" << listPtr->find("one") << endl;
-	cout << "Found three ? (should be 1)" << listPtr->find("three") << endl;
-	cout << "Found six ? (should be 1)" << listPtr->find("six") << endl;
+	cout << "Found a ? (should be 1)" << listPtr->find('a') << endl;
+	cout << "Found c ? (should be 1)" << listPtr->find('c') << endl;
+	cout << "Found f ? (should be 1)" << listPtr->find('f') << endl;
 	listPtr->pop_back();
 	listPtr->pop_front();
 	cout << " after removing front and back :: \n";
-	cout << "Found one ? (should be 0)" << listPtr->find("one") << endl;
-	cout << "Found six ? (should be 0)" << listPtr->find("six") << endl;
+	cout << "Found one ? (should be 0)" << listPtr->find('a') << endl;
+	cout << "Found six ? (should be 0)" << listPtr->find('f') << endl;
 }
 
 template<typename T>
 void print(T* ob)
 {
-	std::cout << *ob;
+	cout << *ob;
 }
 
 int main()
@@ -36,28 +36,28 @@ int main()
 	Process* p = new Process("83", 8, 12);
 	Process* n = new Process("34", 8, 12);
 	Process* r = new Process("21", 8, 12);
-
-	Queue<Process*> myq;
-	myq.push(p);
-	myq.push(n);
-	myq.push(r);
-	myq.print();
-	std::cout << "\nTest list : \n";
+	Process* s = new Process("93", 8, 12);
+	Process* m = new Process("143", 8, 12);
 	List<Process*>mylist;
 
-	mylist.push_back(p);
-	mylist.push_back(n);
+	mylist.push_front(n);
+	mylist.push_front(p);
 	mylist.push_back(r);
-	mylist.print();
-
-	List<int> l2;
-	l2.push_back(10);
-	l2.push_back(20);
-	l2.push_back(30);
-	l2.print();
-
-	List<string> * l3 = new List<string>;
-	List_test(l3);
+	mylist.push_back(s);
+	mylist.push_back(m);
+	mylist.print(); // 83,34, 21, 93, 143
+	cout << endl;
+	cout << boolalpha << mylist.find("24") << endl; //false
+	cout << boolalpha << mylist.find("93") << endl; //true
+	mylist.pop_back();
+	mylist.pop_front();
+	mylist.print(); //34, 21, 93
+	Process* temp;
+	mylist.pop_front(temp);
+	cout << endl;
+	cout << temp->getID() << endl; // 34
+	cout << mylist.getCount() << endl; //2
+	mylist.print(); //21, 93
 
 	return 0;
 }

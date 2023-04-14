@@ -15,5 +15,4 @@ void Queue<Process*>::print() const
 		cout << *(cur->getData()) << ", ";
 		cur = cur->getNext();
 	}
-	cout << "NULL";
 }
