@@ -16,7 +16,7 @@ private:
 	int TerminationT;											 // termination time
 	int TurnRoundT;												 // turn around time
 	int WaitingT;												 // waiting time
-	Queue<Pair<int>> IOList;									 // a queue to hold the IO requests of a process
+	Queue<Pair<int,int>> IOList;									 // a queue to hold the IO requests of a process
 	Process* myChild;											 // this may change to a list or be removed in the future *************
 																
 public:															
@@ -47,7 +47,7 @@ public:
 																
 	int getWaitingT() const;									 // watting time getter
 																
-	void addIORquest(Pair<int>&);								 // Adds an IO request pair to the IOList 
+	void addIORquest(Pair<int,int>&);								 // Adds an IO request pair to the IOList 
 	
 	Process* getMyChild();										 // gets the child of the Process
 

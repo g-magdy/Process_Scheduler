@@ -104,7 +104,7 @@ int Process::getWaitingT() const
 	return WaitingT;
 }
 
-void Process::addIORquest(Pair<int>& ioPair)
+void Process::addIORquest(Pair<int,int>& ioPair)
 {
 	IOList.push(ioPair);
 }

@@ -1,11 +1,12 @@
 #pragma once
+#include <ctime>
 
 enum ProcessState
 {
 	NEW,		// in the new list
 	READY,		// in the ready list of a processor
 	RUN,		// is bein run by a processor
-	Blocked,	// is in the Blocked list waiting its turn for IO
+	BLOCKED,	// is in the Blocked list waiting its turn for IO
 	IO,			// is being served the IO it requested
 	TERM 		// is in the terminated list
 };
@@ -30,9 +31,9 @@ enum RunninMode
 	Silent
 };
 
-template<typename T>
+template<typename T, typename U>
 struct Pair
 {
 	T first;
-	T second;
+	U second;
 };
