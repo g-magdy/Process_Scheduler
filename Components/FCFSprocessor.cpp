@@ -1,8 +1,8 @@
 #include "FCFSprocessor.h"
+#include "Scheduler.h"
 
-FCFSprocessor::FCFSprocessor(Scheduler* pscheduler):Processor(pscheduler)
+FCFSprocessor::FCFSprocessor(Scheduler* pscheduler):Processor(pscheduler, FCFS_T)
 {
-	setCPUtype(FCFS_T);
 }
 
 void FCFSprocessor::scheduleAlgo(int currentTimeStep)
@@ -20,6 +20,8 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			ptr->setProcessState(RUN);					//change the state of the new added process
 
 			ptr->setResponseT(currentTimeStep);
+
+			setCPUstate(Busy);
 		}
 	}
 	if (ptr)
@@ -28,8 +30,9 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		ptr->updateFinishedCPUT();						//increament the CPU time of this process}
 	}
 	else
-		return;							
-	double randNum = rand() % 100;
+		return;		
+
+	double randNum = pScheduler->random();
 	
 	if(randNum>=1&&randNum<=15)
 		//pScheduler->moveToBLK;					//move to BLK
@@ -41,7 +44,7 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		//pScheduler->movefromBLKtoRDY;					//move from IO queue to ready
 	
 	
-	int length=floor(rand()*RDY.getCount());		//randomly take anu process and terminate it
+	int length= pScheduler->random(RDY.getCount());		//randomly take anu process and terminate it
 	//RDY.getElement(lenght)							//this fuction should return this process and delete it from the list and take the pointer by &
 	updateCPUstate();								//update CPU state 												//need to modifiy
 
@@ -49,17 +52,14 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 
 
 void FCFSprocessor::pullFromRDY(Process* & p)
-
 {
-	//RDY.pop(p);								
-
-
+	RDY.pop_front(p);								
 }
 
 void FCFSprocessor::pushToRDY(Process* p)
 {
 	p->setProcessState(READY);
 	p->setHandlingCPU(FCFS_T);
-	//RDY.push(p);
+	RDY.push_back(p);
 }
 
