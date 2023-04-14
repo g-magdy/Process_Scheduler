@@ -2,13 +2,13 @@
 #include"../Components/Scheduler.h"
 
 
-Processor::Processor(Scheduler* pscheduler)
+Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)
+	: CPUtype(type), pScheduler(pscheduler)
 {
 	totalCPUtime = 0;
 	runningProcess = nullptr;
-	pScheduler = pscheduler;
+	CPUstate = IDLE;
 }
-
 
 Process* Processor::getRunnignProcess()
 {
@@ -59,8 +59,3 @@ int Processor::getTotalCpuTime()
 //{
 //	(*BLKptr).push(p);
 //}
-
-void Processor::setCPUtype(CPU_TYPE type)
-{
-	CPUtype = type;
-}
