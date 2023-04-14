@@ -1,8 +1,7 @@
 #include "RRprocessor.h"
 
-RRprocessor::RRprocessor(Scheduler* pscheduler) :Processor(pscheduler)
+RRprocessor::RRprocessor(Scheduler* pscheduler) :Processor(pscheduler, RR_T)
 {
-	setCPUtype(RR_T);
 }
 
 void RRprocessor::scheduleAlgo(int currentTimeStep)

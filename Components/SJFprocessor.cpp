@@ -1,8 +1,7 @@
 #include "SJFprocessor.h"
 
-SJF::SJF(Scheduler* pscheduler):Processor(pscheduler)
+SJF::SJF(Scheduler* pscheduler):Processor(pscheduler, SJF_T)
 {
-	setCPUtype(SJF_T);
 }
 
 void SJF::scheduleAlgo(int currentTimeStep)
