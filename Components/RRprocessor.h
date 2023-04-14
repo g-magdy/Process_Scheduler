@@ -2,7 +2,6 @@
 #include"Processor.h"
 #include"../Basic/Queue.h"
 
-
 class RRprocessor:public Processor
 {
 private:

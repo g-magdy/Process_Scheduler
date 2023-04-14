@@ -2,7 +2,7 @@
 #include"Processor.h"
 #include"../Basic/Queue.h"
 #include"../Basic/List.h"
-class Processor;
+
 class FCFSprocessor:public Processor
 {
 private:

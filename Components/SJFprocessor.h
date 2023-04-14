@@ -1,7 +1,7 @@
 #pragma once
 #include"Processor.h"
 #include"../Basic/PriorityQueue.h"
-class Processor;
+
 class SJF:public Processor{
 private:
 	PriorityQueue <Process*> RDY;

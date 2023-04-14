@@ -1,7 +1,7 @@
 #pragma once
 #include"Process.h"
 #include"../DEFS.h"
-#include"../Components/Scheduler.h"
+class Scheduler;
 
 class Processor
 {

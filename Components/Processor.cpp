@@ -1,4 +1,6 @@
 #include "Processor.h"
+#include"../Components/Scheduler.h"
+
 
 Processor::Processor(Scheduler* pscheduler)
 {
