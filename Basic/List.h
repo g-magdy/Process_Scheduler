@@ -35,6 +35,9 @@ public:
 	bool find(const ItemType& key) const;
 	bool find(std::string ID) const;
 
+	bool removeByIndex(int index);
+	Process* removeByID(std::string ID);
+
 	~List() { clear(); }
 };
 
@@ -217,7 +220,38 @@ inline bool List<ItemType>::find(const ItemType& key) const
 	return false;
 }
 
+template<class ItemType>
+bool List<ItemType>::removeByIndex(int index)
+{
+	if (index <= 0 || index > count || head == nullptr)
+		return false;
+
+	if (index == 1)
+	{
+		pop_front();
+	}
+	else if (index == getCount())
+	{
+		pop_back();
+	}
+	else
+	{
+		Node <ItemType>* prev = head;
+		for (int i = 1; i < index-1; i++)
+			prev= prev->getNext();
+		Node<ItemType>* toDelPtr = prev->getNext();
+		prev->setNext(toDelPtr->getNext());
+		delete toDelPtr;
+		count--;
+	}
+	return true;
+}
+
+
 template<>
 void List<Process*>::print() const;
 template<>
 bool List<Process*>::find(std::string ID) const;
+
+template<>
+Process* List<Process*>::removeByID(std::string ID);

@@ -25,6 +25,52 @@ void List_test(List<char>* listPtr)
 	cout << "Found six ? (should be 0)" << listPtr->find('f') << endl;
 }
 
+void removeTest1(List<string>* listPtr)
+{
+	cout << "\n//////////////////\n";
+	cout << "Normal Items : ";
+	listPtr->push_back("Tom");
+	listPtr->push_back("Jerry");
+	listPtr->push_back("Donald");
+	listPtr->push_back("Duck");
+	cout <<  "\n" << listPtr->getCount() << endl;
+	listPtr->print();
+	listPtr->removeByIndex(2); /// removed "Jerry"
+	listPtr->removeByIndex(0);
+	listPtr->removeByIndex(10);
+	listPtr->removeByIndex(3); /// removed "Duck"
+	listPtr->removeByIndex(2); /// removed "Donald"
+	cout << "\n" << listPtr->getCount() << endl;
+	listPtr->print();
+	cout << "\n//////////////////\n";
+}
+void removeTest2(List<Process*>* listPtr)
+{
+	cout << "\n//////////////////\n";
+	cout << "Process ptrs: \n";
+	listPtr->clear(); /// Start with empty
+	Process* p = new Process("83", 8, 12);
+	Process* n = new Process("34", 8, 12);
+	Process* r = new Process("21", 8, 12);
+	Process* s = new Process("93", 8, 12);
+	Process* m = new Process("143", 8, 12);
+	listPtr->push_back(p);
+	listPtr->push_back(n);
+	listPtr->push_back(r);
+	listPtr->push_back(s);
+	listPtr->push_back(m);
+	cout << "count :" << listPtr->getCount()<<'\n';
+	listPtr->print();
+
+	cout << "\n\nafter removing 83, 21, 143 : \n";
+	listPtr->removeByID(p->getID());
+	listPtr->removeByID(r->getID());
+	listPtr->removeByID(m->getID());
+	cout << "count :" << listPtr->getCount()<<'\n';
+	listPtr->print();
+	cout << "\n//////////////////\n";
+}
+
 template<typename T>
 void print(T* ob)
 {
@@ -59,5 +105,9 @@ int main()
 	cout << mylist.getCount() << endl; //2
 	mylist.print(); //21, 93
 
+	List<string>* listPtr1 = new List<string>;
+	List<Process*>* listPtr2 = new List<Process*>;
+	//removeTest1(listPtr);
+	removeTest2(listPtr2);
 	return 0;
 }
