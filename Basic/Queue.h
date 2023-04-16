@@ -103,7 +103,7 @@ public:
 
 		return true;
 	}
-	bool empty() const
+	bool isEmpty() const
 	{
 		return itemCount == 0;
 	}
