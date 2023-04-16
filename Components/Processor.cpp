@@ -10,12 +10,12 @@ Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)
 	CPUstate = IDLE;
 }
 
-Process* Processor::getRunnignProcess()
+Process* Processor::getRunningProcess()
 {
 	return runningProcess;
 }
 
-void Processor::setRunnignProcess(Process* runProcess)
+void Processor::setRunningProcess(Process* runProcess)
 {
 	runningProcess = runProcess;
 }
@@ -42,7 +42,7 @@ void Processor::updateTotalCpuTime(int time)
 
 void Processor::updateCPUstate()
 {
-	if (getRunnignProcess())	//if there is a running process 
+	if (getRunningProcess())	//if there is a running process 
 		setCPUstate(Busy);
 	else
 	{
