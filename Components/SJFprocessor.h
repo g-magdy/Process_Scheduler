@@ -2,7 +2,8 @@
 #include"Processor.h"
 #include"../Basic/PriorityQueue.h"
 
-class SJF:public Processor{
+class SJF:public Processor
+{
 private:
 	PriorityQueue <Process*> RDY;
 public:
