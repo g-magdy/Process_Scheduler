@@ -1,9 +1,10 @@
 #pragma once
-
+#include <iostream> 
 #include <iostream> /// (will be removed) only for using std::cout to print queue 
 
 #include "Node.h"
-#include "PriorityQueueInterface.h"
+class Process;
+
 template <class ItemType>
 class PriorityQueue : public PriorityQueueInterface<ItemType>
 {
@@ -133,3 +134,10 @@ inline PriorityQueue<ItemType>::~PriorityQueue()
     while (!isEmpty())
         remove();
 }
+
+template<>
+void PriorityQueue<Process*>::print() const;
+template<>
+void PriorityQueue<Process*>::push(Process* entry);
+template<>
+Node<Process*>* PriorityQueue<Process*>::getNodeBefore(Process* entry) const;
