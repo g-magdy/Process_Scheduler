@@ -1,12 +1,10 @@
 #pragma once
 #include <iostream> 
-#include <iostream> /// (will be removed) only for using std::cout to print queue 
-
 #include "Node.h"
 class Process;
 
 template <class ItemType>
-class PriorityQueue : public PriorityQueueInterface<ItemType>
+class PriorityQueue
 {
 private:
     // we don't need tail
@@ -19,16 +17,17 @@ private:
     
     // iteratively loops through the sorted list till if finds the element greater than the given one
     // returns pointer to the node before it
-    Node<ItemType>* getNodeBefore(const ItemType& entry) const;
+    Node<ItemType>* getNodeBefore(ItemType entry) const;
 public:
-    PriorityQueue();
-    PriorityQueue(const PriorityQueue<ItemType>& original);
-    bool isEmpty() const;
-    void add(const ItemType& entry);
-    bool remove();
-    ItemType peek() const;
-    void show() const; /// Only for testing
-    ~PriorityQueue();
+    PriorityQueue();                                            //defult argument constructor
+    PriorityQueue(const PriorityQueue<ItemType>& original);     //copy constructor
+    bool isEmpty() const;                                       //checks whether the queue is empty or not
+    void push(ItemType entry);                                  //adds an element in its right position in the queue
+    bool pop();                                                 //pop the front element of the queue
+    bool pop(ItemType&);
+    ItemType peek() const;                                      //gives a glance to the front element of the queue
+    void print() const;                                         //prints all the elements of the queue
+    ~PriorityQueue();                                           //destructor
 };
 
 template<class ItemType>
@@ -49,7 +48,7 @@ inline Node<ItemType>* PriorityQueue<ItemType>::copychain(Node<ItemType>* origin
 }
 
 template<class ItemType>
-inline Node<ItemType>* PriorityQueue<ItemType>::getNodeBefore(const ItemType& entry) const
+inline Node<ItemType>* PriorityQueue<ItemType>::getNodeBefore(ItemType entry) const
 {
     Node<ItemType>* prevPtr = nullptr;
     Node<ItemType>* currPtr = head;
@@ -80,7 +79,7 @@ inline bool PriorityQueue<ItemType>::isEmpty() const
 }
 
 template<class ItemType>
-inline void PriorityQueue<ItemType>::add(const ItemType& entry)
+inline void PriorityQueue<ItemType>::push(ItemType entry)
 {
     Node<ItemType>* prevPtr = getNodeBefore(entry);
     Node<ItemType>* newNodePtr = new Node<ItemType>(entry);
@@ -97,7 +96,7 @@ inline void PriorityQueue<ItemType>::add(const ItemType& entry)
 }
 
 template<class ItemType>
-inline bool PriorityQueue<ItemType>::remove()
+inline bool PriorityQueue<ItemType>::pop()
 {
     if (isEmpty())
         return false;
@@ -111,28 +110,34 @@ inline bool PriorityQueue<ItemType>::remove()
 }
 
 template<class ItemType>
-inline ItemType PriorityQueue<ItemType>::peek() const
+inline bool PriorityQueue<ItemType>::pop(ItemType& poped)
 {
-    return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
+    if (isEmpty())
+        return false;
+    else
+    {
+        poped = head->getData();
+        Node<ItemType>* toDeletePtr = head;
+        head = head->getNext();
+        delete toDeletePtr;
+        return true;
+    }
 }
 
 template<class ItemType>
-inline void PriorityQueue<ItemType>::show() const
+inline ItemType PriorityQueue<ItemType>::peek() const
 {
-    Node <ItemType>* trav = head;
-    while (trav != nullptr)
-    {
-        std::cout << trav->getData() << " -> ";
-        trav = trav->getNext();
-    }
-    std::cout << "NULL\n";
+    if (isEmpty())
+        throw "empty";
+    return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
 }
+
 
 template<class ItemType>
 inline PriorityQueue<ItemType>::~PriorityQueue()
 {
     while (!isEmpty())
-        remove();
+        pop();
 }
 
 template<>

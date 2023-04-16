@@ -7,10 +7,10 @@ class PriorityQueueInterface
     virtual bool isEmpty() const = 0;
 
     // inserts it such that the queue is in ascending order
-    virtual void add(const ItemType& entry) = 0;
+    virtual void push(const ItemType& entry) = 0;
 
     // deletes the entry with the highest priority (lowest value)
-    virtual bool remove() = 0;
+    virtual bool pop() = 0;
 
     // please DO NOT call this function if the queue is empty
     // (until we handle this exception)
