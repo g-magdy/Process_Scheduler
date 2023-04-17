@@ -4,6 +4,23 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 {
 }
 
+void Scheduler::startUp()
+{
+}
+
+bool Scheduler::run()
+{
+	return false;
+}
+
+void Scheduler::moveToBLK()
+{
+}
+
+void Scheduler::moveToTRM()
+{
+}
+
 int Scheduler::random(int upperbound) const
 {
 	std::srand(time(NULL));
@@ -15,22 +32,53 @@ int Scheduler::getTimeStep() const
     return currentTimeStep;
 }
 
-void Scheduler::printCPUs() const
+Process* Scheduler::createChild(int)
 {
+	return nullptr;
 }
 
-void Scheduler::printBLK() const
+bool Scheduler::migrate(Process*, CPU_TYPE)
 {
+	return false;
 }
 
-void Scheduler::printRUN() const
+bool Scheduler::kill(std::string)
 {
-}
-
-void Scheduler::printTRM() const
-{
+	return false;
 }
 
 Scheduler::~Scheduler()
 {
+}
+
+void Scheduler::readInputFile()
+{
+}
+
+void Scheduler::createOutputFile()
+{
+}
+
+void Scheduler::update()
+{
+}
+
+Process* Scheduler::createProcess(std::string, int, int)
+{
+	return nullptr;
+}
+
+Processor* Scheduler::createCPU(CPU_TYPE)
+{
+	return nullptr;
+}
+
+bool Scheduler::steal()
+{
+	return false;
+}
+
+bool Scheduler::kill()
+{
+	return false;
 }
