@@ -24,7 +24,7 @@ bool Scheduler::run()
 
 void Scheduler::moveToRDY(Process* ptr)
 {
-	Processor* toPutRDY = &processorsGroup[indexOfNextCPU % NumberOfCPUs];
+	Processor* toPutRDY = &processorsGroup[indexOfNextCPU % numberOfCPUs];
 	ptr->setHandlingCPU(toPutRDY->getMyType());
 	ptr->setProcessState(READY);
 	indexOfNextCPU++;
