@@ -1,5 +1,5 @@
 #include "Scheduler.h"
-
+#include<string>
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0)
 {
 }
@@ -87,7 +87,7 @@ void Scheduler::createOutputFile()
 void Scheduler::update()
 {
 		Process* ptr;											//to determine the processor to put the new process in 
-		for (int i = 0; i < numberOfProcesses;; i++)
+		for (int i = 0; i < numberOfProcesses; i++)
 		{
 			ptr = nullptr;
 			newList.pop(ptr);
@@ -127,14 +127,26 @@ void Scheduler::update()
 		}
 		ptr = nullptr;
 		double randNum = random();
-		if (randNum >= 10)
+		if (randNum <= 10)
 		{
 			blockedList.pop(ptr);
 			moveToRDY(ptr);
 		}
-		//int length = random(RDY.getCount());				//randomly take anu process and terminate it
-		//RDY.getElement(lenght)
+		//termination of probablity 20%
+		int rand_num = random(5*numberOfProcesses);
+		if (rand_num <= numberOfProcesses) {
+			std::string id = std::to_string(rand_num);
+			for (int i = 0; i < numberOfCPUs; i++) {
+				if (processorsGroup[i].getMyType() == FCFS_T) {
+					if (processorsGroup[i].kill(id))
+					{
+						break;
+					}
+				}
+			}
 
+		}
+		
 }
 
 Process* Scheduler::createProcess(std::string, int, int)
