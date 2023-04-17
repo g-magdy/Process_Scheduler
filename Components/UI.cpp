@@ -5,6 +5,15 @@ void UI::print(std::string sr)
 	std::cout << sr;
 }
 
+char UI::getInput()
+{
+	char c;
+	std::cin >> c;
+	return c;
+}
+
+UI::UI(Scheduler* SCDptr): pScheduler(SCDptr) {}
+
 RunningMode UI::startUP()
 {
 	do
@@ -16,21 +25,41 @@ RunningMode UI::startUP()
 		std::cin >> mode;
 		if (mode == 1) return INTERACTIVE;
 		else if (mode == 2) return STEPBYSTEP;
-		else if (mode == 3) return SILENT;
+		else if (mode == 3)
+		{
+			std::cout << "\nSilent Mode.......  Simulation Starts.......\n";
+			return SILENT;
+		}
 		std::cout << std::endl;
 	} while (true);
 }
 
-void UI::showStatus()
+void UI::showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Queue<Process*>& TRMList)
 {
-	//std::cout << "Current Timestep: " << pScheduler->getTimeStep() << std::endl;
-	//std::cout << "------------------ RDY processes ------------------" << std::endl;
-	//pScheduler->printCPUs(); // here the scheduler should print the "processor " + number of the CPU
-	//						 // and then make the CPU print it's type and it's ready list
-	//std::cout << "------------------ BLK processes ------------------" << std::endl;
-	//pScheduler->printBLK();  // this will print the number of processes in the BLK and their IDs
-	//std::cout << "------------------ RUN processes ------------------" << std::endl;
-	//pScheduler->printRUN();  //it will iterate on every CPU and make it print the process it has in the running state
-	//std::cout << "------------------ TRM processes ------------------" << std::endl;
-	//pScheduler->printTRM();  // this will print the number of processes terminated and then print them
+	std::cout << "Current Timestep: " << pScheduler->getTimeStep() << std::endl;
+
+	std::cout << "------------------ RDY processes ------------------" << std::endl;
+	for (int i = 0; i < size; i++)
+		CPUList[i]->print('l');
+	
+	std::cout << "------------------ BLK processes ------------------" << std::endl;
+	std::cout << BLKList.size() << " BLK: ";
+	BLKList.print();
+
+	std::cout << "------------------ RUN processes ------------------" << std::endl;
+	int runningCPUsCount = 0;
+	for (int i = 0; i < size; i++)
+		if (CPUList[i]->getCPUstate() == Busy) runningCPUsCount++;
+	std::cout << runningCPUsCount << " RUN: ";
+	for (int i = 0, j = 0; i < size; i++)
+		if (CPUList[i]->getCPUstate() == Busy)
+		{
+			j++;
+			CPUList[i]->print('r');
+			if (j < runningCPUsCount) std::cout << ", ";
+		}
+
+	std::cout << "------------------ TRM processes ------------------" << std::endl;
+	std::cout << TRMList.size() << " TRM: ";
+	TRMList.print();
 }

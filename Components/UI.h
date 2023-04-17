@@ -6,18 +6,20 @@
 class Scheduler;
 
 class UI
-{
+{						
 private:
-	Scheduler* pScheduler;			// A Pointer to the Scheduler
+	Scheduler* pScheduler;
+public:		
+	UI(Scheduler*);
+	RunningMode startUP();			     //this will be implemented in phase 2
 
-public:
-	RunningMode startUP();			//this will be implemented in phase 2
-	void showStatus();				//this might be int the private if the UI is the one responsble
-									// for running the console
-	void print(std::string sr);     // Prints a string given to it with no extra spaces or "endl"
-
-	template<typename T>
-	void print(T* ob);				// Prints a string given to it with no extra spaces or "endl"
+	void showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Queue<Process*>& TRMList);
+									     
+	void print(std::string sr);          // Prints a string given to it with no extra spaces or "endl"
+	char getInput();
+									     
+	template<typename T>			     
+	void print(T* ob);				     
 };
 
 template<typename T>
