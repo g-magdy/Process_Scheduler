@@ -57,3 +57,9 @@ void SJF::pushToRDY(Process* p)
 	p->setHandlingCPU(SJF_T);
 	RDY.push(p);
 }
+
+void SJF::printRDYList()
+{
+	std::cout << RDY.size() << " RDY: ";
+	RDY.print();
+}

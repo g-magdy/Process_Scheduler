@@ -62,6 +62,12 @@ void FCFSprocessor::pushToRDY(Process* p)
 	RDY.push_back(p);
 }
 
+void FCFSprocessor::printRDYList()
+{
+	std::cout << RDY.getCount() << " RDY: ";
+	RDY.print();
+}
+
 bool FCFSprocessor::kill(std::string idtoKill)
 {
 	return false;

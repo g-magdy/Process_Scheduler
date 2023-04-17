@@ -58,5 +58,11 @@ void RRprocessor::pushToRDY(Process* p)
 	RDY.push(p);
 }
 
+void RRprocessor::printRDYList()
+{
+	std::cout << RDY.size() << " RDY: ";
+	RDY.print();
+}
+
 
 
