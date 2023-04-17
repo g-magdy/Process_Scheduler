@@ -26,6 +26,7 @@ public:
     bool pop();                                                 //pop the front element of the queue
     bool pop(ItemType&);
     ItemType peek() const;                                      //gives a glance to the front element of the queue
+    int size() const;                                           // returns the number of elements in the PriorityQueue
     void print() const;                                         //prints all the elements of the queue
     ~PriorityQueue();                                           //destructor
 };
@@ -130,6 +131,19 @@ inline ItemType PriorityQueue<ItemType>::peek() const
     if (isEmpty())
         throw "empty";
     return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
+}
+
+template<class ItemType>
+inline int PriorityQueue<ItemType>::size() const
+{
+    int count = 0;
+    Node<ItemType>* countptr = head;
+    while (countptr)
+    {
+        count++;
+        countptr = countptr->getNext();
+    }
+    return count;
 }
 
 

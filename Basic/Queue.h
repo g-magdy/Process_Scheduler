@@ -113,7 +113,7 @@ public:
 			return front->getData();
 
 		//what should I return if front was null?
-		return 0;
+		throw "empty";
 	}
 	itemType Back() const
 	{
