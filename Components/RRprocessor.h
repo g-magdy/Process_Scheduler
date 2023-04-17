@@ -12,7 +12,7 @@ public:
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
 	virtual void pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);
-	virtual bool kill(std::string idtoKill) {}
-	virtual bool fork() {}
+	virtual bool kill(std::string idtoKill) { return false; }
+	virtual bool fork() { return false; }
 };
 
