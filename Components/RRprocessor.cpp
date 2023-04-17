@@ -1,6 +1,6 @@
 #include "RRprocessor.h"
 
-RRprocessor::RRprocessor(Scheduler* pscheduler) :Processor(pscheduler, RR_T)
+RRprocessor::RRprocessor(Scheduler* pscheduler, int rtf) :Processor(pscheduler, RR_T), RTF(rtf)
 {
 }
 
@@ -24,7 +24,7 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 
 	if (ptr)
 	{
-		updateTotalCpuTime();							// increament total CPU time of this processor by the cpu time of this process
+		updateCPUTs();							// increament total CPU time of this processor by the cpu time of this process
 		ptr->updateFinishedCPUT();						//increament the CPU time of this process
 
 		//we need to handle if the Process needs IO     ******************************************************************************
