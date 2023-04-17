@@ -23,6 +23,7 @@ private:
 	std::string latestID;
 	int STL;
 	RunningMode runningMode;
+	int indexOfNextCPU;
 
 	//statistics attributes
 
@@ -34,15 +35,14 @@ private:
 	Processor* createCPU(CPU_TYPE);
 	bool steal();
 	bool kill();
-
 public:
 	Scheduler();
 	void startUp();
 	bool run();
-	void moveToBLK();
-	void moveToTRM();
+	void moveToRDY(Process* ptr);
+	void moveToBLK(Process* ptr);
+	void moveToTRM(Process* ptr);
 	int getTimeStep() const;
-
 	Process* createChild(int);
 	bool migrate(Process*, CPU_TYPE);
 	bool kill(std::string);

@@ -18,6 +18,7 @@ protected:
 	void updateCPUTs();
 
 	Process* getRunningProcess();
+
 	void setRunningProcess(Process* runProcess);			//set runnign Process
 
 	void setCPUstate(CPU_STATE state);						//still not sure about its implementation
