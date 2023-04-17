@@ -17,18 +17,21 @@ private:
 	Queue<Process*> terminatedList;
 	int currentTimeStep;
 	UI* pUI;
+	int NumberOfProcesses;
+	int NumberOfCPUs;
+	int indexOfNextCPU;
 public:
 	Scheduler();
-	/*startUp();
-	readInputFile(){}
-	createOutputFile()
-	update();
-	run();
-	createProcess();
+	void startUp();
+	bool run();
+	void update();
+	void moveToRDY(Process * ptr);
+	void moveToBLK(Process* ptr);
+	void moveToTRM(Process* ptr);
+	//readInputFile();
+	//createOutputFile()
+	/*createProcess();
 	createCPU();
-	moveToRDY();
-	moveToBLK();
-	moveToTRM();
 	steal();
 	createChild();*/
 	int random(int upperbound = 100) const; //returns a value from 0 to 100
