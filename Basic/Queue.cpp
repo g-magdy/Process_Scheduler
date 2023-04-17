@@ -6,7 +6,7 @@ using namespace std;
 template<>
 void Queue<Process*>::print() const
 {
-	if (empty())
+	if (isEmpty())
 		return;
 
 	Node<Process*>* cur = front;

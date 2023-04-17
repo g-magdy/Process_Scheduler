@@ -1,11 +1,11 @@
 #include "Processor.h"
-#include"../Components/Scheduler.h"
+#include"../Scheduler.h"
 
 
 Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)
 	: CPUtype(type), pScheduler(pscheduler)
 {
-	totalCPUtime = 0;
+	expectedFinishT = totalBusyT = totalIdleT = 0;
 	runningProcess = nullptr;
 	CPUstate = IDLE;
 }
@@ -47,6 +47,11 @@ CPU_TYPE Processor::getMyType()
 	return CPUtype;
 }
 
+std::string Processor::getID()
+{
+	return ID;
+}
+
 CPU_STATE Processor::getCPUstate()
 {
 	return CPUstate;
@@ -57,9 +62,14 @@ void Processor::setCPUstate(CPU_STATE state)
 	CPUstate = state;
 }
 
-void Processor::updateTotalCpuTime(int time)
+void Processor::updateCPUTs()		//each timestep decrease the expectedFinishT and increach either the totalBusyT or totalIdleT according to the state of the CPU
 {
-	totalCPUtime += time;
+	expectedFinishT--;					
+
+	if (getCPUstate() == Busy)
+		totalBusyT++;
+	else
+		totalIdleT++;
 }
 
 void Processor::updateCPUstate()
@@ -72,12 +82,28 @@ void Processor::updateCPUstate()
 	}
 }
 
-int Processor::getTotalCpuTime()
+int Processor::getExpectedFinishT()
 {
-	return totalCPUtime;
+	return expectedFinishT;
 }
-//
-//void Processor::pushToBLK(Process* p)
-//{
-//	(*BLKptr).push(p);
-//}
+
+void Processor::print(char printMode)
+{
+	if (printMode == 'l')
+	{
+		std::cout << "processor " + ID + " [";
+
+		if (getMyType() == FCFS_T) std::cout << "FCFS";
+		else if (getMyType() == SJF_T) std::cout << "SJF ";
+		else if (getMyType() == RR_T) std::cout << "RR  ";
+
+		std::cout << "]:";
+	}
+	else if (printMode == 's')
+		std::cout << "P" + ID;
+	else if (printMode == 'r')
+	{
+		std::cout << *runningProcess;
+		print('s');
+	}
+}

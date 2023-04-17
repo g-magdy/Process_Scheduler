@@ -24,11 +24,11 @@ enum CPU_STATE {
 	IDLE		//mean the reay list is empty 
 };
 
-enum RunninMode
+enum RunningMode
 {
-	Interactive,
-	StepByStep,
-	Silent
+	INTERACTIVE,
+	STEPBYSTEP,
+	SILENT
 };
 
 template<typename T, typename U>

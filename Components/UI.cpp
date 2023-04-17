@@ -5,6 +5,22 @@ void UI::print(std::string sr)
 	std::cout << sr;
 }
 
+RunningMode UI::startUP()
+{
+	do
+	{
+		int mode = 0;
+		std::cout << "------------ Select the Running Mode ------------\n";
+		std::cout << " 1-Inter Active     2-Step by Step     3-Silent\n";
+		std::cout << "\nYour choice: ";
+		std::cin >> mode;
+		if (mode == 1) return INTERACTIVE;
+		else if (mode == 2) return STEPBYSTEP;
+		else if (mode == 3) return SILENT;
+		std::cout << std::endl;
+	} while (true);
+}
+
 void UI::showStatus()
 {
 	//std::cout << "Current Timestep: " << pScheduler->getTimeStep() << std::endl;

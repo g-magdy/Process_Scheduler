@@ -18,7 +18,8 @@ private:
 	int WaitingT;												 // waiting time
 	Queue<Pair<int,int>> IOList;									 // a queue to hold the IO requests of a process
 	Process* myChild;											 // this may change to a list or be removed in the future *************
-																
+	int totalIOD;
+
 public:															
 	Process(std::string id, int inAT, int ct);					 // non-defult constructor
 	Process(const Process& origin);								 // copy constructor													 //default argument constructor
@@ -47,8 +48,11 @@ public:
 																
 	int getWaitingT() const;									 // watting time getter
 																
-	void addIORquest(Pair<int,int>&);								 // Adds an IO request pair to the IOList 
-	
+	void pushIORquest(Pair<int,int>&);							 // Adds an IO request pair to the IOList 
+	bool peekNextIOR(Pair<int, int>&);							 // Takes a peek on the first pair in the IOlist pairs
+	bool popkNextIOR(Pair<int, int>&);							 // pops and returns the first pair in the IOlist pairs
+
+
 	Process* getMyChild();										 // gets the child of the Process
 
 	bool operator > (const Process& second);					 // compares between two processes in terms of cpu time

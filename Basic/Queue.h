@@ -68,7 +68,7 @@ public:
 	}
 	bool pop()
 	{
-		if (empty())
+		if (isEmpty())
 			return false;
 
 		// catching the front with a temp pointer
@@ -85,7 +85,7 @@ public:
 	}
 	bool pop(itemType& data)
 	{
-		if (empty())
+		if (isEmpty())
 			return false;
 
 		// catching the front with a temp pointer
@@ -113,7 +113,7 @@ public:
 			return front->getData();
 
 		//what should I return if front was null?
-		return 0;
+		throw "empty";
 	}
 	itemType Back() const
 	{
