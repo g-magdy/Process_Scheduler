@@ -13,7 +13,7 @@ private:
 	CPU_STATE CPUstate;
 
 protected:
-	const Scheduler* pScheduler;
+	Scheduler* const pScheduler;
 	virtual void updateCPUstate();
 	void updateCPUTs();
 
@@ -21,6 +21,8 @@ protected:
 	void setRunningProcess(Process* runProcess);			//set runnign Process
 
 	void setCPUstate(CPU_STATE state);						//still not sure about its implementation
+
+	virtual void printRDYList() = 0;
 
 public:
 	Processor(Scheduler* pscheduler, CPU_TYPE type);		//non default constructor define total cputime =0
