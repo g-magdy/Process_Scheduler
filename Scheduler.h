@@ -11,7 +11,7 @@ class UI;
 class Scheduler
 {
 private:
-	Processor* processorsGroup;
+	Processor** processorsGroup;
 	int numberOfCPUs;
 	Queue<Process*> newList;
 	Queue<Process*> blockedList;
