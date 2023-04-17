@@ -1,4 +1,3 @@
-/*
 #include "Scheduler.h"
 
 int main()
@@ -6,10 +5,9 @@ int main()
 
 	Scheduler ProScheduler;
 
-	ProScheduler.startUP();
+	ProScheduler.startUp();
 
-	while( ProSheduler.run() );
+	//while( ProScheduler.run() );
 
 	return 0;
 }
-*/

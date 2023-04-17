@@ -6,6 +6,8 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 
 void Scheduler::startUp()
 {
+	//readInputFile();
+	runningMode = pUI->startUP();
 }
 
 bool Scheduler::run()

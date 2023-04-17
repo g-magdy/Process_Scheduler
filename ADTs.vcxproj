@@ -135,11 +135,11 @@
     <ClInclude Include="Components\FCFSprocessor.h" />
     <ClInclude Include="Components\Process.h" />
     <ClInclude Include="Components\RRprocessor.h" />
-    <ClInclude Include="Components\Scheduler.h" />
     <ClInclude Include="Components\SJFprocessor.h" />
     <ClInclude Include="Components\UI.h" />
     <ClInclude Include="DEFS.h" />
     <ClInclude Include="Components\Processor.h" />
+    <ClInclude Include="Scheduler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Basic\List.cpp" />
@@ -149,10 +149,10 @@
     <ClCompile Include="Components\Process.cpp" />
     <ClCompile Include="Components\Processor.cpp" />
     <ClCompile Include="Components\RRprocessor.cpp" />
-    <ClCompile Include="Components\Scheduler.cpp" />
     <ClCompile Include="Components\SJFprocessor.cpp" />
     <ClCompile Include="Components\UI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>

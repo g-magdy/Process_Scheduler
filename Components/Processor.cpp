@@ -1,5 +1,5 @@
 #include "Processor.h"
-#include"../Components/Scheduler.h"
+#include"../Scheduler.h"
 
 
 Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)

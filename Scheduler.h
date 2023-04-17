@@ -1,10 +1,10 @@
 #pragma once
-#include "../Components/Process.h"
-#include "../Components/Processor.h"
-#include "../Components/FCFSprocessor.h"
-#include "../Components/SJFprocessor.h"
-#include "../Components/RRprocessor.h"
-#include "../Components/UI.h"
+#include "Components/Process.h"
+#include "Components/Processor.h"
+#include "Components/FCFSprocessor.h"
+#include "Components/SJFprocessor.h"
+#include "Components/RRprocessor.h"
+#include "Components/UI.h"
 
 class UI;
 
@@ -22,6 +22,7 @@ private:
 	UI* pUI;
 	std::string latestID;
 	int STL;
+	RunningMode runningMode;
 
 	//statistics attributes
 
