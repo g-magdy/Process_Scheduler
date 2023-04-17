@@ -1,15 +1,14 @@
-/*
-#include "Scheduler.h"
+
+#include"Components/Scheduler.h"
 
 int main()
 {
 
-	Scheduler ProScheduler;
+	Scheduler *ProScheduler=new Scheduler ;
 
-	ProScheduler.startUP();
+	ProScheduler->startUP();
 
-	while( ProSheduler.run() );
+	while( ProSheduler->run() );
 
 	return 0;
 }
-*/

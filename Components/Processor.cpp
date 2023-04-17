@@ -10,6 +10,26 @@ Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)
 	CPUstate = IDLE;
 }
 
+void Processor::scheduleAlgo(int currentTimeStep)
+{
+	Process* ptr = nullptr;
+
+	if (getCPUstate() == IDLE )				//!RDY.isEmpty() was removed
+	{
+		pullFromRDY(ptr);
+		setRunningProcess(ptr);
+		updateCPUstate();
+	}
+	ptr = getRunningProcess();
+
+	if (getCPUstate() == Busy)
+	{
+		updateTotalCpuTime();		// increament total CPU time of this processor by the cpu time of this process
+		ptr->setResponseT(currentTimeStep);
+		ptr->updateFinishedCPUT();						//increament the CPU time of this process
+	}
+}
+
 Process* Processor::getRunningProcess()
 {
 	return runningProcess;
@@ -18,6 +38,8 @@ Process* Processor::getRunningProcess()
 void Processor::setRunningProcess(Process* runProcess)
 {
 	runningProcess = runProcess;
+	if(runningProcess)
+		runningProcess->setProcessState(RUN);
 }
 
 CPU_TYPE Processor::getMyType()
