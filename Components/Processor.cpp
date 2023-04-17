@@ -75,13 +75,16 @@ void Processor::print(char printMode)
 		else if (getMyType() == SJF_T) std::cout << "SJF ";
 		else if (getMyType() == RR_T) std::cout << "RR  ";
 
-		std::cout << "]:";
+		std::cout << "]: ";
+		printRDYList();
+		std::cout << std::endl;
 	}
 	else if (printMode == 's')
 		std::cout << "P" + ID;
 	else if (printMode == 'r')
 	{
-		std::cout << *runningProcess;
+		std::cout << *runningProcess << '(';
 		print('s');
+		std::cout << ')';
 	}
 }
