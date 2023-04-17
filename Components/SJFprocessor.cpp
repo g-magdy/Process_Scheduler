@@ -24,7 +24,7 @@ void SJF::scheduleAlgo(int currentTimeStep)
 
 	if (ptr)
 	{
-		updateTotalCpuTime();							// increament total CPU time of this processor by the cpu time of this process
+		updateCPUTs();							// increament total CPU time of this processor by the cpu time of this process
 		ptr->updateFinishedCPUT();						//increament the CPU time of this process
 
 		//we need to handle if the Process needs IO     ******************************************************************************

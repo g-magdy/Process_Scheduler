@@ -11,6 +11,8 @@ public:
 	virtual void scheduleAlgo(int currentTimeStep);			
 	virtual void pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);
+	virtual bool kill(std::string idtoKill) {}
+	virtual bool fork() {}
 };
 
 
