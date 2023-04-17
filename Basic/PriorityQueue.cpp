@@ -16,23 +16,6 @@ Node<Process*>* PriorityQueue<Process*>::getNodeBefore(Process* entry) const
 }
 
 template<>
-void PriorityQueue<Process*>::push(Process* entry)
-{
-    Node<Process*>* prevPtr = getNodeBefore(entry);
-    Node<Process*>* newNodePtr = new Node<Process*>(entry);
-    if (isEmpty() || prevPtr == nullptr) // luckily: entry is the new lowest element or the only one
-    {
-        newNodePtr->setNext(head);
-        head = newNodePtr;
-    }
-    else
-    {
-        newNodePtr->setNext(prevPtr->getNext());
-        prevPtr->setNext(newNodePtr);
-    }
-}
-
-template<>
 void PriorityQueue<Process*>::print() const
 {
     Node <Process*>* trav = head;

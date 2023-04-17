@@ -10,7 +10,8 @@ private:
     // we don't need tail
     // we only remove from the front (highest priority)
     // we don't always add at the end of the list
-    Node<ItemType>* head;   
+    Node<ItemType>* head;
+    int count;
     
     // recursive function to be used in the copy constructor
     Node<ItemType>* copychain(Node<ItemType>* originalChainPtr);
@@ -63,7 +64,7 @@ inline Node<ItemType>* PriorityQueue<ItemType>::getNodeBefore(ItemType entry) co
 }
 
 template<class ItemType>
-inline PriorityQueue<ItemType>::PriorityQueue() : head(nullptr)
+inline PriorityQueue<ItemType>::PriorityQueue() : head(nullptr), count(0)
 {
 }
 
@@ -94,6 +95,7 @@ inline void PriorityQueue<ItemType>::push(ItemType entry)
         newNodePtr->setNext(prevPtr->getNext());
         prevPtr->setNext(newNodePtr);
     }
+    count++;
 }
 
 template<class ItemType>
@@ -106,6 +108,7 @@ inline bool PriorityQueue<ItemType>::pop()
         Node<ItemType>* toDeletePtr = head;
         head = head->getNext();
         delete toDeletePtr;
+        count--;
         return true;
     }
 }
@@ -121,6 +124,7 @@ inline bool PriorityQueue<ItemType>::pop(ItemType& poped)
         Node<ItemType>* toDeletePtr = head;
         head = head->getNext();
         delete toDeletePtr;
+        count--;
         return true;
     }
 }
@@ -136,13 +140,6 @@ inline ItemType PriorityQueue<ItemType>::peek() const
 template<class ItemType>
 inline int PriorityQueue<ItemType>::size() const
 {
-    int count = 0;
-    Node<ItemType>* countptr = head;
-    while (countptr)
-    {
-        count++;
-        countptr = countptr->getNext();
-    }
     return count;
 }
 
@@ -156,7 +153,5 @@ inline PriorityQueue<ItemType>::~PriorityQueue()
 
 template<>
 void PriorityQueue<Process*>::print() const;
-template<>
-void PriorityQueue<Process*>::push(Process* entry);
 template<>
 Node<Process*>* PriorityQueue<Process*>::getNodeBefore(Process* entry) const;
