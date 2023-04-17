@@ -3,7 +3,7 @@
 Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPUT(ct)
 {
 	ResponseT = TerminationT = TurnRoundT = WaitingT = -1; // they are not givn real values yet
-	FinishedCPUT = 0;
+	totalIOD = FinishedCPUT = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
 	myChild = nullptr;
@@ -59,7 +59,8 @@ int Process::getArrivalT() const
 
 void Process::setResponseT(int rt)
 {
-	ResponseT = rt;
+	if(ResponseT == -1)
+		ResponseT = rt;
 }
 
 int Process::getResponseT() const
@@ -104,9 +105,25 @@ int Process::getWaitingT() const
 	return WaitingT;
 }
 
-void Process::addIORquest(Pair<int,int>& ioPair)
+void Process::pushIORquest(Pair<int,int>& ioPair)
 {
 	IOList.push(ioPair);
+}
+
+bool Process::peekNextIOR(Pair<int, int>& P)
+{
+	if (IOList.isEmpty())
+		return false;
+
+	P = IOList.Front();
+}
+
+bool Process::popkNextIOR(Pair<int, int>& P)
+{
+	if (IOList.isEmpty())
+		return false;
+
+	IOList.pop(P);
 }
 
 Process* Process::getMyChild()
