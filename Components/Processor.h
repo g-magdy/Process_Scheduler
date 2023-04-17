@@ -28,7 +28,7 @@ protected:
 public:
 	Processor(Scheduler* pscheduler, CPU_TYPE type);		//non default constructor define total cputime =0
 
-	virtual void scheduleAlgo(int currentTimeStep)=0;		//do the operation of the CPU
+	virtual void scheduleAlgo(int currentTimeStep);		//do the operation of the CPU
 
 	virtual void pullFromRDY(Process*& p) = 0;
 	virtual void pushToRDY(Process* p) = 0;

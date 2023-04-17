@@ -67,8 +67,16 @@ bool Scheduler::migrate(Process*, CPU_TYPE)
 	return false;
 }
 
-bool Scheduler::kill(std::string)
+bool Scheduler::kill(std::string idToKill)
 {
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		if (processorsGroup[i]->getMyType() == FCFS_T)
+		{
+			if (processorsGroup[i]->kill(idToKill))
+				return true;
+		}
+	}
 	return false;
 }
 
