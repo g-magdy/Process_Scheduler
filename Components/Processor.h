@@ -13,7 +13,7 @@ private:
 	CPU_STATE CPUstate;
 
 protected:
-	const Scheduler* pScheduler;
+	 Scheduler* pScheduler;
 public:
 	virtual void updateCPUstate();
 	void updateCPUTs();

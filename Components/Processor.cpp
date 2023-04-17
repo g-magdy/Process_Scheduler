@@ -24,7 +24,7 @@ void Processor::scheduleAlgo(int currentTimeStep)
 
 	if (getCPUstate() == Busy)
 	{
-		updateTotalCpuTime();		// increament total CPU time of this processor by the cpu time of this process
+		//updateTotalCpuTime();		// increament total CPU time of this processor by the cpu time of this process
 		ptr->setResponseT(currentTimeStep);
 		ptr->updateFinishedCPUT();						//increament the CPU time of this process
 	}
