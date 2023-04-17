@@ -25,7 +25,13 @@ void FCFSprocessor::pushToRDY(Process* p)
 
 bool FCFSprocessor::kill(std::string idtoKill)
 {
-	return false;
+	if (RDY.find(idtoKill))
+	{
+		Process * ptr=RDY.removeByID(idtoKill);
+		pScheduler->moveToTRM(ptr);
+		return 1;
+	}
+	return 0;
 }
 
 bool FCFSprocessor::fork()
