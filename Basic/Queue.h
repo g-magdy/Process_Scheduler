@@ -86,7 +86,7 @@ public:
 	bool pop(itemType& data)
 	{
 		if (isEmpty())
-			return false;
+			throw "empty";
 
 		// catching the front with a temp pointer
 		Node<itemType>* delPtr = front;
