@@ -11,7 +11,7 @@ private:
 public:
 	RRprocessor(Scheduler* pscheduler, std::string s,int tslice, int rtf);
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
-	virtual void pullFromRDY(Process*& p);
+	virtual bool pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);
 	virtual void printRDYList();
 	virtual bool kill(std::string idtoKill) { return false; }

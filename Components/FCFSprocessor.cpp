@@ -11,9 +11,14 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 }
 
 
-void FCFSprocessor::pullFromRDY(Process* & p)
+bool FCFSprocessor::pullFromRDY(Process* & p)
 {
-	RDY.pop_front(p);								
+	if (!RDY.isEmpty())
+	{
+		RDY.pop_front(p);
+		return true;
+	}
+	return false;
 }
 
 void FCFSprocessor::pushToRDY(Process* p)

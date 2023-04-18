@@ -16,9 +16,12 @@ void Processor::scheduleAlgo(int currentTimeStep)
 
 	if (getCPUstate() == IDLE )				//!RDY.isEmpty() was removed
 	{
-		pullFromRDY(ptr);
-		setRunningProcess(ptr);
-		updateCPUstate();
+		
+		if (pullFromRDY(ptr))
+		{
+			setRunningProcess(ptr);
+			updateCPUstate();
+		}
 	}
 	ptr = getRunningProcess();
 

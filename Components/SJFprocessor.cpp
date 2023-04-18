@@ -9,9 +9,14 @@ void SJF::scheduleAlgo(int currentTimeStep)
 	Processor::scheduleAlgo(currentTimeStep);
 }
 
-void SJF::pullFromRDY(Process*& p)
+bool SJF::pullFromRDY(Process*& p)
 {
-	RDY.pop(p);
+	if (!RDY.isEmpty())
+	{
+		RDY.pop(p);
+		return true;
+	}
+	return false;
 }
 
 void SJF::pushToRDY(Process* p)

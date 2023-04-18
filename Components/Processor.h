@@ -30,7 +30,7 @@ public:
 
 	virtual void scheduleAlgo(int currentTimeStep);		//do the operation of the CPU
 
-	virtual void pullFromRDY(Process*& p) = 0;
+	virtual bool pullFromRDY(Process*& p) = 0;
 	virtual void pushToRDY(Process* p) = 0;
 	
 	CPU_TYPE getMyType();									//you should identify the type of processor while you are creating the processor

@@ -10,9 +10,14 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 }
 
 
-void RRprocessor::pullFromRDY(Process*& p)
+bool RRprocessor::pullFromRDY(Process*& p)
 {
-	RDY.pop(p);
+	if (!RDY.isEmpty())
+	{
+		RDY.pop(p);
+		return true;
+	}
+	return false;
 }
 
 void RRprocessor::pushToRDY(Process* p)
