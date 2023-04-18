@@ -23,9 +23,7 @@ void Scheduler::run()
 void Scheduler::moveToRDY(Process* ptr)
 {
 	Processor* toPutRDY = processorsGroup[indexOfNextCPU % numberOfCPUs];
-	//send the process to a cpu
-	ptr->setHandlingCPU(toPutRDY->getMyType());
-	ptr->setProcessState(READY);
+	toPutRDY->pushToRDY(ptr);
 	indexOfNextCPU++;
 }
 
@@ -94,11 +92,10 @@ void Scheduler::createOutputFile()
 void Scheduler::update()
 {
 		Process* ptr;											//to determine the processor to put the new process in 
-		for (int i = 0; i < numberOfProcesses; i++)
+		while (newList.Front()->getArrivalT()==currentTimeStep)
 		{
-			ptr = nullptr;
 			newList.pop(ptr);
-			moveToRDY(ptr);
+			moveToRDY(ptr); 
 		}
 
 		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
@@ -107,30 +104,18 @@ void Scheduler::update()
 
 		for (int i = 0; i < numberOfCPUs; i++) {
 			double randNum = random();
-			ptr = processorsGroup[i]->getRunningProcess();
-			if (ptr)
+			if (randNum >= 1 && randNum <= 15)
 			{
-				if (randNum >= 1 && randNum <= 15)
-				{
-					moveToBLK(ptr);
-					processorsGroup[i]->setRunningProcess(nullptr);
-					processorsGroup[i]->updateCPUstate();
-				}
-				if (randNum >= 20 && randNum <= 30)
-				{
-					moveToRDY(ptr);
-					processorsGroup[i]->setRunningProcess(nullptr);
-					processorsGroup[i]->updateCPUstate();
-				}
-				if (randNum >= 50 && randNum <= 60)
-				{
-					moveToTRM(ptr);
-					processorsGroup[i]->setRunningProcess(nullptr);
-					processorsGroup[i]->updateCPUstate();
-				}
-
+				processorsGroup[i]->movetoBLK();
 			}
-
+			if (randNum >= 20 && randNum <= 30)
+			{
+				processorsGroup[i]->movetoMyRDY();
+			}
+			if (randNum >= 50 && randNum <= 60)
+			{
+				processorsGroup[i]->movetoTRM();
+			}
 		}
 		ptr = nullptr;
 		double randNum = random();

@@ -36,6 +36,9 @@ public:
 	CPU_TYPE getMyType();									//you should identify the type of processor while you are creating the processor
 	std::string getID();
 
+	void movetoBLK();
+	void movetoTRM();
+	void movetoMyRDY();
 	CPU_STATE getCPUstate();
 
 	int getExpectedFinishT();
