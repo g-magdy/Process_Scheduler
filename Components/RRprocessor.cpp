@@ -1,6 +1,6 @@
 #include "RRprocessor.h"
 
-RRprocessor::RRprocessor(Scheduler* pscheduler, int rtf) :Processor(pscheduler, RR_T), RTF(rtf)
+RRprocessor::RRprocessor(Scheduler* pscheduler,int tslice, int rtf) :Processor(pscheduler, RR_T),timeSlice(tslice), RTF(rtf)
 {
 }
 
