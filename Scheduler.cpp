@@ -16,7 +16,7 @@ bool Scheduler::run()
 	while (numberOfProcesses > terminatedList.size())
 	{
 		update();									//perform the logic of simulation
-		pUI->showStatus();
+		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList);
 		currentTimeStep++;
 	}
 	return false;
@@ -24,7 +24,7 @@ bool Scheduler::run()
 
 void Scheduler::moveToRDY(Process* ptr)
 {
-	Processor* toPutRDY = &processorsGroup[indexOfNextCPU % numberOfCPUs];
+	Processor* toPutRDY = processorsGroup[indexOfNextCPU % numberOfCPUs];
 	ptr->setHandlingCPU(toPutRDY->getMyType());
 	ptr->setProcessState(READY);
 	indexOfNextCPU++;
@@ -103,31 +103,31 @@ void Scheduler::update()
 		}
 
 		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
-			processorsGroup[i].scheduleAlgo(currentTimeStep);
+			processorsGroup[i]->scheduleAlgo(currentTimeStep);
 		}
 
 		for (int i = 0; i < numberOfCPUs; i++) {
 			double randNum = random();
-			ptr = processorsGroup[i].getRunningProcess();
+			ptr = processorsGroup[i]->getRunningProcess();
 			if (ptr)
 			{
 				if (randNum >= 1 && randNum <= 15)
 				{
 					moveToBLK(ptr);
-					processorsGroup[i].setRunningProcess(nullptr);
-					processorsGroup[i].updateCPUstate();
+					processorsGroup[i]->setRunningProcess(nullptr);
+					processorsGroup[i]->updateCPUstate();
 				}
 				if (randNum >= 20 && randNum <= 30)
 				{
 					moveToRDY(ptr);
-					processorsGroup[i].setRunningProcess(nullptr);
-					processorsGroup[i].updateCPUstate();
+					processorsGroup[i]->setRunningProcess(nullptr);
+					processorsGroup[i]->updateCPUstate();
 				}
 				if (randNum >= 50 && randNum <= 60)
 				{
 					moveToTRM(ptr);
-					processorsGroup[i].setRunningProcess(nullptr);
-					processorsGroup[i].updateCPUstate();
+					processorsGroup[i]->setRunningProcess(nullptr);
+					processorsGroup[i]->updateCPUstate();
 				}
 
 			}
@@ -145,8 +145,8 @@ void Scheduler::update()
 		if (rand_num <= numberOfProcesses) {
 			std::string id = std::to_string(rand_num);
 			for (int i = 0; i < numberOfCPUs; i++) {
-				if (processorsGroup[i].getMyType() == FCFS_T) {
-					if (processorsGroup[i].kill(id))
+				if (processorsGroup[i]->getMyType() == FCFS_T) {
+					if (processorsGroup[i]->kill(id))
 					{
 						break;
 					}
