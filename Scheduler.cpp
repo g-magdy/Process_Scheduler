@@ -119,10 +119,32 @@ void Scheduler::readInputFile()
 			int arrival_t, cpu_t, numIO;
 			string ID;
 			myInputFile >> arrival_t >> ID >> cpu_t >> numIO;
+			Process* nPtr = new Process(ID, arrival_t, cpu_t);
 			for (int i = 0; i < numIO; i++)
 			{
-				/// TODO : read pairs (t,d),(t,d),..
+				/// TOTEST : read pairs (t,d),(t,d),..
+				int t, d;
+				myInputFile.ignore(6, '(');
+				myInputFile >> t;
+				myInputFile.ignore(',');
+				myInputFile >> d;
+				myInputFile.ignore();
+				Pair<int, int> IO_p;
+				IO_p.first = t;
+				IO_p.second = d;
+				nPtr->pushIORquest(IO_p);
 			}
+		}
+		///TOTEST : killing signal 
+		while (!myInputFile.eof())
+		{
+			int at;
+			string s;
+			myInputFile >> at >> s;
+			Pair<int, string> p;
+			p.first = at;
+			p.second = s;
+			killList.push(p);
 		}
 	}
 }
