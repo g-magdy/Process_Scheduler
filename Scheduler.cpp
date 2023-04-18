@@ -10,21 +10,20 @@ void Scheduler::startUp()
 	runningMode = pUI->startUP();
 }
 
-bool Scheduler::run()
+void Scheduler::run()
 {
-	currentTimeStep = 1;
 	while (numberOfProcesses > terminatedList.size())
 	{
-		update();									//perform the logic of simulation
-		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList);
 		currentTimeStep++;
+		update();									//perform the logic of simulation
+		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList); /// may change
 	}
-	return false;
 }
 
 void Scheduler::moveToRDY(Process* ptr)
 {
 	Processor* toPutRDY = processorsGroup[indexOfNextCPU % numberOfCPUs];
+	//send the process to a cpu
 	ptr->setHandlingCPU(toPutRDY->getMyType());
 	ptr->setProcessState(READY);
 	indexOfNextCPU++;
@@ -140,19 +139,11 @@ void Scheduler::update()
 			blockedList.pop(ptr);
 			moveToRDY(ptr);
 		}
-		//termination of probablity 20%
-		int rand_num = random(5*numberOfProcesses);
+		
+		int rand_num = random(numberOfProcesses);
 		if (rand_num <= numberOfProcesses) {
 			std::string id = std::to_string(rand_num);
-			for (int i = 0; i < numberOfCPUs; i++) {
-				if (processorsGroup[i]->getMyType() == FCFS_T) {
-					if (processorsGroup[i]->kill(id))
-					{
-						break;
-					}
-				}
-			}
-
+			kill(id);
 		}
 		
 }

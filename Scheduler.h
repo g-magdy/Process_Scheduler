@@ -38,7 +38,7 @@ private:
 public:
 	Scheduler();
 	void startUp();
-	bool run();
+	void run();
 	void moveToRDY(Process* ptr);
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);

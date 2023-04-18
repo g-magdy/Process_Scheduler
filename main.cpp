@@ -8,7 +8,7 @@ int main()
 
 	ProScheduler->startUp();
 
-	while(ProScheduler->run());
+	ProScheduler->run();
 
 	return 0;
 }
