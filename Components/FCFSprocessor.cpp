@@ -31,9 +31,11 @@ void FCFSprocessor::printRDYList()
 
 bool FCFSprocessor::kill(std::string idtoKill)
 {
-	if (RDY.find(idtoKill))
+	Process processToKill(idtoKill);
+	int indx = RDY.find(&processToKill);
+	if (indx != -1)
 	{
-		Process * ptr=RDY.removeByID(idtoKill);
+		Process * ptr = RDY.remove(indx);
 		pScheduler->moveToTRM(ptr);
 		return 1;
 	}
