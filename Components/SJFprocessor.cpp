@@ -1,6 +1,6 @@
 #include "SJFprocessor.h"
 
-SJF::SJF(Scheduler* pscheduler):Processor(pscheduler, SJF_T)
+SJF::SJF(Scheduler* pscheduler, std::string s):Processor(pscheduler, SJF_T, s)
 {
 }
 

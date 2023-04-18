@@ -9,7 +9,7 @@ private:
 	const int RTF;
 	const int timeSlice;
 public:
-	RRprocessor(Scheduler* pscheduler,int tslice, int rtf);
+	RRprocessor(Scheduler* pscheduler, std::string s,int tslice, int rtf);
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
 	virtual void pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);

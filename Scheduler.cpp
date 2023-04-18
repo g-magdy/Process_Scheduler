@@ -8,7 +8,7 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 
 void Scheduler::startUp()
 {
-	//readInputFile();
+	readInputFile();
 	runningMode = pUI->startUP();
 }
 
@@ -106,14 +106,14 @@ void Scheduler::readInputFile()
 		processorsGroup = new Processor * [numberOfCPUs];
 		int CPU_i = 0;
 		for (int i = 0; i < num_FCFS; i++)
-			processorsGroup[CPU_i++] = new FCFSprocessor(this, MaxWait, forkProb);
+			processorsGroup[CPU_i++] = new FCFSprocessor(this, to_string(CPU_i+1), MaxWait, forkProb);
 		for (int i = 0; i < num_SJF; i++)
-			processorsGroup[CPU_i++] = new SJF(this);
+			processorsGroup[CPU_i++] = new SJF(this, to_string(CPU_i+1));
 		for (int i = 0; i < num_RR; i++)
-			processorsGroup[CPU_i++] = new RRprocessor(this, timeSliceofRR, minTimeToFinish);
+			processorsGroup[CPU_i++] = new RRprocessor(this, to_string(CPU_i+1), timeSliceofRR, minTimeToFinish);
 
 		// create processes one by one
-		for (int i = 0; i < numberOfProcesses; i++)
+		for (int j = 0; j < numberOfProcesses; j++)
 		{
 			// these buffers are for one process at a time
 			int arrival_t, cpu_t, numIO;
@@ -134,6 +134,7 @@ void Scheduler::readInputFile()
 				IO_p.second = d;
 				nPtr->pushIORquest(IO_p);
 			}
+			newList.push(nPtr);
 		}
 		///TOTEST : killing signal 
 		while (!myInputFile.eof())

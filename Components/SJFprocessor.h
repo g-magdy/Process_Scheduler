@@ -7,7 +7,7 @@ class SJF:public Processor
 private:
 	PriorityQueue <Process*> RDY;
 public:
-	SJF(Scheduler* pscheduler);
+	SJF(Scheduler* pscheduler, std::string s);
 	virtual void scheduleAlgo(int currentTimeStep);			
 	virtual void pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);

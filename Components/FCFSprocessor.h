@@ -9,7 +9,7 @@ private:
 	List<Process*> RDY;
 	const int MaxW, forkProbability;
 public:
-	FCFSprocessor(Scheduler* pscheduler, int maxw, int forkP);
+	FCFSprocessor(Scheduler* pscheduler,std::string s, int maxw, int forkP);
 	virtual void scheduleAlgo(int currentTimeStep);				//do the operation of the CPU
 	virtual void pullFromRDY(Process* & p) ;
 	virtual void pushToRDY(Process* p);

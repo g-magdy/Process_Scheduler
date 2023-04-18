@@ -6,9 +6,9 @@ class Scheduler;
 class Processor
 {
 private:
+	std::string ID;
 	Process* runningProcess;
 	int	expectedFinishT, totalBusyT, totalIdleT;
-	std::string ID;
 	const CPU_TYPE CPUtype;									//enum for cpu type
 	CPU_STATE CPUstate;
 
@@ -26,7 +26,7 @@ protected:
 	virtual void printRDYList() = 0;
 
 public:
-	Processor(Scheduler* pscheduler, CPU_TYPE type);		//non default constructor define total cputime =0
+	Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s);		//non default constructor define total cputime =0
 
 	virtual void scheduleAlgo(int currentTimeStep);		//do the operation of the CPU
 

@@ -1,7 +1,7 @@
 #include "FCFSprocessor.h"
 #include "../Scheduler.h"
 
-FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, int maxw, int forkP):Processor(pscheduler, FCFS_T) ,MaxW(maxw), forkProbability(forkP)
+FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, std::string s, int maxw, int forkP):Processor(pscheduler, FCFS_T, s) ,MaxW(maxw), forkProbability(forkP)
 {
 }
 

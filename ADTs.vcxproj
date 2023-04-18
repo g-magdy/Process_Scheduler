@@ -156,6 +156,9 @@
     <ClCompile Include="snippets.cpp" />
     <ClCompile Include="test130323.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="SampleInputFile1.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

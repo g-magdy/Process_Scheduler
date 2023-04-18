@@ -101,4 +101,7 @@
       <Filter>Scheduler</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="SampleInputFile1.txt" />
+  </ItemGroup>
 </Project>

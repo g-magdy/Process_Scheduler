@@ -2,8 +2,8 @@
 #include"../Scheduler.h"
 
 
-Processor::Processor(Scheduler* pscheduler, CPU_TYPE type)
-	: CPUtype(type), pScheduler(pscheduler)
+Processor::Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s)
+	: CPUtype(type), pScheduler(pscheduler), ID(s)
 {
 	expectedFinishT = totalBusyT = totalIdleT = 0;
 	runningProcess = nullptr;
