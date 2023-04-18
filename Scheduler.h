@@ -26,7 +26,12 @@ private:
 	int indexOfNextCPU;
 
 	//statistics attributes
-
+	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
+	Pair<float,float> SucssefulMigration;
+	float stealPercentage;
+	float  killPercentage;
+	float  forkPercentage;
+	float  AVGUtilisation;
 	//private functions
 	void readInputFile();
 	void createOutputFile();
