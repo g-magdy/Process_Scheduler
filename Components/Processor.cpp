@@ -143,3 +143,13 @@ void Processor::print(char printMode)
 		std::cout << ')';
 	}
 }
+
+float Processor::calcPLoad(int totalTurnTime)
+{
+	return 0.0f;
+}
+
+float Processor::calcPUtil()
+{
+	return 0.0f;
+}
