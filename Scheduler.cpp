@@ -1,5 +1,7 @@
 #include "Scheduler.h"
+#include <fstream>
 #include<string>
+using namespace std;
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0)
 {
 }
@@ -85,6 +87,46 @@ Scheduler::~Scheduler()
 
 void Scheduler::readInputFile()
 {
+	int num_FCFS, num_SJF, num_RR;
+	int timeSliceofRR;
+	int minTimeToFinish, MaxWait, stealLimit, forkProb;
+	int numProcesses;
+	ifstream myInputFile("SampleInputFile1.txt");
+	if (myInputFile.is_open())
+	{
+		// read into buffers
+		myInputFile >> num_FCFS >> num_SJF >> num_RR;
+		myInputFile >> timeSliceofRR;
+		myInputFile >> minTimeToFinish >> MaxWait >> stealLimit >> forkProb;
+		myInputFile >> numProcesses;
+		// setdata memebers of scheduler
+		numberOfCPUs = num_FCFS + num_SJF + num_RR;
+		numberOfProcesses = numProcesses;
+		STL = stealLimit;
+		
+		// create array of CPUS
+		processorsGroup = new Processor * [numberOfCPUs];
+		int CPU_i = 0;
+		for (int i = 0; i < num_FCFS; i++)
+			processorsGroup[CPU_i++] = new FCFSprocessor(this, MaxWait, forkProb);
+		for (int i = 0; i < num_SJF; i++)
+			processorsGroup[CPU_i++] = new SJF(this);
+		for (int i = 0; i < num_RR; i++)
+			processorsGroup[CPU_i++] = new RRprocessor(this, timeSliceofRR, minTimeToFinish);
+
+		// create processes one by one
+		for (int i = 0; i < numberOfProcesses; i++)
+		{
+			// these buffers are for one process at a time
+			int arrival_t, cpu_t, numIO;
+			string ID;
+			myInputFile >> arrival_t >> ID >> cpu_t >> numIO;
+			for (int i = 0; i < numIO; i++)
+			{
+				/// TODO : read pairs (t,d),(t,d),..
+			}
+		}
+	}
 }
 
 void Scheduler::createOutputFile()
