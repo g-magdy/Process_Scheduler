@@ -8,7 +8,7 @@ void UI::print(std::string sr)
 char UI::getInput()
 {
 	char c;
-	std::cin >> c;
+	std::cin.get(c);
 	return c;
 }
 
@@ -42,11 +42,11 @@ void UI::showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Que
 	for (int i = 0; i < size; i++)
 		CPUList[i]->print('l');
 	
-	std::cout << "------------------ BLK processes ------------------" << std::endl;
+	std::cout << "\n------------------ BLK processes ------------------" << std::endl;
 	std::cout << BLKList.size() << " BLK: ";
 	BLKList.print();
 
-	std::cout << "------------------ RUN processes ------------------" << std::endl;
+	std::cout << "\n------------------ RUN processes ------------------" << std::endl;
 	int runningCPUsCount = 0;
 	for (int i = 0; i < size; i++)
 		if (CPUList[i]->getCPUstate() == Busy) runningCPUsCount++;
@@ -59,7 +59,9 @@ void UI::showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Que
 			if (j < runningCPUsCount) std::cout << ", ";
 		}
 
-	std::cout << "------------------ TRM processes ------------------" << std::endl;
+	std::cout << "\n------------------ TRM processes ------------------" << std::endl;
 	std::cout << TRMList.size() << " TRM: ";
 	TRMList.print();
+
+	std::cout << std::endl;
 }

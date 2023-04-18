@@ -1,6 +1,7 @@
 #include "Scheduler.h"
 #include <fstream>
 #include<string>
+#include <Windows.h>
 using namespace std;
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0)
 {
@@ -19,7 +20,7 @@ void Scheduler::run()
 	{
 		currentTimeStep++;
 		update();									//perform the logic of simulation
-		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList); /// may change
+		updateConsole();
 	}
 }
 
@@ -187,8 +188,11 @@ void Scheduler::update()
 		double randNum = random();
 		if (randNum <= 10)
 		{
-			blockedList.pop(ptr);
-			moveToRDY(ptr);
+			if (!blockedList.isEmpty())
+			{
+				blockedList.pop(ptr);
+				moveToRDY(ptr);
+			}
 		}
 		
 		int rand_num = random(numberOfProcesses);
@@ -217,4 +221,26 @@ bool Scheduler::steal()
 bool Scheduler::kill()
 {
 	return false;
+}
+
+void Scheduler::updateConsole()
+{
+	if (currentTimeStep == 1 && runningMode == SILENT)
+		pUI->print("Silent Mode......... Simulation Starts.......");
+	
+	if (runningMode == INTERACTIVE)
+	{
+		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList); /// may change
+		pUI->getInput();
+	}
+	else if (runningMode == STEPBYSTEP)
+	{
+		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList); /// may change
+		Sleep(1000);
+	}
+
+	if (numberOfProcesses <= terminatedList.size())
+	{
+		pUI->print("Simulation Ends, Output file created.");
+	}
 }

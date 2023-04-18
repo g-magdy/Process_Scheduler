@@ -35,6 +35,8 @@ private:
 	Processor* createCPU(CPU_TYPE);
 	bool steal();
 	bool kill();
+	void updateConsole();
+
 public:
 	Scheduler();
 	void startUp();
