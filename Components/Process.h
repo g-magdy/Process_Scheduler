@@ -22,7 +22,8 @@ private:
 
 public:															
 	Process(std::string id, int inAT, int ct);					 // non-defult constructor
-	Process(const Process& origin);								 // copy constructor													 //default argument constructor
+	Process(const Process& origin);								 // copy constructor		
+	Process(std::string id);									 // this constructor is to be used in searching
 	std::string getID() const;									 // getter to the id
 																
 	void setProcessState(ProcessState CS);						 // setter to the process state
