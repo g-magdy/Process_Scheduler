@@ -16,57 +16,60 @@ void List<Process*>::print() const
 }
 
 template<>
-bool List<Process*>::find(std::string ID) const
+int List<Process*>::find(Process* key) const
 {
 	if (isEmpty())
-		return false;
+		return -1;
+
+	int count = 1;
 
 	Node<Process*>* trav = head;
 	while (trav)
 	{
-		if (trav->getData()->getID() == ID)
-			return true;
+		if (trav->getData()->getID() == key->getID())
+			return count;
 		trav = trav->getNext();
+		count++;
 	}
-	return false;
+	return -1;
 }
 
-template<>
-Process* List<Process*>::removeByID(std::string ID)
-{
-	if (isEmpty())
-		return nullptr;
-
-	Process* required = nullptr;
-	
-	if (head->getData()->getID() == ID)
-	{
-		required = head->getData();
-		Node<Process*>* toDel = head;
-		head = head->getNext();
-		count--;
-		delete toDel;
-	}
-	else
-	{
-		Node<Process*>* prev = head;
-		Node<Process*>* trav = head->getNext();
-		while (trav != nullptr)
-		{
-			if (trav->getData()->getID() == ID )
-			{
-				required = trav->getData();
-				Node<Process*>* toDel = trav;
-				trav = trav->getNext(); // the one after target
-				prev->setNext(trav);
-				delete toDel;
-				count--;
-				break;
-			}
-			prev = trav;
-			trav = trav->getNext();
-		}
-	}
-
-	return required;
-}
+//template<>
+//Process* List<Process*>::removeByID(std::string ID)
+//{
+//	if (isEmpty())
+//		return nullptr;
+//
+//	Process* required = nullptr;
+//	
+//	if (head->getData()->getID() == ID)
+//	{
+//		required = head->getData();
+//		Node<Process*>* toDel = head;
+//		head = head->getNext();
+//		count--;
+//		delete toDel;
+//	}
+//	else
+//	{
+//		Node<Process*>* prev = head;
+//		Node<Process*>* trav = head->getNext();
+//		while (trav != nullptr)
+//		{
+//			if (trav->getData()->getID() == ID )
+//			{
+//				required = trav->getData();
+//				Node<Process*>* toDel = trav;
+//				trav = trav->getNext(); // the one after target
+//				prev->setNext(trav);
+//				delete toDel;
+//				count--;
+//				break;
+//			}
+//			prev = trav;
+//			trav = trav->getNext();
+//		}
+//	}
+//
+//	return required;
+//}

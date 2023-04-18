@@ -32,11 +32,10 @@ public:
 	bool pop_back();									// Deallocates the last element from the list if exists
 	bool pop_back(ItemType& item);						// Deallocates the last element from the list if exists and puts it in item
 	
-	bool find(const ItemType& key) const;
-	bool find(std::string ID) const;
+	int find(ItemType key) const;
+	//bool find(std::string ID) const;
 
-	bool removeByIndex(int index);
-	Process* removeByID(std::string ID);
+	ItemType remove(int index);
 
 	~List() { clear(); }
 };
@@ -205,34 +204,38 @@ inline bool List<ItemType>::pop_back(ItemType& item)
 }
 
 template<class ItemType>
-inline bool List<ItemType>::find(const ItemType& key) const
+inline int List<ItemType>::find(ItemType key) const
 {
 	if (isEmpty())
-		return false;
+		return -1;
+
+	int count = 1;
 
 	Node<ItemType>* trav = head;
 	while (trav)
 	{
 		if (trav->getData() == key)
-			return true;
+			return count;
 		trav = trav->getNext();
+		count++;
 	}
-	return false;
+	return -1;
 }
 
 template<class ItemType>
-bool List<ItemType>::removeByIndex(int index)
+ItemType List<ItemType>::remove(int index)
 {
 	if (index <= 0 || index > count || head == nullptr)
-		return false;
+		throw "Out Of Range.";
 
+	ItemType toBeRemoved;
 	if (index == 1)
 	{
-		pop_front();
+		pop_front(toBeRemoved);
 	}
 	else if (index == getCount())
 	{
-		pop_back();
+		pop_back(toBeRemoved);
 	}
 	else
 	{
@@ -240,18 +243,20 @@ bool List<ItemType>::removeByIndex(int index)
 		for (int i = 1; i < index-1; i++)
 			prev= prev->getNext();
 		Node<ItemType>* toDelPtr = prev->getNext();
+		toBeRemoved = toDelPtr->getData();
 		prev->setNext(toDelPtr->getNext());
 		delete toDelPtr;
 		count--;
 	}
-	return true;
+	return toBeRemoved;
 }
 
 
 template<>
 void List<Process*>::print() const;
-template<>
-bool List<Process*>::find(std::string ID) const;
 
 template<>
-Process* List<Process*>::removeByID(std::string ID);
+int List<Process*>::find(Process* key) const;
+
+//template<>
+//Process* List<Process*>::removeByID(std::string ID);
