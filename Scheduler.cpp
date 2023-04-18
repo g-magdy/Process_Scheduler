@@ -4,6 +4,7 @@
 using namespace std;
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0)
 {
+	pUI = new UI(this);
 }
 
 void Scheduler::startUp()
@@ -126,7 +127,7 @@ void Scheduler::readInputFile()
 				int t, d;
 				myInputFile.ignore(6, '(');
 				myInputFile >> t;
-				myInputFile.ignore(',');
+				myInputFile.ignore(1, ','); /// there is a problem here ?
 				myInputFile >> d;
 				myInputFile.ignore();
 				Pair<int, int> IO_p;
@@ -157,7 +158,7 @@ void Scheduler::createOutputFile()
 void Scheduler::update()
 {
 		Process* ptr;											//to determine the processor to put the new process in 
-		while (newList.Front()->getArrivalT()==currentTimeStep)
+		while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
 		{
 			newList.pop(ptr);
 			moveToRDY(ptr); 
