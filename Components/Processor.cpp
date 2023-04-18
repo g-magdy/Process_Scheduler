@@ -52,6 +52,30 @@ std::string Processor::getID()
 	return ID;
 }
 
+void Processor::movetoBLK()
+{
+	Process* ptr = getRunningProcess();
+	pScheduler->moveToBLK(ptr);
+	setRunningProcess(nullptr);
+	updateCPUstate();
+}
+
+void Processor::movetoTRM()
+{
+	Process* ptr = getRunningProcess();
+	pScheduler->moveToTRM(ptr);
+	setRunningProcess(nullptr);
+	updateCPUstate();
+}
+
+void Processor::movetoMyRDY()
+{
+	Process* ptr = getRunningProcess();
+	pushToRDY(ptr);
+	setRunningProcess(nullptr);
+	updateCPUstate();
+}
+
 CPU_STATE Processor::getCPUstate()
 {
 	return CPUstate;
