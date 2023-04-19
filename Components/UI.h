@@ -18,12 +18,12 @@ public:
 	void print(std::string sr);          // Prints a string given to it with no extra spaces or "endl"
 	char getInput();
 									     
-	template<typename T>			     
-	void print(T* ob);				     
+	/*template<typename T>			     
+	void print(T* ob);*/				     
 };
 
-template<typename T>
-inline void UI::print(T* ob)
-{
-	std::cout << *ob;
-}
+//template<typename T>
+//inline void UI::print(T* ob)
+//{
+//	std::cout << *ob;
+//}

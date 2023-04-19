@@ -12,7 +12,9 @@ void Queue<Process*>::print() const
 	Node<Process*>* cur = front;
 	while (cur)
 	{
-		cout << *(cur->getData()) << ", ";
+		cout << *(cur->getData());
 		cur = cur->getNext();
+		if(cur)
+			cout << ", ";
 	}
 }

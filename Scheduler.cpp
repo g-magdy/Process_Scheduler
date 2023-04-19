@@ -225,9 +225,6 @@ bool Scheduler::kill()
 
 void Scheduler::updateConsole()
 {
-	if (currentTimeStep == 1 && runningMode == SILENT)
-		pUI->print("Silent Mode......... Simulation Starts.......");
-	
 	if (runningMode == INTERACTIVE)
 	{
 		pUI->showStatus(processorsGroup, numberOfCPUs, blockedList, terminatedList); /// may change

@@ -36,13 +36,13 @@ RunningMode UI::startUP()
 
 void UI::showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Queue<Process*>& TRMList)
 {
-	std::cout << "Current Timestep: " << pScheduler->getTimeStep() << std::endl;
+	std::cout << "\nCurrent Timestep: " << pScheduler->getTimeStep() << std::endl;
 
 	std::cout << "------------------ RDY processes ------------------" << std::endl;
 	for (int i = 0; i < size; i++)
 		CPUList[i]->print('l');
 	
-	std::cout << "\n------------------ BLK processes ------------------" << std::endl;
+	std::cout << "------------------ BLK processes ------------------" << std::endl;
 	std::cout << BLKList.size() << " BLK: ";
 	BLKList.print();
 
