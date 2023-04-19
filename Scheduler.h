@@ -24,6 +24,7 @@ private:
 	int STL;
 	RunningMode runningMode;
 	int indexOfNextCPU;
+	int randHelper;
 
 	//statistics attributes
 	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
@@ -56,6 +57,6 @@ public:
 
 	void simulation();
 
-	int random(int upperbound = 100) const; //returns a value from 0 to 100
+	int random(int upperbound = 100); //returns a value from 0 to 100
 	~Scheduler();
 };

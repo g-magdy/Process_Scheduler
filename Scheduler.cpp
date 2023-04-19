@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
 {
 	pUI = new UI(this);
 }
@@ -38,9 +38,9 @@ void Scheduler::moveToTRM(Process* ptr)
 }
 
 
-int Scheduler::random(int upperbound) const
+int Scheduler::random(int upperbound)
 {
-	std::srand(time(NULL));
+	std::srand(time(NULL) * randHelper++);
 	return std::rand() % upperbound;
 }
 
