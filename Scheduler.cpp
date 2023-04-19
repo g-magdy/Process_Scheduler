@@ -246,3 +246,7 @@ void Scheduler::updateConsole()
 		pUI->print("Simulation Ends, Output file created.");
 	}
 }
+
+void Scheduler::serveIO()
+{
+}

@@ -42,6 +42,7 @@ private:
 	bool steal();
 	bool kill();
 	void updateConsole();
+	void serveIO();
 
 public:
 	Scheduler();
