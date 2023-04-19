@@ -10,18 +10,10 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 
 void Scheduler::startUp()
 {
-	readInputFile();
-	runningMode = pUI->startUP();
 }
 
 void Scheduler::run()
 {
-	while (numberOfProcesses > terminatedList.size())
-	{
-		currentTimeStep++;
-		update();									//perform the logic of simulation
-		updateConsole();
-	}
 }
 
 void Scheduler::moveToRDY(Process* ptr)
@@ -79,6 +71,62 @@ bool Scheduler::kill(std::string idToKill)
 		}
 	}
 	return false;
+}
+
+void Scheduler::simulation()
+{
+	readInputFile();
+	runningMode = pUI->startUP();
+
+	while (numberOfProcesses > terminatedList.size())
+	{
+		currentTimeStep++;
+
+		Process* ptr;											//to determine the processor to put the new process in 
+		while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
+		{
+			newList.pop(ptr);
+			moveToRDY(ptr);
+		}
+
+		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
+			processorsGroup[i]->scheduleAlgo(currentTimeStep);
+		}
+
+		for (int i = 0; i < numberOfCPUs; i++) {
+			double randNum = random();
+			if (randNum >= 1 && randNum <= 15)
+			{
+				processorsGroup[i]->movetoBLK();
+			}
+			if (randNum >= 20 && randNum <= 30)
+			{
+				processorsGroup[i]->movetoMyRDY();
+			}
+			if (randNum >= 50 && randNum <= 60)
+			{
+				processorsGroup[i]->movetoTRM();
+			}
+		}
+		ptr = nullptr;
+		double randNum = random();
+		if (randNum <= 10)
+		{
+			if (!blockedList.isEmpty())
+			{
+				blockedList.pop(ptr);
+				moveToRDY(ptr);
+			}
+		}
+
+		int rand_num = random(numberOfProcesses);
+		if (rand_num <= numberOfProcesses) {
+			std::string id = std::to_string(rand_num);
+			kill(id);
+		}
+
+		updateConsole();
+	}
 }
 
 Scheduler::~Scheduler()
@@ -158,49 +206,6 @@ void Scheduler::createOutputFile()
 
 void Scheduler::update()
 {
-		Process* ptr;											//to determine the processor to put the new process in 
-		while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
-		{
-			newList.pop(ptr);
-			moveToRDY(ptr); 
-		}
-
-		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
-			processorsGroup[i]->scheduleAlgo(currentTimeStep);
-		}
-
-		for (int i = 0; i < numberOfCPUs; i++) {
-			double randNum = random();
-			if (randNum >= 1 && randNum <= 15)
-			{
-				processorsGroup[i]->movetoBLK();
-			}
-			if (randNum >= 20 && randNum <= 30)
-			{
-				processorsGroup[i]->movetoMyRDY();
-			}
-			if (randNum >= 50 && randNum <= 60)
-			{
-				processorsGroup[i]->movetoTRM();
-			}
-		}
-		ptr = nullptr;
-		double randNum = random();
-		if (randNum <= 10)
-		{
-			if (!blockedList.isEmpty())
-			{
-				blockedList.pop(ptr);
-				moveToRDY(ptr);
-			}
-		}
-		
-		int rand_num = random(numberOfProcesses);
-		if (rand_num <= numberOfProcesses) {
-			std::string id = std::to_string(rand_num);
-			kill(id);
-		}
-		
 }
 
 Process* Scheduler::createProcess(std::string, int, int)

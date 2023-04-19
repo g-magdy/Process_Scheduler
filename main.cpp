@@ -4,11 +4,11 @@
 int main()
 {
 
-	Scheduler* ProScheduler= new Scheduler();
+	Scheduler* ProScheduler = new Scheduler();
 
-	ProScheduler->startUp();
+	ProScheduler->simulation();
 
-	ProScheduler->run();
+	delete ProScheduler;
 
 	return 0;
 }

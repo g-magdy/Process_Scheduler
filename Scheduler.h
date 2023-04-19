@@ -54,6 +54,8 @@ public:
 	bool migrate(Process*, CPU_TYPE);
 	bool kill(std::string);
 
+	void simulation();
+
 	int random(int upperbound = 100) const; //returns a value from 0 to 100
 	~Scheduler();
 };
