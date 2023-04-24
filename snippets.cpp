@@ -104,3 +104,14 @@ enum CPU_STATE
 	//if (randNum >= 10)
 	//	//pScheduler->movefromBLKtoRDY;				//move from IO queue to ready
 	//;
+
+//{
+	//when adding a new process to the cpu
+	//exptectedFinishTime += process.cputime - process.finishedcputime;
+	
+	//when sending a process to BLK list
+	//exptectedFinishTime -= process.cputime - process.finishedcputime;
+	
+	//in the schduleAlgo decrease the expectedFinishTime by 1
+
+//}
