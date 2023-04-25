@@ -8,11 +8,11 @@ class Processor
 private:
 	std::string ID;
 	Process* runningProcess;
-	int	expectedFinishT, totalBusyT, totalIdleT;
 	const CPU_TYPE CPUtype;									//enum for cpu type
 	CPU_STATE CPUstate;
 
 protected:
+	int	expectedFinishT, totalBusyT, totalIdleT;
 	Scheduler* const pScheduler;
 	virtual void updateCPUstate();
 	void updateCPUTs();
