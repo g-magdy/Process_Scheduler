@@ -7,7 +7,44 @@ FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, std::string s, int maxw, int
 
 void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
-	Processor::scheduleAlgo(currentTimeStep);
+	if (!runningProcess) // was no running process
+	{
+		if (pullFromRDY(runningProcess)) // if the ready list is not empty
+		{
+			runningProcess->setProcessState(RUN);
+			runningProcess->setHandlingCPU(FCFS_T);
+			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
+			runningProcess->updateFinishedCPUT();
+		}
+		else // no running process and empty Ready list
+		{
+			setCPUstate(IDLE);
+		}
+	}
+	else
+	{
+		setCPUstate(Busy);
+		runningProcess->updateFinishedCPUT();
+
+		// IO check
+		Pair<int, int> req;
+		if (runningProcess->peekNextIOR(req)) // if exists
+		{
+			if (req.first == runningProcess->getFinishedCPUT()) //right time
+			{
+				pScheduler->moveToBLK(runningProcess);
+				runningProcess = nullptr;
+			}
+		}
+		// Termination check
+		else if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		{
+			pScheduler->moveToTRM(runningProcess); // modified
+			runningProcess = nullptr;
+		}
+	}
+	///TODO: migration, forking
+	updateCPUTs();
 }
 
 
@@ -41,6 +78,13 @@ bool FCFSprocessor::kill(std::string idtoKill)
 	if (indx != -1)
 	{
 		Process * ptr = RDY.remove(indx);
+		/// TODO: what if the killed process was the running process ?
+		/*
+		if (ptr->getProcessState() == RUN)
+		{
+			runningProcess = nullptr;
+		}
+		*/
 		pScheduler->moveToTRM(ptr);
 		return 1;
 	}

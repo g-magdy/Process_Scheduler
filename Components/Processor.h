@@ -7,11 +7,11 @@ class Processor
 {
 private:
 	std::string ID;
-	Process* runningProcess;
 	const CPU_TYPE CPUtype;									//enum for cpu type
 	CPU_STATE CPUstate;
 
 protected:
+	Process* runningProcess; // each processor type can access its running process
 	int	expectedFinishT, totalBusyT, totalIdleT;
 	Scheduler* const pScheduler;
 	virtual void updateCPUstate();

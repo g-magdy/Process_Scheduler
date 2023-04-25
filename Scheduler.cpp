@@ -34,6 +34,7 @@ void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
 	ptr->setTerminationT(currentTimeStep);
+	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
 	terminatedList.push(ptr);
 }
 
