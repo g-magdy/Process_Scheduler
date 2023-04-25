@@ -7,23 +7,24 @@ FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, std::string s, int maxw, int
 
 void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
-	if (!runningProcess) // was no running process
+	if (!runningProcess) // was not running any process
 	{
 		if (pullFromRDY(runningProcess)) // if the ready list is not empty
 		{
 			runningProcess->setProcessState(RUN);
-			runningProcess->setHandlingCPU(FCFS_T);
+			//runningProcess->setHandlingCPU(FCFS_T);  (set only when adding to ready list)
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-			runningProcess->updateFinishedCPUT();
+			//runningProcess->updateFinishedCPUT(); (updated only on line 28)
 		}
 		else // no running process and empty Ready list
 		{
 			setCPUstate(IDLE);
 		}
 	}
-	else
+	
+	if(runningProcess) // currently executing or pulled fresh from ready in line 12
 	{
-		setCPUstate(Busy);
+		setCPUstate(Busy); // not sure if needed
 		runningProcess->updateFinishedCPUT();
 
 		// IO check
