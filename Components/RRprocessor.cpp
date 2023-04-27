@@ -7,21 +7,20 @@ RRprocessor::RRprocessor(Scheduler* pscheduler, std::string s, int tslice, int r
 
 void RRprocessor::scheduleAlgo(int currentTimeStep)
 {
-	if (getCPUstate() == IDLE)				// if the cpu is idle, check if there is any process in the ready list
+	if (!runningProcess)				// if the cpu is idle, check if there is any process in the ready list
 	{
 		if (pullFromRDY(runningProcess))				// if ther, get it and put in run
 		{
 			runningProcess->setProcessState(RUN);
-			updateCPUstate();
 		}
 	}
 	
-	updateCPUTs();
 
-	if (getCPUstate() == Busy)
+	if (runningProcess)
 	{
 		runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());			// sets the response time if this is the first time the process is handled
 		runningProcess->updateFinishedCPUT();						//increament the CPU time of this process by one
+		expectedFinishT--;
 
 		//check for IO requests
 		Pair<int, int> nextRequest;
@@ -29,6 +28,7 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 		{
 			if (nextRequest.first == (runningProcess->getFinishedCPUT()))
 			{
+				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
 				runningProcess == nullptr;
 			}
@@ -46,9 +46,17 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 			if (runningProcess)
 			{
 				/// TODO: Process migration is handled in this part
-				movetoMyRDY(); //update cpu state is done inside this funciton
+				pushToRDY(runningProcess);
+				runningProcess = nullptr;
 			}
+
+		totalBusyT++;
 	}
+	else {
+		totalIdleT++;
+	}
+	
+	updateCPUstate();
 }
 
 
@@ -64,6 +72,7 @@ bool RRprocessor::pullFromRDY(Process*& p)
 
 void RRprocessor::pushToRDY(Process* p)
 {
+	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
 	p->setProcessState(READY);
 	p->setHandlingCPU(RR_T);
 	RDY.push(p);
