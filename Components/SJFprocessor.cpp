@@ -1,18 +1,16 @@
 #include "SJFprocessor.h"
-
+#include"../Scheduler.h"
 SJF::SJF(Scheduler* pscheduler, std::string s):Processor(pscheduler, SJF_T, s)
 {
 }
 
 void SJF::scheduleAlgo(int currentTimeStep)
 {
-	Process* runningProcess = getRunningProcess();
 	if (!runningProcess) {
 
 		if (pullFromRDY(runningProcess)) {
-			setRunningProcess(runningProcess);
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-			expectedFinishT += runningProcess->getCPUT();
+
 
 		}
 		else {
@@ -27,19 +25,18 @@ void SJF::scheduleAlgo(int currentTimeStep)
 		Pair<int, int> p;
 		if (runningProcess->peekNextIOR(p)) {
 
-			if (p.first == currentTimeStep)
+			if (p.first == runningProcess->getFinishedCPUT())
 			{
 				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
-				//pScheduler->moveToBLK(runningProcess);
-				setRunningProcess(nullptr);
+				pScheduler->moveToBLK(runningProcess);
+		;
 				runningProcess = nullptr;
 
 			}
 		}
 		else
-			if (currentTimeStep == runningProcess->getTerminationT()) {
-				//pScheduler->moveToTRM(ptr);
-				setRunningProcess(nullptr);
+			if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT()){
+				pScheduler->moveToTRM(runningProcess);
 				runningProcess = nullptr;
 				expectedFinishT--;
 			}
@@ -64,6 +61,7 @@ bool SJF::pullFromRDY(Process*& p)
 
 void SJF::pushToRDY(Process* p)
 {
+	expectedFinishT += p->getCPUT()-p->getFinishedCPUT();
 	p->setProcessState(READY);
 	p->setHandlingCPU(SJF_T);
 	RDY.push(p);

@@ -145,7 +145,7 @@ Scheduler::~Scheduler()
 		delete processorsGroup[i];
 	}
 	delete[]processorsGroup;
-
+	delete pUI;
 }
 
 void Scheduler::readInputFile()
