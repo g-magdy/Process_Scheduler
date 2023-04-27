@@ -55,38 +55,6 @@ std::string Processor::getID()
 	return ID;
 }
 
-void Processor::movetoBLK()
-{
-	Process* ptr = getRunningProcess();
-	if (ptr)
-	{
-		pScheduler->moveToBLK(ptr);
-		setRunningProcess(nullptr);
-		updateCPUstate();
-	}
-}
-
-void Processor::movetoTRM()
-{
-	Process* ptr = getRunningProcess();
-	if (ptr)
-	{
-		pScheduler->moveToTRM(ptr);
-		setRunningProcess(nullptr);
-		updateCPUstate();
-	}
-}
-
-void Processor::movetoMyRDY()
-{
-	Process* ptr = getRunningProcess();
-	if (ptr)
-	{
-		pushToRDY(ptr);
-		setRunningProcess(nullptr);
-		updateCPUstate();
-	}
-}
 
 CPU_STATE Processor::getCPUstate()
 {
@@ -100,10 +68,12 @@ void Processor::setCPUstate(CPU_STATE state)
 
 void Processor::updateCPUTs()		//each timestep decrease the expectedFinishT and increach either the totalBusyT or totalIdleT according to the state of the CPU
 {
-	expectedFinishT--;					
 
 	if (getCPUstate() == Busy)
+	{
 		totalBusyT++;
+		expectedFinishT--;				
+	}
 	else
 		totalIdleT++;
 }
@@ -122,6 +92,8 @@ int Processor::getExpectedFinishT()
 {
 	return expectedFinishT;
 }
+
+
 
 void Processor::print(char printMode)
 {

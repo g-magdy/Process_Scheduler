@@ -131,6 +131,19 @@ void Scheduler::simulation()
 
 Scheduler::~Scheduler()
 {
+	Process* toDelete;
+	
+	while (!terminatedList.isEmpty())
+	{
+		terminatedList.pop(toDelete);
+		delete toDelete;
+		toDelete = nullptr;
+	}
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		delete processorsGroup[i];
+	}
+	delete[]processorsGroup;
 }
 
 void Scheduler::readInputFile()

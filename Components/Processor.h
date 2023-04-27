@@ -8,11 +8,11 @@ class Processor
 private:
 	std::string ID;
 	Process* runningProcess;
-	int	expectedFinishT, totalBusyT, totalIdleT;
 	const CPU_TYPE CPUtype;									//enum for cpu type
 	CPU_STATE CPUstate;
 
 protected:
+	int	expectedFinishT, totalBusyT, totalIdleT;
 	Scheduler* const pScheduler;
 	virtual void updateCPUstate();
 	void updateCPUTs();
@@ -35,14 +35,10 @@ public:
 	
 	CPU_TYPE getMyType();									//you should identify the type of processor while you are creating the processor
 	std::string getID();
-
-	void movetoBLK();
-	void movetoTRM();
-	void movetoMyRDY();
+	;
 	CPU_STATE getCPUstate();
 
 	int getExpectedFinishT();
-
 	virtual bool kill(std::string idtoKill) = 0;			//Used only with FCFS CPUs to deal with killing signals
 	virtual bool fork() = 0;								//Used only with FCFS CPUs to deal with forkings
 
