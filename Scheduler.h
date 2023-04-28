@@ -48,7 +48,11 @@ public:
 	Scheduler();
 	void startUp();
 	void run();
-	void moveToRDY(Process* ptr);
+
+	// loops on processorsGroup in O(n) and calls pushToRDY(ptr)
+	// of the CPU with least expectedfinishTime
+	void moveToShortestRDY(Process* ptr);
+	
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);
 	int getTimeStep() const;

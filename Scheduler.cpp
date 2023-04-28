@@ -16,11 +16,15 @@ void Scheduler::run()
 {
 }
 
-void Scheduler::moveToRDY(Process* ptr)
+void Scheduler::moveToShortestRDY(Process* p)
 {
-	Processor* toPutRDY = processorsGroup[indexOfNextCPU % numberOfCPUs];
-	toPutRDY->pushToRDY(ptr);
-	indexOfNextCPU++;
+	Processor* shortest = processorsGroup[0]; // initial guess
+	for (int i = 1; i < numberOfCPUs; i++) // start comparing from the second
+	{
+		if (processorsGroup[i]->getExpectedFinishT() < shortest->getExpectedFinishT())
+			shortest = processorsGroup[i]; // new shortest found
+	}
+	shortest->pushToRDY(p); // different behaviour according to CPU type
 }
 
 void Scheduler::moveToBLK(Process* ptr)
