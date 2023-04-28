@@ -119,6 +119,7 @@ bool Process::peekNextIOR(Pair<int, int>& P)
 		return false;
 
 	P = IOList.Front();
+	return true;
 }
 
 bool Process::popkNextIOR(Pair<int, int>& P)

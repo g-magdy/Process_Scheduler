@@ -34,6 +34,7 @@ void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
 	ptr->setTerminationT(currentTimeStep);
+	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
 	terminatedList.push(ptr);
 }
 
@@ -131,6 +132,20 @@ void Scheduler::simulation()
 
 Scheduler::~Scheduler()
 {
+	Process* toDelete;
+
+	while (!terminatedList.isEmpty())
+	{
+		terminatedList.pop(toDelete);
+		delete toDelete;
+		toDelete = nullptr;
+	}
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		delete processorsGroup[i];
+	}
+	delete[]processorsGroup;
+	delete pUI;
 }
 
 void Scheduler::readInputFile()

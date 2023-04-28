@@ -7,7 +7,49 @@ FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, std::string s, int maxw, int
 
 void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
-	Processor::scheduleAlgo(currentTimeStep);
+	if (!runningProcess) // was not running any process
+	{
+		if (pullFromRDY(runningProcess)) // if the ready list is not empty
+		{
+			runningProcess->setProcessState(RUN);
+			//runningProcess->setHandlingCPU(FCFS_T);  (set only when adding to ready list)
+			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
+			//runningProcess->updateFinishedCPUT(); (updated only on line 28)
+		}
+		else // no running process and empty Ready list
+		{
+			setCPUstate(IDLE);
+			totalIdleT++;
+		}
+	}
+	
+	if(runningProcess) // currently executing or pulled fresh from ready in line 12
+	{
+		setCPUstate(Busy); // not sure if needed
+		runningProcess->updateFinishedCPUT();
+		expectedFinishT--;
+		totalBusyT++;
+
+		// IO check
+		Pair<int, int> req;
+		if (runningProcess->peekNextIOR(req)) // if exists
+		{
+			if (req.first == runningProcess->getFinishedCPUT()) //right time
+			{
+				// remove the remaining time to finish the process execution from the CPU's expected finsih time
+				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
+				pScheduler->moveToBLK(runningProcess);
+				runningProcess = nullptr;
+			}
+		}
+		// Termination check
+		if (runningProcess && runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		{
+			pScheduler->moveToTRM(runningProcess); // modified
+			runningProcess = nullptr;
+		}
+	}
+	///TODO: migration, forking
 }
 
 
@@ -23,6 +65,8 @@ bool FCFSprocessor::pullFromRDY(Process* & p)
 
 void FCFSprocessor::pushToRDY(Process* p)
 {
+	// add the remaining time of exectution of this process to the expected finsih time of the CPU
+	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
 	p->setProcessState(READY);
 	p->setHandlingCPU(FCFS_T);
 	RDY.push_back(p);
@@ -41,6 +85,13 @@ bool FCFSprocessor::kill(std::string idtoKill)
 	if (indx != -1)
 	{
 		Process * ptr = RDY.remove(indx);
+		/// TODO: what if the killed process was the running process ?
+		/*
+		if (ptr->getProcessState() == RUN)
+		{
+			runningProcess = nullptr;
+		}
+		*/
 		pScheduler->moveToTRM(ptr);
 		return 1;
 	}
