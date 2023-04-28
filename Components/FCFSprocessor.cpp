@@ -19,6 +19,7 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		else // no running process and empty Ready list
 		{
 			setCPUstate(IDLE);
+			totalIdleT++;
 		}
 	}
 	
@@ -26,6 +27,8 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 	{
 		setCPUstate(Busy); // not sure if needed
 		runningProcess->updateFinishedCPUT();
+		expectedFinishT--;
+		totalBusyT++;
 
 		// IO check
 		Pair<int, int> req;
@@ -40,14 +43,13 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			}
 		}
 		// Termination check
-		else if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		if (runningProcess && runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
 		{
 			pScheduler->moveToTRM(runningProcess); // modified
 			runningProcess = nullptr;
 		}
 	}
 	///TODO: migration, forking
-	updateCPUTs();
 }
 
 
