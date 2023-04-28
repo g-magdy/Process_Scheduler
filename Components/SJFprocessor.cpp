@@ -36,7 +36,8 @@ void SJF::scheduleAlgo(int currentTimeStep)
 
 			}
 		}
-		else if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		
+		if (runningProcess && runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
 		{
 				pScheduler->moveToTRM(runningProcess);
 				runningProcess = nullptr;
