@@ -33,6 +33,8 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		{
 			if (req.first == runningProcess->getFinishedCPUT()) //right time
 			{
+				// remove the remaining time to finish the process execution from the CPU's expected finsih time
+				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
 				runningProcess = nullptr;
 			}
@@ -61,6 +63,8 @@ bool FCFSprocessor::pullFromRDY(Process* & p)
 
 void FCFSprocessor::pushToRDY(Process* p)
 {
+	// add the remaining time of exectution of this process to the expected finsih time of the CPU
+	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
 	p->setProcessState(READY);
 	p->setHandlingCPU(FCFS_T);
 	RDY.push_back(p);
