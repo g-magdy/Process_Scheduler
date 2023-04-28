@@ -36,6 +36,12 @@ void Scheduler::moveToTRM(Process* ptr)
 	ptr->setTerminationT(currentTimeStep);
 	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
 	terminatedList.push(ptr);
+	// check if the terminated process has childred
+	if (ptr->getMyChild())
+	{
+		//initiate a killing process with the id of the child
+		kill(ptr->getMyChild()->getID());
+	}
 }
 
 
