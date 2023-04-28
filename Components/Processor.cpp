@@ -105,12 +105,12 @@ void Processor::print(char printMode)
 	}
 }
 
-float Processor::calcPLoad(int totalTurnTime)
+float Processor::calcPLoad(int totalTurnAroundTime)
 {
-	return 0.0f;
+	return ((float)totalBusyT / totalTurnAroundTime) * 100;
 }
 
 float Processor::calcPUtil()
 {
-	return 0.0f;
+	return ((float)totalBusyT / (totalBusyT + totalIdleT)) * 100;
 }
