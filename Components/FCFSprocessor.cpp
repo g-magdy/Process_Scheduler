@@ -87,12 +87,17 @@ bool FCFSprocessor::kill(std::string idtoKill)
 		{
 			pScheduler->moveToTRM(runningProcess);
 			runningProcess = nullptr;
-			// may need to add setCPUState(IDLE);
+
+			//update the state of the CPU
+			if (RDY.isEmpty())
+				setCPUstate(IDLE);
+			else
+				setCPUstate(Busy);
 
 			//if found return ture
 			return true;
-			//else search in the RDY list
 		}
+		//else search in the RDY list
 	}
 	
 	if(RDY.isEmpty() == false)
