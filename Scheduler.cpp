@@ -67,7 +67,7 @@ bool Scheduler::kill(std::string idToKill)
 	{
 		if (processorsGroup[i]->getMyType() == FCFS_T)
 		{
-			if (processorsGroup[i]->kill(idToKill))
+			if ( ((FCFSprocessor*)processorsGroup[i])->kill(idToKill))
 				return true;
 		}
 	}
@@ -240,7 +240,22 @@ bool Scheduler::steal()
 
 bool Scheduler::kill()
 {
-	return false;
+	//First check that the killList is not empty
+	if (killList.isEmpty() == false)
+	{
+		//make a pair to take a peak on the front element of the KillList
+		Pair<int, string> killSig;
+		killSig = killList.Front(); 
+
+		//check if the kill signal is in this time step
+		if (killSig.first == currentTimeStep)
+		{
+			//remove the killing signal from the list
+			killList.pop();
+			//call kill(string) that iterates on the cpus to kill the process with the given id
+			kill(killSig.second);
+		}
+	}
 }
 
 void Scheduler::updateConsole()
