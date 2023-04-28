@@ -65,15 +65,6 @@ void Processor::setCPUstate(CPU_STATE state)
 	CPUstate = state;
 }
 
-void Processor::updateCPUTs()		//each timestep decrease the expectedFinishT and increach either the totalBusyT or totalIdleT according to the state of the CPU
-{
-	expectedFinishT--;					
-
-	if (getCPUstate() == Busy)
-		totalBusyT++;
-	else
-		totalIdleT++;
-}
 
 void Processor::updateCPUstate()
 {

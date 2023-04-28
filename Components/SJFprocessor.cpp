@@ -9,9 +9,8 @@ void SJF::scheduleAlgo(int currentTimeStep)
 	if (!runningProcess) {
 
 		if (pullFromRDY(runningProcess)) {
+			// sets the response time if this is the first time the process is handled
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-
-
 		}
 		else {
 			totalIdleT++;
@@ -21,7 +20,6 @@ void SJF::scheduleAlgo(int currentTimeStep)
 	if (runningProcess)
 	{
 		totalBusyT++;
-		runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());			// sets the response time if this is the first time the process is handled
 		runningProcess->updateFinishedCPUT();
 		expectedFinishT--;
 

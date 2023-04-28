@@ -15,7 +15,6 @@ protected:
 	int	expectedFinishT, totalBusyT, totalIdleT;
 	Scheduler* const pScheduler;
 	virtual void updateCPUstate();
-	void updateCPUTs();
 
 	Process* getRunningProcess();
 
