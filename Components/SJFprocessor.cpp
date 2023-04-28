@@ -23,6 +23,8 @@ void SJF::scheduleAlgo(int currentTimeStep)
 		totalBusyT++;
 		runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());			// sets the response time if this is the first time the process is handled
 		runningProcess->updateFinishedCPUT();
+		expectedFinishT--;
+
 		Pair<int, int> p;
 		if (runningProcess->peekNextIOR(p)) {
 
@@ -34,14 +36,11 @@ void SJF::scheduleAlgo(int currentTimeStep)
 
 			}
 		}
-		else
-			if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT()){
+		else if (runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		{
 				pScheduler->moveToTRM(runningProcess);
 				runningProcess = nullptr;
-				expectedFinishT--;
-			}
-			else
-				expectedFinishT--;
+		}
 
 	}
 
