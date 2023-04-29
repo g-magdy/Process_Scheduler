@@ -80,22 +80,42 @@ void FCFSprocessor::printRDYList()
 
 bool FCFSprocessor::kill(std::string idtoKill)
 {
-	Process processToKill(idtoKill);
-	int indx = RDY.find(&processToKill);
-	if (indx != -1)
+	//chech if the running process is the one to kill
+	if (runningProcess)
 	{
-		Process * ptr = RDY.remove(indx);
-		/// TODO: what if the killed process was the running process ?
-		/*
-		if (ptr->getProcessState() == RUN)
+		if (runningProcess->getID() == idtoKill)
 		{
+			pScheduler->moveToTRM(runningProcess);
 			runningProcess = nullptr;
+
+			//update the state of the CPU
+			if (RDY.isEmpty())
+				setCPUstate(IDLE);
+			else
+				setCPUstate(Busy);
+
+			//if found return ture
+			return true;
 		}
-		*/
-		pScheduler->moveToTRM(ptr);
-		return 1;
+		//else search in the RDY list
 	}
-	return 0;
+	
+	if(RDY.isEmpty() == false)
+	{	
+		//search the RDY list for the Process to kill
+		//to do so we need a temp process with the id we are looking for
+		Process processToKill(idtoKill);
+		int indx = RDY.find(&processToKill);
+		//will enter the if statement if the process was found
+		if (indx != -1)
+		{
+			Process* ptr = RDY.remove(indx);
+			pScheduler->moveToTRM(ptr);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool FCFSprocessor::fork()

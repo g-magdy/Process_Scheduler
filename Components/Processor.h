@@ -39,7 +39,6 @@ public:
 
 	int getExpectedFinishT();
 
-	virtual bool kill(std::string idtoKill) = 0;			//Used only with FCFS CPUs to deal with killing signals
 	virtual bool fork() = 0;								//Used only with FCFS CPUs to deal with forkings
 
 	void print(char printMode);								//Prints the info of the CPU in either long, short format or running Process
