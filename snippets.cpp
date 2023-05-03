@@ -115,3 +115,14 @@ enum CPU_STATE
 	//in the schduleAlgo decrease the expectedFinishTime by 1
 
 //}
+
+/* old moveToShortest ready list
+		Processor* shortest = processorsGroup[0]; // initial guess
+		for (int i = 1; i < numberOfCPUs; i++) // start comparing from the second
+		{
+			if (processorsGroup[i]->getExpectedFinishT() < shortest->getExpectedFinishT())
+				shortest = processorsGroup[i]; // new shortest found
+		}
+		shortest->pushToRDY(p); // different behaviour according to CPU type
+		
+*/
