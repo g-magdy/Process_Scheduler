@@ -282,6 +282,9 @@ bool Scheduler::steal()
 
 bool Scheduler::kill()
 {
+	//A flag to indicate whether a killing process has done successufully or not
+	bool successKill = false;
+
 	//First check that the killList is not empty
 	if (killList.isEmpty() == false)
 	{
@@ -295,9 +298,11 @@ bool Scheduler::kill()
 			//remove the killing signal from the list
 			killList.pop();
 			//call kill(string) that iterates on the cpus to kill the process with the given id
-			kill(killSig.second);
+			successKill = kill(killSig.second);
 		}
 	}
+
+	return successKill;
 }
 
 void Scheduler::updateConsole()
