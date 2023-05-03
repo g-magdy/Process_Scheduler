@@ -26,7 +26,7 @@ void Scheduler::run()
 	{
 		currentTimeStep++;
 		update();									//perform the logic of simulation
-}
+	}
 }
 
 void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
@@ -131,25 +131,17 @@ bool Scheduler::kill(std::string idToKill)
 
 void Scheduler::simulation()
 {
-	readInputFile();
-	runningMode = pUI->startUP();
+	Process* ptr;
 
 	while (numberOfProcesses > terminatedList.size())
 	{
 		currentTimeStep++;
 
-		Process* ptr;											//to determine the processor to put the new process in 
-		while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
-		{
-			newList.pop(ptr);
-			moveToRDY(ptr);
-		}
-
 		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
 			processorsGroup[i]->scheduleAlgo(currentTimeStep);
 		}
 
-		for (int i = 0; i < numberOfCPUs; i++) {
+		/*for (int i = 0; i < numberOfCPUs; i++) {
 			double randNum = random();
 			if (randNum >= 1 && randNum <= 15)
 			{
@@ -163,7 +155,8 @@ void Scheduler::simulation()
 			{
 				processorsGroup[i]->movetoTRM();
 			}
-		}
+		}*/
+
 		ptr = nullptr;
 		double randNum = random();
 		if (randNum <= 10)
@@ -171,7 +164,7 @@ void Scheduler::simulation()
 			if (!blockedList.isEmpty())
 			{
 				blockedList.pop(ptr);
-				moveToRDY(ptr);
+				//moveToRDY(ptr);
 			}
 		}
 
