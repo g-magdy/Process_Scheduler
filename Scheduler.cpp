@@ -6,6 +6,12 @@ using namespace std;
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
 {
 	pUI = new UI(this);
+	SucssefulMigration.first = SucssefulMigration.second = 0;
+	STL = 0;
+	stealPercentage = killPercentage = forkPercentage = 0;
+	runningMode = SILENT; // this is just an initial value
+	numberOfProcesses = numberOfCPUs = 0;
+	AVGResponseT = AVGTurnRoundT = AVGUtilisation = AVGWaitingT = 0;
 }
 
 void Scheduler::startUp()
