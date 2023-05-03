@@ -51,7 +51,8 @@ public:
 
 	// loops on processorsGroup in O(n) and calls pushToRDY(ptr)
 	// of the CPU with least expectedfinishTime
-	void moveToShortestRDY(Process* ptr);
+	// if the kind is by default set to any CPU
+	void moveToShortestRDY(Process* ptr, CPU_TYPE kind = NoCPU);
 	
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);

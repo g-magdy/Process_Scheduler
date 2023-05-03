@@ -16,15 +16,47 @@ void Scheduler::run()
 {
 }
 
-void Scheduler::moveToShortestRDY(Process* p)
+void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
 {
-	Processor* shortest = processorsGroup[0]; // initial guess
-	for (int i = 1; i < numberOfCPUs; i++) // start comparing from the second
+	Processor* shortestFCFS, * shortestSJF, * shortestRR;
+	shortestFCFS = shortestSJF = shortestRR = nullptr; // initially I can't assume
+	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
-		if (processorsGroup[i]->getExpectedFinishT() < shortest->getExpectedFinishT())
-			shortest = processorsGroup[i]; // new shortest found
+		Processor* pCPU = processorsGroup[i];
+		if (pCPU->getMyType() == FCFS_T)
+		{
+			if (shortestFCFS == nullptr) // if i haven't seen an FCFS yet
+				shortestFCFS = pCPU;
+			else // compare with what I have currently
+				shortestFCFS = (pCPU->getExpectedFinishT() < shortestFCFS->getExpectedFinishT()) ? pCPU : shortestFCFS;
+		}
+		else if (pCPU->getMyType() == SJF_T)
+		{
+			if (shortestSJF == nullptr) // if i haven't seen an SJF yet
+				shortestSJF = pCPU;
+			else
+				shortestSJF = (pCPU->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? pCPU : shortestSJF;
+		}
+		else // RR CPU
+		{
+			if (shortestRR == nullptr) // if i haven't seen an RR yet
+				shortestRR = pCPU;
+			else
+				shortestRR = (pCPU->getExpectedFinishT() < shortestRR->getExpectedFinishT()) ? pCPU : shortestRR;
+		}
 	}
-	shortest->pushToRDY(p); // different behaviour according to CPU type
+	if (kind == FCFS_T)
+		shortestFCFS->pushToRDY(p);
+	else if (kind == SJF_T)
+		shortestSJF->pushToRDY(p);
+	else if (kind == RR_T)
+		shortestRR->pushToRDY(p);
+	else // kind is any general CPU
+	{
+		Processor* pShortest = (shortestFCFS->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
+		pShortest = (shortestRR->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
+		pShortest->pushToRDY(p);
+	}
 }
 
 void Scheduler::moveToBLK(Process* ptr)
