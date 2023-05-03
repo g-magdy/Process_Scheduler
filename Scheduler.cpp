@@ -16,10 +16,17 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 
 void Scheduler::startUp()
 {
+	readInputFile();
+	runningMode = pUI->startUP();
 }
 
 void Scheduler::run()
 {
+	while (numberOfProcesses > terminatedList.size())
+	{
+		currentTimeStep++;
+		update();									//perform the logic of simulation
+}
 }
 
 void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
@@ -269,6 +276,33 @@ void Scheduler::createOutputFile()
 
 void Scheduler::update()
 {
+	Process* ptr;
+
+	// Distripute new arriving Processes at this time step
+	while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
+	{
+		newList.pop(ptr);
+		moveToShortestRDY(ptr);
+	}
+
+	// call scheduleAlgo function for all CPUs
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		processorsGroup[i]->scheduleAlgo(currentTimeStep);
+	}
+
+	/// TODO: activate the stealing function
+	steal();
+
+	//serves IO requests of the Processes wating in the BLKList
+	/// TODO: activeate serveIO funcion
+	serveIO();
+
+	//Check for Killing signals at this time step
+	kill();
+
+	//update the console
+	updateConsole();
 }
 
 Process* Scheduler::createProcess(std::string, int, int)
