@@ -69,8 +69,7 @@ void Scheduler::moveToBLK(Process* ptr)
 void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
-	ptr->setTerminationT(currentTimeStep);
-	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
+	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
 	if (ptr->getMyChild())
@@ -321,4 +320,14 @@ void Scheduler::updateConsole()
 
 void Scheduler::serveIO()
 {
+}
+
+void Scheduler::calcStatiscs(Process* ptr)
+{
+	ptr->setTerminationT(currentTimeStep);
+	ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
+	ptr->setWaitingT(ptr->getTurnRoundT() - ptr->getCPUT());
+	totalWaitingT += ptr->getWaitingT();
+	tatalResponseT += ptr->getResponseT();
+	totalTurnRoundT = ptr->getTurnRoundT();
 }

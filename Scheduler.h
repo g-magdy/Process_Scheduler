@@ -27,7 +27,8 @@ private:
 	int randHelper;
 
 	//statistics attributes
-	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
+	float AVGWaitingT, AVGResponseT, AVGTurnRoundT; //to be discussed
+	float totalWaitingT ,tatalResponseT, totalTurnRoundT;
 	Pair<float,float> SucssefulMigration;
 	float stealPercentage;
 	float  killPercentage;
@@ -44,6 +45,7 @@ private:
 	void updateConsole();
 	void serveIO();
 
+	void calcStatiscs(Process* p);
 public:
 	Scheduler();
 	void startUp();
@@ -62,7 +64,6 @@ public:
 	bool kill(std::string);
 
 	void simulation();
-
 	int random(int upperbound = 100); //returns a value from 0 to 100
 	~Scheduler();
 };

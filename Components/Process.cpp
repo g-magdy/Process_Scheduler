@@ -103,9 +103,21 @@ int Process::getTurnRoundT() const
 	return TurnRoundT;
 }
 
+void Process::setTurnAroundTime(int t)
+{									
+	TurnRoundT = t;												
+}
+
+
+
 int Process::getWaitingT() const
 {
 	return WaitingT;
+}
+
+void Process::setWaitingT(int t)
+{
+	WaitingT = t;
 }
 
 void Process::pushIORquest(Pair<int,int>& ioPair)
