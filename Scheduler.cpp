@@ -118,12 +118,12 @@ bool Scheduler::kill(std::string idToKill)
 	return false;
 }
 
-bool Scheduler::fork(std::string id, int AT, int CPUT)
-{
-	Process* child = new Process(id,AT,CPUT);
-	mo
-	return false;
-}
+//bool Scheduler::fork(std::string id, int AT, int CPUT)
+//{
+//	Process* child = new Process(id,AT,CPUT);
+//	mo
+//	return false;
+//}
 
 void Scheduler::simulation()
 {

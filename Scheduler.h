@@ -60,7 +60,7 @@ public:
 	Process* createChild(int at, int ct);
 	bool migrate(Process*, CPU_TYPE);
 	bool kill(std::string);
-	bool fork(std::string id, int AT, int CPUT);
+	//bool fork(std::string id, int AT, int CPUT);
 	void simulation();
 
 	int random(int upperbound = 100); //returns a value from 0 to 100
