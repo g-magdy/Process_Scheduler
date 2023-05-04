@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0)
 {
 	pUI = new UI(this);
 }
@@ -113,7 +113,11 @@ bool Scheduler::kill(std::string idToKill)
 		if (processorsGroup[i]->getMyType() == FCFS_T)
 		{
 			if ( ((FCFSprocessor*)processorsGroup[i])->kill(idToKill))
+			{
+				numOfKillededProcess++;
 				return true;
+			}
+
 		}
 	}
 	return false;

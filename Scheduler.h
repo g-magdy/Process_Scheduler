@@ -26,6 +26,7 @@ private:
 	int indexOfNextCPU;
 	int randHelper;
 	int numOfForkedProcess;
+	int numOfKillededProcess;
 	//statistics attributes
 	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
 	Pair<float,float> SucssefulMigration;
