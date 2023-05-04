@@ -174,14 +174,6 @@ void Scheduler::simulation()
 
 Scheduler::~Scheduler()
 {
-	Process* toDelete;
-
-	while (!terminatedList.isEmpty())
-	{
-		terminatedList.pop(toDelete);
-		delete toDelete;
-		toDelete = nullptr;
-	}
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
 		delete processorsGroup[i];
@@ -192,7 +184,6 @@ Scheduler::~Scheduler()
 
 void Scheduler::readInputFile()
 {
-	int num_FCFS, num_SJF, num_RR;
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
@@ -259,6 +250,54 @@ void Scheduler::readInputFile()
 
 void Scheduler::createOutputFile()
 {
+	ofstream outF("sampleOutput.txt", ios::out);
+	outF << "TT" << "    " << "PID" << "    " << "AT"
+		<< "    " << "IO_D" << "    " << "WT" << "    " << "RT"
+		<< "    " << "TRT" << endl;
+	for (int i = 0; i < numberOfProcesses; i++)
+	{
+		Process * ptr=terminatedList.Front();
+		terminatedList.pop();
+		outF << ptr->getTerminationT() << "    " << ptr->getID() 
+			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
+			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
+			<< "    " << ptr->getResponseT() << "    " << ptr->getTurnRoundT()
+			<< endl;
+		delete ptr;
+	}
+	outF << "Processors:" << numberOfCPUs << endl;
+	AVGWaitingT = AVGWaitingT / numberOfProcesses;
+	AVGResponseT = AVGResponseT / numberOfProcesses;
+	int totalTurnRoundT = AVGTurnRoundT;
+	AVGTurnRoundT = AVGTurnRoundT / numberOfProcesses;
+	outF << "Avg WT = " << AVGWaitingT << ','
+		<< "    " << "Avg RT = "<< AVGResponseT 
+		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
+	outF << "Migration %: " << "    " << "RTF= " 
+		<< SucssefulMigration.first << "%," << "    " 
+		<< "MaxW = " << SucssefulMigration.second << "%" << endl;
+	outF << "Work Steal%: " << stealPercentage <<"%" <<endl;
+	outF << "Forked Process: " << forkPercentage << "%" << endl;
+	outF << "Killed Process: " << killPercentage << "%" << endl;
+	outF << "Processors:" << numberOfCPUs << " [" << num_FCFS<<"FCFS, " 
+		<< num_SJF << "SJF, "<<num_RR << "RR "<< "]" << endl;
+	outF << "Processors Load " << endl;
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< "    ";
+	}
+	outF << endl;
+	outF << "Processors Utiliz" << endl;
+	AVGUtilisation = 0;
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << "    ";
+		AVGUtilisation += processorsGroup[i]->calcPUtil();
+	}
+	outF << endl;
+	AVGUtilisation = AVGUtilisation / numberOfCPUs;
+	outF << "Avg utilization = " << AVGUtilisation<<'%';
+	outF.close();
 }
 
 void Scheduler::update()

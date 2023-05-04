@@ -25,7 +25,7 @@ private:
 	RunningMode runningMode;
 	int indexOfNextCPU;
 	int randHelper;
-
+	int num_FCFS, num_SJF, num_RR;
 	//statistics attributes
 	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
 	Pair<float,float> SucssefulMigration;
