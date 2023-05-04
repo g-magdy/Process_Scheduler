@@ -12,7 +12,7 @@ public:
 	virtual bool pullFromRDY(Process*& p);
 	virtual void pushToRDY(Process* p);
 	virtual void printRDYList();
-	virtual bool fork() { return false; }
+	//virtual bool fork() { return false; }
 };
 
 

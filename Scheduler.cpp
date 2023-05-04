@@ -93,9 +93,11 @@ int Scheduler::getTimeStep() const
 }
 
 
-Process* Scheduler::createChild(int)
+Process* Scheduler::createChild(int at,int ct)
 {
-	return nullptr;
+	Process* child = new Process(to_string(++numberOfProcesses), at, ct);
+	moveToShortestRDY(child, FCFS_T);
+	return child;
 }
 
 bool Scheduler::migrate(Process*, CPU_TYPE)
@@ -113,6 +115,13 @@ bool Scheduler::kill(std::string idToKill)
 				return true;
 		}
 	}
+	return false;
+}
+
+bool Scheduler::fork(std::string id, int AT, int CPUT)
+{
+	Process* child = new Process(id,AT,CPUT);
+	mo
 	return false;
 }
 
@@ -265,10 +274,10 @@ void Scheduler::update()
 {
 }
 
-Process* Scheduler::createProcess(std::string, int, int)
-{
-	return nullptr;
-}
+//Process* Scheduler::createProcess(std::string, int, int)
+//{
+//	return nullptr;
+//}
 
 Processor* Scheduler::createCPU(CPU_TYPE)
 {

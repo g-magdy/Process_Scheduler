@@ -135,6 +135,11 @@ Process* Process::getMyChild()
 	return myChild;
 }
 
+void Process::setMyChild(Process* ch)
+{
+	myChild = ch;
+}
+
 bool Process::operator>(const Process& second)
 {
 	return (CPUT > second.CPUT);

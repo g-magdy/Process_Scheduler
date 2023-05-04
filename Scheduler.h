@@ -37,7 +37,7 @@ private:
 	void readInputFile();
 	void createOutputFile();
 	void update();
-	Process* createProcess(std::string, int, int);
+	//Process* createProcess(std::string, int, int);
 	Processor* createCPU(CPU_TYPE);
 	bool steal();
 	bool kill();
@@ -57,10 +57,10 @@ public:
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);
 	int getTimeStep() const;
-	Process* createChild(int);
+	Process* createChild(int at, int ct);
 	bool migrate(Process*, CPU_TYPE);
 	bool kill(std::string);
-
+	bool fork(std::string id, int AT, int CPUT);
 	void simulation();
 
 	int random(int upperbound = 100); //returns a value from 0 to 100
