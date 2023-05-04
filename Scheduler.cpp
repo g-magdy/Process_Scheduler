@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0)
 {
 	pUI = new UI(this);
 }
@@ -96,6 +96,7 @@ int Scheduler::getTimeStep() const
 Process* Scheduler::createChild(int at,int ct)
 {
 	Process* child = new Process(to_string(++numberOfProcesses), at, ct);
+	numOfForkedProcess++;
 	moveToShortestRDY(child, FCFS_T);
 	return child;
 }
