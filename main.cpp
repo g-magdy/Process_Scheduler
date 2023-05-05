@@ -4,11 +4,13 @@
 int main()
 {
 
-	Scheduler* ProScheduler = new Scheduler();
+	Scheduler ProScheduler;
 
-	ProScheduler->simulation();
+	ProScheduler.startUp();
+	
+	//ProScheduler.simulation();
 
-	delete ProScheduler;
+	ProScheduler.run();
 
 	return 0;
 }
