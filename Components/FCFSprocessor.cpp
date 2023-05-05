@@ -51,8 +51,8 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 	}
 	///TODO: migration
 	int randN=pScheduler->random();
-	if (randN <= forkProbability)
-		fork(currentTimeStep);
+	if (!runningProcess->getMyChild()&&randN <= forkProbability)
+		fork();
 
 }
 
@@ -122,14 +122,13 @@ bool FCFSprocessor::kill(std::string idtoKill)
 	return false;
 }
 
-void FCFSprocessor::fork(int currentT)
+void FCFSprocessor::fork()
 {
 	if (runningProcess)
 	{
-		int at, ct;
-		at = currentT;
+		int  ct;
 		ct = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
-		Process* child = pScheduler->createChild(at, ct);
+		Process* child = pScheduler->createChild(ct);
 		runningProcess->setMyChild(child);
 
 	}

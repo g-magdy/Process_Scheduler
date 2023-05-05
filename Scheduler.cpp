@@ -93,9 +93,9 @@ int Scheduler::getTimeStep() const
 }
 
 
-Process* Scheduler::createChild(int at,int ct)
+Process* Scheduler::createChild(int ct)
 {
-	Process* child = new Process(to_string(++numberOfProcesses), at, ct);
+	Process* child = new Process(to_string(++numberOfProcesses), currentTimeStep, ct);
 	numOfForkedProcess++;
 	moveToShortestRDY(child, FCFS_T);
 	return child;
