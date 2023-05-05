@@ -49,6 +49,9 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			runningProcess = nullptr;
 		}
 	}
+
+	updateCPUstate();
+
 	///TODO: migration, forking
 }
 
