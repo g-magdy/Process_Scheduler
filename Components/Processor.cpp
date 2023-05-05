@@ -10,28 +10,30 @@ Processor::Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s)
 	CPUstate = IDLE;
 }
 
-void Processor::scheduleAlgo(int currentTimeStep)
-{
-	Process* ptr = nullptr;
 
-	if (getCPUstate() == IDLE )				//!RDY.isEmpty() was removed
-	{
-		
-		if (pullFromRDY(ptr))
-		{
-			setRunningProcess(ptr);
-			updateCPUstate();
-		}
-	}
-	ptr = getRunningProcess();
-
-	if (getCPUstate() == Busy)
-	{
-		//updateTotalCpuTime();		// increament total CPU time of this processor by the cpu time of this process
-		ptr->setResponseT(currentTimeStep);
-		ptr->updateFinishedCPUT();						//increament the CPU time of this process
-	}
-}
+///TODO: delete this part
+//void Processor::scheduleAlgo(int currentTimeStep)
+//{
+//	Process* ptr = nullptr;
+//
+//	if (getCPUstate() == IDLE )				//!RDY.isEmpty() was removed
+//	{
+//		
+//		if (pullFromRDY(ptr))
+//		{
+//			setRunningProcess(ptr);
+//			updateCPUstate();
+//		}
+//	}
+//	ptr = getRunningProcess();
+//
+//	if (getCPUstate() == Busy)
+//	{
+//		//updateTotalCpuTime();		// increament total CPU time of this processor by the cpu time of this process
+//		ptr->setResponseT(currentTimeStep);
+//		ptr->updateFinishedCPUT();						//increament the CPU time of this process
+//	}
+//}
 
 Process* Processor::getRunningProcess()
 {
