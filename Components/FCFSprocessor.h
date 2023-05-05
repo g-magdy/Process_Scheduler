@@ -15,6 +15,6 @@ public:
 	virtual void pushToRDY(Process* p);
 	virtual void printRDYList();
 	virtual bool kill(std::string idtoKill);
-	virtual bool fork();
+	void fork();
 };
 

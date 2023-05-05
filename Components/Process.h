@@ -55,7 +55,7 @@ public:
 
 
 	Process* getMyChild();										 // gets the child of the Process
-
+	void setMyChild(Process* ch);
 	bool operator > (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator < (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator >= (const Process& second);					 // compares between two processes in terms of cpu time

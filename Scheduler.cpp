@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0)
 {
 	pUI = new UI(this);
 }
@@ -93,9 +93,12 @@ int Scheduler::getTimeStep() const
 }
 
 
-Process* Scheduler::createChild(int)
+Process* Scheduler::createChild(int ct)
 {
-	return nullptr;
+	Process* child = new Process(to_string(++numberOfProcesses), currentTimeStep, ct);
+	numOfForkedProcess++;
+	moveToShortestRDY(child, FCFS_T);
+	return child;
 }
 
 bool Scheduler::migrate(Process*, CPU_TYPE)
@@ -110,11 +113,22 @@ bool Scheduler::kill(std::string idToKill)
 		if (processorsGroup[i]->getMyType() == FCFS_T)
 		{
 			if ( ((FCFSprocessor*)processorsGroup[i])->kill(idToKill))
+			{
+				numOfKillededProcess++;
 				return true;
+			}
+
 		}
 	}
 	return false;
 }
+
+//bool Scheduler::fork(std::string id, int AT, int CPUT)
+//{
+//	Process* child = new Process(id,AT,CPUT);
+//	mo
+//	return false;
+//}
 
 void Scheduler::simulation()
 {
@@ -265,10 +279,10 @@ void Scheduler::update()
 {
 }
 
-Process* Scheduler::createProcess(std::string, int, int)
-{
-	return nullptr;
-}
+//Process* Scheduler::createProcess(std::string, int, int)
+//{
+//	return nullptr;
+//}
 
 Processor* Scheduler::createCPU(CPU_TYPE)
 {
