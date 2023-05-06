@@ -130,6 +130,21 @@ bool Process::popkNextIOR(Pair<int, int>& P)
 	IOList.pop(P);
 }
 
+void Process::incrementServedIODuration()
+{
+	servedIODuration++;
+}
+
+int Process::getServedIODuration()
+{
+	return servedIODuration;
+}
+
+void Process::resetServedIODuration()
+{
+	servedIODuration = 0;
+}
+
 Process* Process::getMyChild()
 {
 	return myChild;

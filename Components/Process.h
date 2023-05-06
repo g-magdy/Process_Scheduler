@@ -16,9 +16,10 @@ private:
 	int TerminationT;											 // termination time
 	int TurnRoundT;												 // turn around time
 	int WaitingT;												 // waiting time
-	Queue<Pair<int,int>> IOList;									 // a queue to hold the IO requests of a process
+	Queue<Pair<int,int>> IOList;								 // a queue to hold the IO requests of a process
 	Process* myChild;											 // this may change to a list or be removed in the future *************
-	int totalIOD;
+	int totalIOD;												 // to be printed in the output file
+	int servedIODuration;										 // to track the (current IO request)'s finished time
 
 public:															
 	Process(std::string id, int inAT, int ct);					 // non-defult constructor
@@ -53,6 +54,9 @@ public:
 	bool peekNextIOR(Pair<int, int>&);							 // Takes a peek on the first pair in the IOlist pairs
 	bool popkNextIOR(Pair<int, int>&);							 // pops and returns the first pair in the IOlist pairs
 
+	void incrementServedIODuration();
+	int getServedIODuration();
+	void resetServedIODuration();	
 
 	Process* getMyChild();										 // gets the child of the Process
 	void setMyChild(Process* ch);
