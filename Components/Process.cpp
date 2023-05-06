@@ -3,7 +3,7 @@
 Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPUT(ct)
 {
 	ResponseT = TerminationT = TurnRoundT = WaitingT = -1; // they are not givn real values yet
-	totalIOD = FinishedCPUT = 0;
+	totalIOD = FinishedCPUT = servedIODuration = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
 	myChild = nullptr;
@@ -23,9 +23,10 @@ Process::Process(const Process& origin)
 	WaitingT = origin.WaitingT;
 	IOList = origin.IOList;
 	myChild = nullptr;      //what should I set this to ?
+	servedIODuration = 0;
 }
 
-Process::Process(std::string id): ID(id)
+Process::Process(std::string id): ID(id), servedIODuration(0)
 {
 }
 
