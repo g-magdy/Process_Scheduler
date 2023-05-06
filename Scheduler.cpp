@@ -64,6 +64,7 @@ void Scheduler::moveToBLK(Process* ptr)
 	ptr->setProcessState(BLOCKED);
 	blockedList.push(ptr);
 	//pop io request
+	///EDIT: i will just peek first request and pop it only when it is fully served
 }
 
 void Scheduler::moveToTRM(Process* ptr)
@@ -335,4 +336,24 @@ void Scheduler::updateConsole()
 
 void Scheduler::serveIO()
 {
+	// first: check if there is a process in BLK
+	if (!blockedList.isEmpty())
+	{
+		Process* customer = blockedList.Front(); // just a temp pointer
+		if (customer->getProcessState() == BLOCKED)
+			customer->setProcessState(IO);
+
+		customer->incrementServedIODuration();
+		// second: the processes in the blocked list will always have requests
+		// checked before calling moveTOBLK()
+		Pair <int, int>req;
+		customer->peekNextIOR(req);
+		if (customer->getServedIODuration() == req.second) // IO duration is finished
+		{
+			customer->popkNextIOR(req); // request was completed
+			blockedList.pop(); // remove the customer from the blocked list
+			customer->resetServedIODuration(); // to prepare for the next request
+			moveToShortestRDY(customer);
+		}
+	}
 }
