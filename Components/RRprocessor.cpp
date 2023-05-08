@@ -11,14 +11,17 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 	{
 		int unFinishedCPUT = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
 
-		if (unFinishedCPUT < RTF) //check whether this Proccess has remaining cpu time less than rtf
+		if (runningProcess->getMyParent() == nullptr) //first check that this process is not a child
 		{
-			if (pScheduler->migrate(runningProcess, SJF_T))
+			if (unFinishedCPUT < RTF) //check whether this Proccess has remaining cpu time less than rtf
 			{
-				runningProcess = nullptr;
-				continue;
-			}
+				if (pScheduler->migrate(runningProcess, SJF_T))
+				{
+					runningProcess = nullptr;
+					continue;
+				}
 
+			}
 		}
 
 		runningProcess->setProcessState(RUN);
