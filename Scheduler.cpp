@@ -66,8 +66,8 @@ void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
 		shortestRR->pushToRDY(p);
 	else // kind is any general CPU
 	{
-		Processor* pShortest = (shortestFCFS->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
-		pShortest = (shortestRR->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
+		Processor* pShortest = (shortestFCFS->getExpectedFinishT() <= shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
+		pShortest = (shortestRR->getExpectedFinishT() <= pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
 		pShortest->pushToRDY(p);
 	}
 }
