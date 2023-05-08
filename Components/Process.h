@@ -17,7 +17,7 @@ private:
 	int TurnRoundT;												 // turn around time
 	int WaitingT;												 // waiting time
 	Queue<Pair<int,int>> IOList;								 // a queue to hold the IO requests of a process
-	Process* myChild;											 // this may change to a list or be removed in the future *************
+	Process* myChild, *myParent;								 // this may change to a list or be removed in the future *************
 	int totalIOD;												 // to be printed in the output file
 	int servedIODuration;										 // to track the (current IO request)'s finished time
 
@@ -60,6 +60,9 @@ public:
 
 	Process* getMyChild();										 // gets the child of the Process
 	void setMyChild(Process* ch);
+	Process* getMyParent();
+	void setMyParent(Process* parent);
+
 	bool operator > (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator < (const Process& second);					 // compares between two processes in terms of cpu time
 	bool operator >= (const Process& second);					 // compares between two processes in terms of cpu time
