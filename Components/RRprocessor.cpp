@@ -11,6 +11,8 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 	{
 		int unFinishedCPUT = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
 
+
+		// Migration is handled in this part
 		if (runningProcess->getMyParent() == nullptr) //first check that this process is not a child
 		{
 			if (unFinishedCPUT < RTF) //check whether this Proccess has remaining cpu time less than rtf
