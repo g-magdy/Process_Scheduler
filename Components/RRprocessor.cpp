@@ -13,9 +13,12 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 
 		if (unFinishedCPUT < RTF) //check whether this Proccess has remaining cpu time less than rtf
 		{
-			pScheduler->migrate(runningProcess, SJF_T);
-			runningProcess = nullptr;
-			continue;
+			if (pScheduler->migrate(runningProcess, SJF_T))
+			{
+				runningProcess = nullptr;
+				continue;
+			}
+
 		}
 
 		runningProcess->setProcessState(RUN);
