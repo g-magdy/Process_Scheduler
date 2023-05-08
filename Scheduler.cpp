@@ -104,9 +104,20 @@ Process* Scheduler::createChild(int ct, Process* parent)
 	return child;
 }
 
-bool Scheduler::migrate(Process*, CPU_TYPE)
+bool Scheduler::migrate(Process* ptr, CPU_TYPE Destination_kind)
 {
-	return false;
+	if (Destination_kind == RR_T)
+	{
+		moveToShortestRDY(ptr, RR_T);
+		return true;
+	}
+	else if (Destination_kind == SJF_T)
+	{
+		moveToShortestRDY(ptr, SJF_T);
+		return true;
+	}
+	else
+		return false;
 }
 
 bool Scheduler::kill(std::string idToKill)
