@@ -128,7 +128,7 @@ void FCFSprocessor::fork()
 	{
 		int  ct;
 		ct = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
-		Process* child = pScheduler->createChild(ct);
+		Process* child = pScheduler->createChild(ct, runningProcess);
 		runningProcess->setMyChild(child);
 
 	}
