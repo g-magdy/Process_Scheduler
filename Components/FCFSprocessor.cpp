@@ -51,7 +51,7 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 	}
 	///TODO: migration
 	int randN=pScheduler->random();
-	if (!runningProcess->getMyChild()&&randN <= forkProbability)
+	if (runningProcess && (runningProcess->getMyChild() && randN <= forkProbability))
 		fork();
 
 }
