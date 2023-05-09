@@ -13,7 +13,7 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		// I'll stop when i find a suitable one to run
 		while (pullFromRDY(runningProcess)) // if the ready list is not empty
 		{
-			int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT();
+			int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
 			/// TODO: runningProcess->setWaitingTime(wait);
 			
 			if (wait > MaxW && runningProcess->getMyParent() == nullptr)
@@ -21,8 +21,11 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			else
 				break;
 		}
-		runningProcess->setProcessState(RUN);
-		runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
+		if (runningProcess) // ensure that i have pulled a vaild process : thanks Ahmed :)
+		{
+			runningProcess->setProcessState(RUN);
+			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
+		}
 	}
 	
 	if(runningProcess) // currently executing or pulled fresh from ready in line 12
