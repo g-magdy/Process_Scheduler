@@ -27,6 +27,7 @@ private:
 	int randHelper;
 	int numOfForkedProcess;
 	int numOfKillededProcess;
+	int numOfStolenProcess;
 	//statistics attributes
 	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
 	Pair<float,float> SucssefulMigration;
@@ -44,7 +45,8 @@ private:
 	bool kill();
 	void updateConsole();
 	void serveIO();
-
+	Processor* getLongestProcessor();
+	Processor* getShortestProcessor();
 public:
 	Scheduler();
 	void startUp();

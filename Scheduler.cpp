@@ -319,10 +319,16 @@ bool Scheduler::steal()
 								{
 									fcfsP->pushTopOfRDY(forkedProcess[j]);
 								}
+								numOfStolenProcess++;
 								return 1;
-								//break;
 
 							}
+							else
+							{
+								forkedProcess[i] = toMove;
+
+							}
+							
 						}
 						else
 							return 0;
