@@ -76,6 +76,11 @@ void FCFSprocessor::pushToRDY(Process* p)
 	RDY.push_back(p);
 }
 
+void FCFSprocessor::pushTopOfRDY(Process*& p)
+{
+	RDY.push_front(p);
+}
+
 void FCFSprocessor::printRDYList()
 {
 	std::cout << RDY.getCount() << " RDY: ";

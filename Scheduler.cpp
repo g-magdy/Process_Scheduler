@@ -314,7 +314,14 @@ bool Scheduler::steal()
 						{
 							if (!toMove->getParent()) {
 								shortest->pushToRDY(toMove);
-								break;
+								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+								for (int j = i-1; j <=0; j--)
+								{
+									fcfsP->pushTopOfRDY(forkedProcess[j]);
+								}
+								return 1;
+								//break;
+
 							}
 						}
 						else
