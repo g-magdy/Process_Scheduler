@@ -61,6 +61,7 @@ bool FCFSprocessor::pullFromRDY(Process* & p)
 {
 	if (!RDY.isEmpty())
 	{
+		expectedFinishT -= p->getCPUT() - p->getFinishedCPUT();
 		RDY.pop_front(p);
 		return true;
 	}
@@ -78,7 +79,11 @@ void FCFSprocessor::pushToRDY(Process* p)
 
 void FCFSprocessor::pushTopOfRDY(Process*& p)
 {
+	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
+	p->setProcessState(READY);
+	p->setHandlingCPU(FCFS_T);
 	RDY.push_front(p);
+
 }
 
 void FCFSprocessor::printRDYList()
