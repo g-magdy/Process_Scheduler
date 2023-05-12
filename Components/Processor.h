@@ -27,7 +27,7 @@ protected:
 public:
 	Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s);		//non default constructor define total cputime =0
 
-	virtual void scheduleAlgo(int currentTimeStep);		          /// TODO: make this a pure virtual function
+	virtual void scheduleAlgo(int currentTimeStep) = 0;
 
 	virtual bool pullFromRDY(Process*& p) = 0;
 	virtual void pushToRDY(Process* p) = 0;

@@ -59,13 +59,14 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		setCPUstate(IDLE);
 		totalIdleT++;
 	}
+  
+  updateCPUstate();
 
 	// forking 
 	int randN=pScheduler->random();
 	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
 	if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
 		fork();
-
 }
 
 

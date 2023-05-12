@@ -14,14 +14,27 @@ void Scheduler::calcStatiscs(Process* ptr)
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0), numOfStolenProcess(0)
 {
 	pUI = new UI(this);
+	SucssefulMigration.first = SucssefulMigration.second = 0;
+	STL = 0;
+	stealPercentage = killPercentage = forkPercentage = 0;
+	runningMode = SILENT; // this is just an initial value
+	numberOfProcesses = numberOfCPUs = 0;
+	AVGResponseT = AVGTurnRoundT = AVGUtilisation = AVGWaitingT = 0;
 }
 	
 void Scheduler::startUp()
 {
+	readInputFile();
+	runningMode = pUI->startUP();
 }
 
 void Scheduler::run()
 {
+	while (numberOfProcesses > terminatedList.size())
+	{
+		currentTimeStep++;
+		update();									//perform the logic of simulation
+	}
 }
 
 void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
@@ -61,8 +74,8 @@ void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
 		shortestRR->pushToRDY(p);
 	else // kind is any general CPU
 	{
-		Processor* pShortest = (shortestFCFS->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
-		pShortest = (shortestRR->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
+		Processor* pShortest = (shortestFCFS->getExpectedFinishT() <= shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
+		pShortest = (shortestRR->getExpectedFinishT() <= pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
 		pShortest->pushToRDY(p);
 	}
 }
@@ -150,25 +163,17 @@ bool Scheduler::kill(std::string idToKill)
 
 void Scheduler::simulation()
 {
-	readInputFile();
-	runningMode = pUI->startUP();
+	Process* ptr;
 
 	while (numberOfProcesses > terminatedList.size())
 	{
 		currentTimeStep++;
 
-		Process* ptr;											//to determine the processor to put the new process in 
-		while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
-		{
-			newList.pop(ptr);
-			moveToRDY(ptr);
-		}
-
 		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
 			processorsGroup[i]->scheduleAlgo(currentTimeStep);
 		}
 
-		for (int i = 0; i < numberOfCPUs; i++) {
+		/*for (int i = 0; i < numberOfCPUs; i++) {
 			double randNum = random();
 			if (randNum >= 1 && randNum <= 15)
 			{
@@ -182,7 +187,8 @@ void Scheduler::simulation()
 			{
 				processorsGroup[i]->movetoTRM();
 			}
-		}
+		}*/
+
 		ptr = nullptr;
 		double randNum = random();
 		if (randNum <= 10)
@@ -190,7 +196,7 @@ void Scheduler::simulation()
 			if (!blockedList.isEmpty())
 			{
 				blockedList.pop(ptr);
-				moveToRDY(ptr);
+				//moveToRDY(ptr);
 			}
 		}
 
@@ -341,6 +347,33 @@ void Scheduler::createOutputFile()
 
 void Scheduler::update()
 {
+	Process* ptr;
+
+	// Distripute new arriving Processes at this time step
+	while (!newList.isEmpty() && newList.Front()->getArrivalT() == currentTimeStep)
+	{
+		newList.pop(ptr);
+		moveToShortestRDY(ptr);
+	}
+
+	// call scheduleAlgo function for all CPUs
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		processorsGroup[i]->scheduleAlgo(currentTimeStep);
+	}
+
+	/// TODO: activate the stealing function
+	steal();
+
+	//serves IO requests of the Processes wating in the BLKList
+	/// TODO: activeate serveIO funcion
+	serveIO();
+
+	//Check for Killing signals at this time step
+	kill();
+
+	//update the console
+	updateConsole();
 }
 
 Processor* Scheduler::createCPU(CPU_TYPE)
@@ -422,6 +455,9 @@ bool Scheduler::steal()
 
 bool Scheduler::kill()
 {
+	//A flag to indicate whether a killing process has done successufully or not
+	bool successKill = false;
+
 	//First check that the killList is not empty
 	if (killList.isEmpty() == false)
 	{
@@ -435,9 +471,11 @@ bool Scheduler::kill()
 			//remove the killing signal from the list
 			killList.pop();
 			//call kill(string) that iterates on the cpus to kill the process with the given id
-			kill(killSig.second);
+			successKill = kill(killSig.second);
 		}
 	}
+
+	return successKill;
 }
 
 void Scheduler::updateConsole()
