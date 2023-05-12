@@ -6,7 +6,7 @@ Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPU
 	totalIOD = FinishedCPUT = servedIODuration = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
-	myChild = nullptr;
+	myChild = myParent = nullptr;
 }
 
 Process::Process(const Process& origin)
@@ -22,7 +22,7 @@ Process::Process(const Process& origin)
 	TurnRoundT = origin.TurnRoundT;
 	WaitingT = origin.WaitingT;
 	IOList = origin.IOList;
-	myChild = nullptr;      //what should I set this to ?
+	myChild = myParent = nullptr;      //what should I set this to ?
 	servedIODuration = 0;
 }
 
@@ -159,6 +159,16 @@ Process* Process::getMyChild()
 void Process::setMyChild(Process* ch)
 {
 	myChild = ch;
+}
+
+Process* Process::getMyParent()
+{
+	return myParent;
+}
+
+void Process::setMyParent(Process* parent)
+{
+	myParent = parent;
 }
 
 bool Process::operator>(const Process& second)

@@ -58,7 +58,9 @@ public:
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);
 	int getTimeStep() const;
-	Process* createChild( int ct);
+	Process* createChild( int ct, Process* parent);
+
+	// takes a process pointer, and a DESTINATION (specific CPU type)
 	bool migrate(Process*, CPU_TYPE);
 	bool kill(std::string);
 	//bool fork(std::string id, int AT, int CPUT);
