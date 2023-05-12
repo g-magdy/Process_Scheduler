@@ -147,12 +147,6 @@ bool Scheduler::kill(std::string idToKill)
 	return false;
 }
 
-//bool Scheduler::fork(std::string id, int AT, int CPUT)
-//{
-//	Process* child = new Process(id,AT,CPUT);
-//	mo
-//	return false;
-//}
 
 void Scheduler::simulation()
 {
@@ -316,9 +310,9 @@ void Scheduler::createOutputFile()
 		<< "%," << "    "<< "MaxW = "
 		<< 100.00 * SucssefulMigration.second / numberOfProcesses
 		<< "%" << endl;	
-	//stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
-	//forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
-	//killPercentage=100.00*numOfKilledProcess/ numberOfProcesses;
+	stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
+	forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
+	killPercentage=100.00*numOfKilledProcess/ numberOfProcesses;
 
 	outF << "Work Steal%: " << stealPercentage <<"%" <<endl;
 	outF << "Forked Process: " << forkPercentage << "%" << endl;
@@ -348,11 +342,6 @@ void Scheduler::createOutputFile()
 void Scheduler::update()
 {
 }
-
-//Process* Scheduler::createProcess(std::string, int, int)
-//{
-//	return nullptr;
-//}
 
 Processor* Scheduler::createCPU(CPU_TYPE)
 {
