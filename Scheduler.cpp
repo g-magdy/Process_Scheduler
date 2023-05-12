@@ -282,9 +282,9 @@ void Scheduler::createOutputFile()
 		<< "    " << "Avg RT = "<< AVGResponseT 
 		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
 	outF << "Migration %: " << "    " << "RTF= " 
-		<< 100.00 * SucssefulMigration.first/(SucssefulMigration.first+ SucssefulMigration.second)
+		<< 100.00 * SucssefulMigration.first/ numberOfProcesses
 		<< "%," << "    "<< "MaxW = "
-		<< 100.00 * SucssefulMigration.second / (SucssefulMigration.first + SucssefulMigration.second)
+		<< 100.00 * SucssefulMigration.second / numberOfProcesses
 		<< "%" << endl;	
 	//stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
 	//forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
