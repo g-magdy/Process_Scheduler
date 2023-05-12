@@ -5,9 +5,6 @@
 using namespace std;
 void Scheduler::calcStatiscs(Process* ptr)
 {
-	ptr->setTerminationT(currentTimeStep);
-	ptr->setTurnRoundT();
-	ptr->setWaitingT();
 	AVGWaitingT += ptr->getWaitingT();
 	AVGResponseT += ptr->getResponseT();
 	AVGTurnRoundT = ptr->getTurnRoundT();
@@ -16,7 +13,7 @@ Scheduler::Scheduler(): processorsGroup(nullptr), currentTimeStep(0), pUI(nullpt
 {
 	pUI = new UI(this);
 }
-
+	
 void Scheduler::startUp()
 {
 }
@@ -78,6 +75,9 @@ void Scheduler::moveToBLK(Process* ptr)
 void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
+	ptr->setTerminationT(currentTimeStep);
+	ptr->setTurnRoundT();
+	ptr->setWaitingT();
 	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
@@ -259,7 +259,7 @@ void Scheduler::readInputFile()
 void Scheduler::createOutputFile()
 {
 	ofstream outF("sampleOutput.txt", ios::out);
-	outF << "TT" << "    " << "PID" << "    " << "AT"
+	outF << "TT" << "    " << "PID" << "    " << "AT"<<"    "<<"CT"
 		<< "    " << "IO_D" << "    " << "WT" << "    " << "RT"
 		<< "    " << "TRT" << endl;
 	for (int i = 0; i < numberOfProcesses; i++)
@@ -282,8 +282,10 @@ void Scheduler::createOutputFile()
 		<< "    " << "Avg RT = "<< AVGResponseT 
 		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
 	outF << "Migration %: " << "    " << "RTF= " 
-		<< SucssefulMigration.first << "%," << "    " 
-		<< "MaxW = " << SucssefulMigration.second << "%" << endl;	///TODO:
+		<< 100.00 * SucssefulMigration.first/(SucssefulMigration.first+ SucssefulMigration.second)
+		<< "%," << "    "<< "MaxW = "
+		<< 100.00 * SucssefulMigration.second / (SucssefulMigration.first + SucssefulMigration.second)
+		<< "%" << endl;	
 	//stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
 	//forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
 	//killPercentage=100.00*numOfKilledProcess/ numberOfProcesses;
