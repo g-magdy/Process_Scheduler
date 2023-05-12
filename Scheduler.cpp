@@ -297,6 +297,7 @@ bool Scheduler::steal()
 		Processor* shortest = getShortestProcessor();
 		Processor* longest = getLongestProcessor();
 		Process* toMove;
+		bool stealFlag = false;
 		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
 		while (stealLimit > 40)
 		{
@@ -320,7 +321,8 @@ bool Scheduler::steal()
 									fcfsP->pushTopOfRDY(forkedProcess[j]);
 								}
 								numOfStolenProcess++;
-								return 1;
+								stealFlag = true;
+								break;
 
 							}
 							else
@@ -331,7 +333,14 @@ bool Scheduler::steal()
 							
 						}
 						else
-							return 0;
+						{
+							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+							for (int j = i - 1; j <= 0; j--)
+							{
+								fcfsP->pushTopOfRDY(forkedProcess[j]);
+							}
+							return stealFlag;
+						}
 					}
 				}
 
@@ -339,7 +348,7 @@ bool Scheduler::steal()
 
 			}
 			else
-				return 0;
+				return stealFlag;
 			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
 		}
 
