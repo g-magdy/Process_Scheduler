@@ -3,6 +3,15 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
+void Scheduler::calcStatiscs(Process* ptr)
+{
+	ptr->setTerminationT(currentTimeStep);
+	ptr->setTurnRoundT();
+	ptr->setWaitingT();
+	AVGWaitingT += ptr->getWaitingT();
+	AVGResponseT += ptr->getResponseT();
+	AVGTurnRoundT = ptr->getTurnRoundT();
+}
 Scheduler::Scheduler(): processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
 {
 	pUI = new UI(this);
@@ -69,9 +78,7 @@ void Scheduler::moveToBLK(Process* ptr)
 void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
-	ptr->setTerminationT(currentTimeStep);
-	ptr->setTurnRoundT();
-	ptr->setWaitingT();
+	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
 	if (ptr->getMyChild())
@@ -292,7 +299,7 @@ void Scheduler::createOutputFile()
 	{
 		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< "    ";
 	}
-	outF << endl;
+	outF << endl<<endl;
 	outF << "Processors Utiliz" << endl;
 	AVGUtilisation = 0;
 	for (int i = 0; i < numberOfCPUs; i++)

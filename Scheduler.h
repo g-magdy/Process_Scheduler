@@ -44,6 +44,10 @@ private:
 	void updateConsole();
 	void serveIO();
 
+
+	
+	
+	void calcStatiscs(Process* ptr);
 public:
 	Scheduler();
 	void startUp();
