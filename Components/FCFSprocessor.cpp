@@ -32,7 +32,6 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 	{
 		setCPUstate(Busy); // not sure if needed
 		runningProcess->updateFinishedCPUT();
-		expectedFinishT--;
 		totalBusyT++;
 
 		// IO check
@@ -42,13 +41,12 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			if (req.first == runningProcess->getFinishedCPUT()) //right time
 			{
 				// remove the remaining time to finish the process execution from the CPU's expected finsih time
-				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
 				runningProcess = nullptr;
 			}
 		}
 		// Termination check
-		if (runningProcess && runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
 		{
 			pScheduler->moveToTRM(runningProcess); // modified
 			runningProcess = nullptr;

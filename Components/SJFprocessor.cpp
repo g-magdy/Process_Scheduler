@@ -22,21 +22,19 @@ void SJF::scheduleAlgo(int currentTimeStep)
 	{
 		totalBusyT++;
 		runningProcess->updateFinishedCPUT();
-		expectedFinishT--;
 
 		Pair<int, int> p;
 		if (runningProcess->peekNextIOR(p)) {
 
 			if (p.first == runningProcess->getFinishedCPUT())
 			{
-				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
 				runningProcess = nullptr;
 
 			}
 		}
 		
-		if (runningProcess && runningProcess->getFinishedCPUT() == runningProcess->getCPUT())
+		if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
 		{
 				pScheduler->moveToTRM(runningProcess);
 				runningProcess = nullptr;

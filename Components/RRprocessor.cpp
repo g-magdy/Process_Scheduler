@@ -34,7 +34,6 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 	{
 		runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());			// sets the response time if this is the first time the process is handled
 		runningProcess->updateFinishedCPUT();						//increament the CPU time of this process by one
-		expectedFinishT--;
 
 		//check for IO requests
 		Pair<int, int> nextRequest;
@@ -42,14 +41,13 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 		{
 			if (nextRequest.first == (runningProcess->getFinishedCPUT()))
 			{
-				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
 				runningProcess = nullptr;
 			}
 		}
 
 		//check for termination
-		if (runningProcess && (runningProcess->getCPUT() == runningProcess->getFinishedCPUT()))
+		if (runningProcess && (runningProcess->getCPUT() <= runningProcess->getFinishedCPUT()))
 		{
 			pScheduler->moveToTRM(runningProcess);
 			runningProcess = nullptr;
