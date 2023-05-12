@@ -76,8 +76,6 @@ void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
 	ptr->setTerminationT(currentTimeStep);
-	ptr->setTurnRoundT();
-	ptr->setWaitingT();
 	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
