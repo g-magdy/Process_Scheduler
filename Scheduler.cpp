@@ -351,6 +351,7 @@ void Scheduler::serveIO()
 		if (customer->getServedIODuration() == req.second) // IO duration is finished
 		{
 			customer->popkNextIOR(req); // request was completed
+			customer->incrementTotalIOD(req.second);
 			blockedList.pop(); // remove the customer from the blocked list
 			customer->resetServedIODuration(); // to prepare for the next request
 			moveToShortestRDY(customer);

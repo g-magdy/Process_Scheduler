@@ -146,6 +146,11 @@ void Process::resetServedIODuration()
 	servedIODuration = 0;
 }
 
+void Process::incrementTotalIOD(int a)
+{
+	totalIOD += a;
+}
+
 Process* Process::getMyChild()
 {
 	return myChild;

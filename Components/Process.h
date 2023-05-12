@@ -56,7 +56,8 @@ public:
 
 	void incrementServedIODuration();
 	int getServedIODuration();
-	void resetServedIODuration();	
+	void resetServedIODuration();
+	void incrementTotalIOD(int a);
 
 	Process* getMyChild();										 // gets the child of the Process
 	void setMyChild(Process* ch);
