@@ -35,7 +35,10 @@ std::string Processor::getID()
 
 CPU_STATE Processor::getCPUstate()
 {
-	return CPUstate;
+	if (runningProcess)
+		return Busy;
+	else
+		return IDLE;
 }
 
 void Processor::setCPUstate(CPU_STATE state)

@@ -35,6 +35,7 @@ void Scheduler::run()
 		currentTimeStep++;
 		update();									//perform the logic of simulation
 	}
+	createOutputFile();
 }
 
 void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)

@@ -60,13 +60,13 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 		totalIdleT++;
 	}
   
-  updateCPUstate();
-
 	// forking 
 	int randN=pScheduler->random();
 	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
 	if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
 		fork();
+
+  updateCPUstate();
 }
 
 
@@ -74,8 +74,8 @@ bool FCFSprocessor::pullFromRDY(Process* & p)
 {
 	if (!RDY.isEmpty())
 	{
-		expectedFinishT -= p->getCPUT() - p->getFinishedCPUT();
 		RDY.pop_front(p);
+		expectedFinishT -= p->getCPUT() - p->getFinishedCPUT();
 		return true;
 	}
 	return false;
