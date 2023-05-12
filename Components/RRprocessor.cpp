@@ -7,12 +7,26 @@ RRprocessor::RRprocessor(Scheduler* pscheduler, std::string s, int tslice, int r
 
 void RRprocessor::scheduleAlgo(int currentTimeStep)
 {
-	if (!runningProcess)				// if the cpu is idle, check if there is any process in the ready list
+	while (!runningProcess && pullFromRDY(runningProcess)) // if the cpu is idle, check if there is any process in the ready list
 	{
-		if (pullFromRDY(runningProcess))				// if ther, get it and put in run
+		int unFinishedCPUT = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
+
+
+		// Migration is handled in this part
+		if (runningProcess->getMyParent() == nullptr) //first check that this process is not a child
 		{
-			runningProcess->setProcessState(RUN);
+			if (unFinishedCPUT < RTF) //check whether this Proccess has remaining cpu time less than rtf
+			{
+				if (pScheduler->migrate(runningProcess, SJF_T))
+				{
+					runningProcess = nullptr;
+					continue;
+				}
+
+			}
 		}
+
+		runningProcess->setProcessState(RUN);
 	}
 	
 

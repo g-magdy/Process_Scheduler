@@ -3,13 +3,15 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
+
 void Scheduler::calcStatiscs(Process* ptr)
 {
 	AVGWaitingT += ptr->getWaitingT();
 	AVGResponseT += ptr->getResponseT();
 	AVGTurnRoundT += ptr->getTurnRoundT();
 }
-Scheduler::Scheduler(): processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
+
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0), numOfStolenProcess(0)
 {
 	pUI = new UI(this);
 }
@@ -70,6 +72,7 @@ void Scheduler::moveToBLK(Process* ptr)
 	ptr->setProcessState(BLOCKED);
 	blockedList.push(ptr);
 	//pop io request
+	///EDIT: i will just peek first request and pop it only when it is fully served
 }
 
 void Scheduler::moveToTRM(Process* ptr)
@@ -99,14 +102,32 @@ int Scheduler::getTimeStep() const
 }
 
 
-Process* Scheduler::createChild(int)
+Process* Scheduler::createChild(int ct, Process* parent)
 {
-	return nullptr;
+	Process* child = new Process(to_string(++numberOfProcesses), currentTimeStep, ct);
+	child->setMyParent(parent);
+
+	numOfForkedProcess++;
+	moveToShortestRDY(child, FCFS_T);
+	return child;
 }
 
-bool Scheduler::migrate(Process*, CPU_TYPE)
+bool Scheduler::migrate(Process* ptr, CPU_TYPE Destination_kind)
 {
-	return false;
+	if (Destination_kind == RR_T)
+	{
+		moveToShortestRDY(ptr, RR_T);
+		SucssefulMigration.second++;
+		return true;
+	}
+	else if (Destination_kind == SJF_T)
+	{
+		moveToShortestRDY(ptr, SJF_T);
+		SucssefulMigration.first++;
+		return true;
+	}
+	else
+		return false;
 }
 
 bool Scheduler::kill(std::string idToKill)
@@ -116,11 +137,22 @@ bool Scheduler::kill(std::string idToKill)
 		if (processorsGroup[i]->getMyType() == FCFS_T)
 		{
 			if ( ((FCFSprocessor*)processorsGroup[i])->kill(idToKill))
+			{
+				numOfKillededProcess++;
 				return true;
+			}
+
 		}
 	}
 	return false;
 }
+
+//bool Scheduler::fork(std::string id, int AT, int CPUT)
+//{
+//	Process* child = new Process(id,AT,CPUT);
+//	mo
+//	return false;
+//}
 
 void Scheduler::simulation()
 {
@@ -317,10 +349,10 @@ void Scheduler::update()
 {
 }
 
-Process* Scheduler::createProcess(std::string, int, int)
-{
-	return nullptr;
-}
+//Process* Scheduler::createProcess(std::string, int, int)
+//{
+//	return nullptr;
+//}
 
 Processor* Scheduler::createCPU(CPU_TYPE)
 {
@@ -329,7 +361,74 @@ Processor* Scheduler::createCPU(CPU_TYPE)
 
 bool Scheduler::steal()
 {
-	return false;
+	if (currentTimeStep % STL == 0)
+	{
+		Processor* shortest = getShortestProcessor();
+		Processor* longest = getLongestProcessor();
+		Process* toMove;
+		bool stealFlag = false;
+		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		while (stealLimit > 40)
+		{
+			if (longest->pullFromRDY(toMove)) {
+				if (!toMove->getMyParent()) {
+					shortest->pushToRDY(toMove);
+					numOfStolenProcess++;
+					stealFlag = true;
+				}
+				else
+				{
+					Process** forkedProcess = new Process*[numOfForkedProcess];
+					forkedProcess[0] = toMove;
+					for (int i = 1; i < numOfForkedProcess; i++)
+					{
+						if (longest->pullFromRDY(toMove))
+						{
+							if (!toMove->getMYParent()) {
+								shortest->pushToRDY(toMove);
+								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+								for (int j = i-1; j <=0; j--)
+								{
+									fcfsP->pushTopOfRDY(forkedProcess[j]);
+								}
+								delete []forkedProcess;
+								numOfStolenProcess++;
+								stealFlag = true;
+								break;
+
+							}
+							else
+							{
+								forkedProcess[i] = toMove;
+
+							}
+							
+						}
+						else
+						{
+							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+							for (int j = i - 1; j <= 0; j--)
+							{
+								fcfsP->pushTopOfRDY(forkedProcess[j]);
+							}
+							delete[]forkedProcess;
+							return stealFlag;
+						}
+					}
+				}
+
+
+
+			}
+			else
+				return stealFlag;
+			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		}
+
+	}
+	else
+		return 0;
+
 }
 
 bool Scheduler::kill()
@@ -373,4 +472,54 @@ void Scheduler::updateConsole()
 
 void Scheduler::serveIO()
 {
+	// first: check if there is a process in BLK
+	if (!blockedList.isEmpty())
+	{
+		Process* customer = blockedList.Front(); // just a temp pointer
+		if (customer->getProcessState() == BLOCKED)
+			customer->setProcessState(IO);
+
+		customer->incrementServedIODuration();
+		// second: the processes in the blocked list will always have requests
+		// checked before calling moveTOBLK()
+		Pair <int, int>req;
+		customer->peekNextIOR(req);
+		if (customer->getServedIODuration() == req.second) // IO duration is finished
+		{
+			customer->popkNextIOR(req); // request was completed
+			customer->incrementTotalIOD(req.second);
+			blockedList.pop(); // remove the customer from the blocked list
+			customer->resetServedIODuration(); // to prepare for the next request
+			moveToShortestRDY(customer);
+		}
+	}
+}
+
+Processor* Scheduler::getShortestProcessor()
+{
+	Processor* shortest = processorsGroup[0];
+
+	for (int i = 1; i < numberOfCPUs; i++)
+	{
+		if (shortest->getExpectedFinishT() > processorsGroup[i]->getExpectedFinishT())
+		{
+			shortest = processorsGroup[i];
+		}
+
+	}
+	return shortest;
+}
+
+Processor* Scheduler::getLongestProcessor()
+{
+	Processor* longest = processorsGroup[0];
+	for (int i = 1; i < numberOfCPUs; i++)
+	{
+		if (longest->getExpectedFinishT() < processorsGroup[i]->getExpectedFinishT())
+		{
+			longest = processorsGroup[i];
+		}
+
+	}
+	return longest;
 }
