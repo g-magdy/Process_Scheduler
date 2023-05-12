@@ -7,7 +7,7 @@ void Scheduler::calcStatiscs(Process* ptr)
 {
 	AVGWaitingT += ptr->getWaitingT();
 	AVGResponseT += ptr->getResponseT();
-	AVGTurnRoundT = ptr->getTurnRoundT();
+	AVGTurnRoundT += ptr->getTurnRoundT();
 }
 Scheduler::Scheduler(): processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
 {
