@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
+Scheduler::Scheduler(): processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0)
 {
 	pUI = new UI(this);
 }
