@@ -49,7 +49,7 @@ public:
 	int getTurnRoundT() const;									 // total round time getter
 																
 	int getWaitingT() const;									 // watting time getter
-																
+															
 	void pushIORquest(Pair<int,int>&);							 // Adds an IO request pair to the IOList 
 	bool peekNextIOR(Pair<int, int>&);							 // Takes a peek on the first pair in the IOlist pairs
 	bool popkNextIOR(Pair<int, int>&);							 // pops and returns the first pair in the IOlist pairs

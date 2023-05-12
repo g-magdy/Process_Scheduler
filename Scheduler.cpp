@@ -3,7 +3,7 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0), numOfStolenProcess(0)
 {
 	pUI = new UI(this);
 }
@@ -307,7 +307,74 @@ Processor* Scheduler::createCPU(CPU_TYPE)
 
 bool Scheduler::steal()
 {
-	return false;
+	if (currentTimeStep % STL == 0)
+	{
+		Processor* shortest = getShortestProcessor();
+		Processor* longest = getLongestProcessor();
+		Process* toMove;
+		bool stealFlag = false;
+		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		while (stealLimit > 40)
+		{
+			if (longest->pullFromRDY(toMove)) {
+				if (!toMove->getMyParent()) {
+					shortest->pushToRDY(toMove);
+					numOfStolenProcess++;
+					stealFlag = true;
+				}
+				else
+				{
+					Process** forkedProcess = new Process*[numOfForkedProcess];
+					forkedProcess[0] = toMove;
+					for (int i = 1; i < numOfForkedProcess; i++)
+					{
+						if (longest->pullFromRDY(toMove))
+						{
+							if (!toMove->getMYParent()) {
+								shortest->pushToRDY(toMove);
+								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+								for (int j = i-1; j <=0; j--)
+								{
+									fcfsP->pushTopOfRDY(forkedProcess[j]);
+								}
+								delete []forkedProcess;
+								numOfStolenProcess++;
+								stealFlag = true;
+								break;
+
+							}
+							else
+							{
+								forkedProcess[i] = toMove;
+
+							}
+							
+						}
+						else
+						{
+							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+							for (int j = i - 1; j <= 0; j--)
+							{
+								fcfsP->pushTopOfRDY(forkedProcess[j]);
+							}
+							delete[]forkedProcess;
+							return stealFlag;
+						}
+					}
+				}
+
+
+
+			}
+			else
+				return stealFlag;
+			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		}
+
+	}
+	else
+		return 0;
+
 }
 
 bool Scheduler::kill()
@@ -372,4 +439,33 @@ void Scheduler::serveIO()
 			moveToShortestRDY(customer);
 		}
 	}
+}
+
+Processor* Scheduler::getShortestProcessor()
+{
+	Processor* shortest = processorsGroup[0];
+
+	for (int i = 1; i < numberOfCPUs; i++)
+	{
+		if (shortest->getExpectedFinishT() > processorsGroup[i]->getExpectedFinishT())
+		{
+			shortest = processorsGroup[i];
+		}
+
+	}
+	return shortest;
+}
+
+Processor* Scheduler::getLongestProcessor()
+{
+	Processor* longest = processorsGroup[0];
+	for (int i = 1; i < numberOfCPUs; i++)
+	{
+		if (longest->getExpectedFinishT() < processorsGroup[i]->getExpectedFinishT())
+		{
+			longest = processorsGroup[i];
+		}
+
+	}
+	return longest;
 }
