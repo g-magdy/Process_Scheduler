@@ -258,6 +258,8 @@ void Scheduler::createOutputFile()
 	{
 		Process * ptr=terminatedList.Front();
 		terminatedList.pop();
+		ptr->setTurnRoundT();
+		ptr->setWaitingT();
 		outF << ptr->getTerminationT() << "    " << ptr->getID() 
 			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
 			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
@@ -265,7 +267,7 @@ void Scheduler::createOutputFile()
 			<< endl;
 		delete ptr;
 	}
-	outF << "Processors:" << numberOfCPUs << endl;
+	outF << "Processes:" << numberOfProcesses << endl;
 	AVGWaitingT = AVGWaitingT / numberOfProcesses;
 	AVGResponseT = AVGResponseT / numberOfProcesses;
 	int totalTurnRoundT = AVGTurnRoundT;

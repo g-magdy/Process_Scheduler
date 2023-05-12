@@ -103,9 +103,18 @@ int Process::getTurnRoundT() const
 	return TurnRoundT;
 }
 
+void Process::setTurnRoundT()
+{
+	TurnRoundT = TerminationT-ArrivalT;
+}
+
 int Process::getWaitingT() const
 {
 	return WaitingT;
+}
+void Process::setWaitingT()
+{
+	WaitingT = TurnRoundT - CPUT;
 }
 int Process::getTotalIOD() {
 	return totalIOD;
