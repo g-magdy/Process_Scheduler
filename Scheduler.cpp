@@ -109,11 +109,13 @@ bool Scheduler::migrate(Process* ptr, CPU_TYPE Destination_kind)
 	if (Destination_kind == RR_T)
 	{
 		moveToShortestRDY(ptr, RR_T);
+		SucssefulMigration.second++;
 		return true;
 	}
 	else if (Destination_kind == SJF_T)
 	{
 		moveToShortestRDY(ptr, SJF_T);
+		SucssefulMigration.first++;
 		return true;
 	}
 	else
