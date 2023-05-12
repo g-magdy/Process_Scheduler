@@ -104,11 +104,15 @@ int Process::getTurnRoundT() const
 	return TurnRoundT;
 }
 
+
 int Process::getWaitingT() const
 {
 	return WaitingT;
 }
 
+int Process::getTotalIOD() {
+	return totalIOD;
+}
 void Process::pushIORquest(Pair<int,int>& ioPair)
 {
 	IOList.push(ioPair);

@@ -3,11 +3,19 @@
 #include<string>
 #include <Windows.h>
 using namespace std;
+
+void Scheduler::calcStatiscs(Process* ptr)
+{
+	AVGWaitingT += ptr->getWaitingT();
+	AVGResponseT += ptr->getResponseT();
+	AVGTurnRoundT += ptr->getTurnRoundT();
+}
+
 Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0), numOfStolenProcess(0)
 {
 	pUI = new UI(this);
 }
-
+	
 void Scheduler::startUp()
 {
 }
@@ -71,7 +79,7 @@ void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
 	ptr->setTerminationT(currentTimeStep);
-	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
+	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
 	if (ptr->getMyChild())
@@ -204,14 +212,6 @@ void Scheduler::simulation()
 
 Scheduler::~Scheduler()
 {
-	Process* toDelete;
-
-	while (!terminatedList.isEmpty())
-	{
-		terminatedList.pop(toDelete);
-		delete toDelete;
-		toDelete = nullptr;
-	}
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
 		delete processorsGroup[i];
@@ -222,7 +222,6 @@ Scheduler::~Scheduler()
 
 void Scheduler::readInputFile()
 {
-	int num_FCFS, num_SJF, num_RR;
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
@@ -289,6 +288,61 @@ void Scheduler::readInputFile()
 
 void Scheduler::createOutputFile()
 {
+	ofstream outF("sampleOutput.txt", ios::out);
+	outF << "TT" << "    " << "PID" << "    " << "AT"<<"    "<<"CT"
+		<< "    " << "IO_D" << "    " << "WT" << "    " << "RT"
+		<< "    " << "TRT" << endl;
+	for (int i = 0; i < numberOfProcesses; i++)
+	{
+		Process * ptr=terminatedList.Front();
+		terminatedList.pop();
+		outF << ptr->getTerminationT() << "    " << ptr->getID() 
+			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
+			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
+			<< "    " << ptr->getResponseT() << "    " << ptr->getTurnRoundT()
+			<< endl;
+		delete ptr;
+	}
+	outF << "Processes:" << numberOfProcesses << endl;
+	AVGWaitingT = AVGWaitingT / numberOfProcesses;
+	AVGResponseT = AVGResponseT / numberOfProcesses;
+	float totalTurnRoundT = AVGTurnRoundT;
+	AVGTurnRoundT = AVGTurnRoundT / numberOfProcesses;
+	outF << "Avg WT = " << AVGWaitingT << ','
+		<< "    " << "Avg RT = "<< AVGResponseT 
+		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
+	outF << "Migration %: " << "    " << "RTF= " 
+		<< 100.00 * SucssefulMigration.first/ numberOfProcesses
+		<< "%," << "    "<< "MaxW = "
+		<< 100.00 * SucssefulMigration.second / numberOfProcesses
+		<< "%" << endl;	
+	//stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
+	//forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
+	//killPercentage=100.00*numOfKilledProcess/ numberOfProcesses;
+
+	outF << "Work Steal%: " << stealPercentage <<"%" <<endl;
+	outF << "Forked Process: " << forkPercentage << "%" << endl;
+	outF << "Killed Process: " << killPercentage << "%" << endl<<endl;
+
+	outF << "Processors:" << numberOfCPUs << " [" << num_FCFS<<"FCFS, " 
+		<< num_SJF << "SJF, "<<num_RR << "RR "<< "]" << endl;
+	outF << "Processors Load " << endl;
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< "    ";
+	}
+	outF << endl<<endl;
+	outF << "Processors Utiliz" << endl;
+	AVGUtilisation = 0;
+	for (int i = 0; i < numberOfCPUs; i++)
+	{
+		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << "    ";
+		AVGUtilisation += processorsGroup[i]->calcPUtil();
+	}
+	outF << endl;
+	AVGUtilisation = AVGUtilisation / numberOfCPUs;
+	outF << "Avg utilization = " << AVGUtilisation<<'%';
+	outF.close();
 }
 
 void Scheduler::update()

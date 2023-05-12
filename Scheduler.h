@@ -25,6 +25,9 @@ private:
 	RunningMode runningMode;
 	int indexOfNextCPU;
 	int randHelper;
+  
+	int num_FCFS, num_SJF, num_RR;
+  
 	int numOfForkedProcess;
 	int numOfKillededProcess;
 	int numOfStolenProcess;
@@ -45,8 +48,12 @@ private:
 	bool kill();
 	void updateConsole();
 	void serveIO();
+  
+	void calcStatiscs(Process* ptr);
+  
 	Processor* getLongestProcessor();
 	Processor* getShortestProcessor();
+  
 public:
 	Scheduler();
 	void startUp();
