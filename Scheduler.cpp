@@ -11,7 +11,7 @@ void Scheduler::calcStatiscs(Process* ptr)
 	AVGTurnRoundT += ptr->getTurnRoundT();
 }
 
-Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKillededProcess(0), numOfStolenProcess(0)
+Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullptr), indexOfNextCPU(0), randHelper(0),numOfForkedProcess(0), numOfKilledProcess(0), numOfStolenProcess(0)
 {
 	pUI = new UI(this);
 	SucssefulMigration.first = SucssefulMigration.second = 0;
@@ -151,7 +151,7 @@ bool Scheduler::kill(std::string idToKill)
 		{
 			if ( ((FCFSprocessor*)processorsGroup[i])->kill(idToKill))
 			{
-				numOfKillededProcess++;
+				numOfKilledProcess++;
 				return true;
 			}
 
@@ -406,7 +406,7 @@ bool Scheduler::steal()
 					{
 						if (longest->pullFromRDY(toMove))
 						{
-							if (!toMove->getMYParent()) {
+							if (!toMove->getMyParent()) {
 								shortest->pushToRDY(toMove);
 								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
 								for (int j = i-1; j <=0; j--)

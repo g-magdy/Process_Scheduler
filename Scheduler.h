@@ -29,7 +29,7 @@ private:
 	int num_FCFS, num_SJF, num_RR;
   
 	int numOfForkedProcess;
-	int numOfKillededProcess;
+	int numOfKilledProcess;
 	int numOfStolenProcess;
 	//statistics attributes
 	float AVGWaitingT, AVGResponseT, AVGTurnRoundT;
