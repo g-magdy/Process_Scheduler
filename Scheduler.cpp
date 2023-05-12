@@ -430,7 +430,7 @@ bool Scheduler::steal()
 						else
 						{
 							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-							for (int j = i - 1; j <= 0; j--)
+							for (int j = i - 1; j >= 0; j--)
 							{
 								fcfsP->pushTopOfRDY(forkedProcess[j]);
 							}
