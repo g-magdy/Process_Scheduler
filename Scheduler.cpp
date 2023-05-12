@@ -70,7 +70,8 @@ void Scheduler::moveToTRM(Process* ptr)
 {
 	ptr->setProcessState(TERM);
 	ptr->setTerminationT(currentTimeStep);
-	/// TODO: ptr->setTurnAroundTime(currentTimeStep - ptr->getArrivalT());
+	ptr->setTurnRoundT();
+	ptr->setWaitingT();
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
 	if (ptr->getMyChild())
@@ -258,8 +259,6 @@ void Scheduler::createOutputFile()
 	{
 		Process * ptr=terminatedList.Front();
 		terminatedList.pop();
-		ptr->setTurnRoundT();
-		ptr->setWaitingT();
 		outF << ptr->getTerminationT() << "    " << ptr->getID() 
 			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
 			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
@@ -270,17 +269,22 @@ void Scheduler::createOutputFile()
 	outF << "Processes:" << numberOfProcesses << endl;
 	AVGWaitingT = AVGWaitingT / numberOfProcesses;
 	AVGResponseT = AVGResponseT / numberOfProcesses;
-	int totalTurnRoundT = AVGTurnRoundT;
+	float totalTurnRoundT = AVGTurnRoundT;
 	AVGTurnRoundT = AVGTurnRoundT / numberOfProcesses;
 	outF << "Avg WT = " << AVGWaitingT << ','
 		<< "    " << "Avg RT = "<< AVGResponseT 
 		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
 	outF << "Migration %: " << "    " << "RTF= " 
 		<< SucssefulMigration.first << "%," << "    " 
-		<< "MaxW = " << SucssefulMigration.second << "%" << endl;
+		<< "MaxW = " << SucssefulMigration.second << "%" << endl;	///TODO:
+	//stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
+	//forkPercentage=100.00*numOfForkedProcess/ numberOfProcesses;
+	//killPercentage=100.00*numOfKilledProcess/ numberOfProcesses;
+
 	outF << "Work Steal%: " << stealPercentage <<"%" <<endl;
 	outF << "Forked Process: " << forkPercentage << "%" << endl;
-	outF << "Killed Process: " << killPercentage << "%" << endl;
+	outF << "Killed Process: " << killPercentage << "%" << endl<<endl;
+
 	outF << "Processors:" << numberOfCPUs << " [" << num_FCFS<<"FCFS, " 
 		<< num_SJF << "SJF, "<<num_RR << "RR "<< "]" << endl;
 	outF << "Processors Load " << endl;
