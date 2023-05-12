@@ -44,7 +44,7 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 			{
 				expectedFinishT -= (runningProcess->getCPUT() - runningProcess->getFinishedCPUT());
 				pScheduler->moveToBLK(runningProcess);
-				runningProcess == nullptr;
+				runningProcess = nullptr;
 			}
 		}
 
@@ -52,7 +52,7 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 		if (runningProcess && (runningProcess->getCPUT() == runningProcess->getFinishedCPUT()))
 		{
 			pScheduler->moveToTRM(runningProcess);
-			runningProcess == nullptr;
+			runningProcess = nullptr;
 		}
 
 		//chek for the time slice if it has ended or not
