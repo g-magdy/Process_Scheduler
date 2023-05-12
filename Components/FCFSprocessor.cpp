@@ -9,17 +9,22 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
 	if (!runningProcess) // was not running any process
 	{
-		if (pullFromRDY(runningProcess)) // if the ready list is not empty
+		// more than one process can migrate
+		// I'll stop when i find a suitable one to run
+		while (pullFromRDY(runningProcess)) // if the ready list is not empty
+		{
+			int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
+			/// TODO: runningProcess->setWaitingTime(wait);
+			
+			if (wait > MaxW && runningProcess->getMyParent() == nullptr)
+				pScheduler->migrate(runningProcess, RR_T);
+			else
+				break;
+		}
+		if (runningProcess) // ensure that i have pulled a vaild process : thanks Ahmed :)
 		{
 			runningProcess->setProcessState(RUN);
-			//runningProcess->setHandlingCPU(FCFS_T);  (set only when adding to ready list)
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-			//runningProcess->updateFinishedCPUT(); (updated only on line 28)
-		}
-		else // no running process and empty Ready list
-		{
-			setCPUstate(IDLE);
-			totalIdleT++;
 		}
 	}
 	
@@ -49,9 +54,16 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			runningProcess = nullptr;
 		}
 	}
-	///TODO: migration
+	else // no running process and empty Ready list
+	{
+		setCPUstate(IDLE);
+		totalIdleT++;
+	}
+
+	// forking 
 	int randN=pScheduler->random();
-	if (!runningProcess->getMyChild()&&randN <= forkProbability)
+	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
+	if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
 		fork();
 
 }
@@ -128,7 +140,7 @@ void FCFSprocessor::fork()
 	{
 		int  ct;
 		ct = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
-		Process* child = pScheduler->createChild(ct);
+		Process* child = pScheduler->createChild(ct, runningProcess);
 		runningProcess->setMyChild(child);
 
 	}
