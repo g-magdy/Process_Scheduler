@@ -53,6 +53,7 @@ bool SJF::pullFromRDY(Process*& p)
 	if (!RDY.isEmpty())
 	{
 		RDY.pop(p);
+		expectedFinishT -= (p->getCPUT() - p->getFinishedCPUT());
 		return true;
 	}
 	return false;
@@ -60,7 +61,7 @@ bool SJF::pullFromRDY(Process*& p)
 
 void SJF::pushToRDY(Process* p)
 {
-	expectedFinishT += p->getCPUT()-p->getFinishedCPUT();
+	expectedFinishT += (p->getCPUT() - p->getFinishedCPUT());
 	p->setProcessState(READY);
 	p->setHandlingCPU(SJF_T);
 	RDY.push(p);

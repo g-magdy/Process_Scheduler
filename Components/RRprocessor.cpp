@@ -79,6 +79,7 @@ bool RRprocessor::pullFromRDY(Process*& p)
 	if (!RDY.isEmpty())
 	{
 		RDY.pop(p);
+		expectedFinishT -= (p->getCPUT() - p->getFinishedCPUT());
 		return true;
 	}
 	return false;
@@ -86,7 +87,7 @@ bool RRprocessor::pullFromRDY(Process*& p)
 
 void RRprocessor::pushToRDY(Process* p)
 {
-	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
+	expectedFinishT += (p->getCPUT() - p->getFinishedCPUT());
 	p->setProcessState(READY);
 	p->setHandlingCPU(RR_T);
 	RDY.push(p);
