@@ -3,10 +3,10 @@
 Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPUT(ct)
 {
 	ResponseT = TerminationT = TurnRoundT = WaitingT = -1; // they are not givn real values yet
-	totalIOD = FinishedCPUT = 0;
+	totalIOD = FinishedCPUT = servedIODuration = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
-	myChild = nullptr;
+	myChild = myParent = nullptr;
 }
 
 Process::Process(const Process& origin)
@@ -22,10 +22,11 @@ Process::Process(const Process& origin)
 	TurnRoundT = origin.TurnRoundT;
 	WaitingT = origin.WaitingT;
 	IOList = origin.IOList;
-	myChild = nullptr;      //what should I set this to ?
+	myChild = myParent = nullptr;      //what should I set this to ?
+	servedIODuration = 0;
 }
 
-Process::Process(std::string id): ID(id)
+Process::Process(std::string id): ID(id), servedIODuration(0)
 {
 }
 
@@ -103,11 +104,15 @@ int Process::getTurnRoundT() const
 	return TurnRoundT;
 }
 
+
 int Process::getWaitingT() const
 {
 	return WaitingT;
 }
 
+int Process::getTotalIOD() {
+	return totalIOD;
+}
 void Process::pushIORquest(Pair<int,int>& ioPair)
 {
 	IOList.push(ioPair);
@@ -130,9 +135,44 @@ bool Process::popkNextIOR(Pair<int, int>& P)
 	IOList.pop(P);
 }
 
+void Process::incrementServedIODuration()
+{
+	servedIODuration++;
+}
+
+int Process::getServedIODuration()
+{
+	return servedIODuration;
+}
+
+void Process::resetServedIODuration()
+{
+	servedIODuration = 0;
+}
+
+void Process::incrementTotalIOD(int a)
+{
+	totalIOD += a;
+}
+
 Process* Process::getMyChild()
 {
 	return myChild;
+}
+
+void Process::setMyChild(Process* ch)
+{
+	myChild = ch;
+}
+
+Process* Process::getMyParent()
+{
+	return myParent;
+}
+
+void Process::setMyParent(Process* parent)
+{
+	myParent = parent;
 }
 
 bool Process::operator>(const Process& second)

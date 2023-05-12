@@ -10,6 +10,7 @@ void SJF::scheduleAlgo(int currentTimeStep)
 
 		if (pullFromRDY(runningProcess)) {
 			// sets the response time if this is the first time the process is handled
+			runningProcess->setProcessState(RUN);
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
 		}
 		else {

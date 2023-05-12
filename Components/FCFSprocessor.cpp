@@ -9,17 +9,22 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
 	if (!runningProcess) // was not running any process
 	{
-		if (pullFromRDY(runningProcess)) // if the ready list is not empty
+		// more than one process can migrate
+		// I'll stop when i find a suitable one to run
+		while (pullFromRDY(runningProcess)) // if the ready list is not empty
+		{
+			int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
+			/// TODO: runningProcess->setWaitingTime(wait);
+			
+			if (wait > MaxW && runningProcess->getMyParent() == nullptr)
+				pScheduler->migrate(runningProcess, RR_T);
+			else
+				break;
+		}
+		if (runningProcess) // ensure that i have pulled a vaild process : thanks Ahmed :)
 		{
 			runningProcess->setProcessState(RUN);
-			//runningProcess->setHandlingCPU(FCFS_T);  (set only when adding to ready list)
 			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-			//runningProcess->updateFinishedCPUT(); (updated only on line 28)
-		}
-		else // no running process and empty Ready list
-		{
-			setCPUstate(IDLE);
-			totalIdleT++;
 		}
 	}
 	
@@ -49,10 +54,19 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			runningProcess = nullptr;
 		}
 	}
+	else // no running process and empty Ready list
+	{
+		setCPUstate(IDLE);
+		totalIdleT++;
+	}
+  
+  updateCPUstate();
 
-	updateCPUstate();
-
-	///TODO: migration, forking
+	// forking 
+	int randN=pScheduler->random();
+	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
+	if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
+		fork();
 }
 
 
@@ -60,6 +74,7 @@ bool FCFSprocessor::pullFromRDY(Process* & p)
 {
 	if (!RDY.isEmpty())
 	{
+		expectedFinishT -= p->getCPUT() - p->getFinishedCPUT();
 		RDY.pop_front(p);
 		return true;
 	}
@@ -73,6 +88,15 @@ void FCFSprocessor::pushToRDY(Process* p)
 	p->setProcessState(READY);
 	p->setHandlingCPU(FCFS_T);
 	RDY.push_back(p);
+}
+
+void FCFSprocessor::pushTopOfRDY(Process*& p)
+{
+	expectedFinishT += p->getCPUT() - p->getFinishedCPUT();
+	p->setProcessState(READY);
+	p->setHandlingCPU(FCFS_T);
+	RDY.push_front(p);
+
 }
 
 void FCFSprocessor::printRDYList()
@@ -121,8 +145,16 @@ bool FCFSprocessor::kill(std::string idtoKill)
 	return false;
 }
 
-bool FCFSprocessor::fork()
+void FCFSprocessor::fork()
 {
-	return false;
+	if (runningProcess)
+	{
+		int  ct;
+		ct = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
+		Process* child = pScheduler->createChild(ct, runningProcess);
+		runningProcess->setMyChild(child);
+
+	}
+	
 }
 
