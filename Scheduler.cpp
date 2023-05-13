@@ -293,15 +293,16 @@ void Scheduler::createOutputFile()
 	outF << "TT" << "    " << "PID" << "    " << "AT"<<"    "<<"CT"
 		<< "    " << "IO_D" << "    " << "WT" << "    " << "RT"
 		<< "    " << "TRT" << endl;
+
 	for (int i = 0; i < numberOfProcesses; i++)
 	{
 		Process * ptr=terminatedList.Front();
-		terminatedList.pop();
 		outF << ptr->getTerminationT() << "    " << ptr->getID() 
 			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
 			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
 			<< "    " << ptr->getResponseT() << "    " << ptr->getTurnRoundT()
 			<< endl;
+		terminatedList.pop();
 		delete ptr;
 	}
 	outF << "Processes:" << numberOfProcesses << endl;
@@ -386,6 +387,7 @@ bool Scheduler::steal()
 {
 	if (currentTimeStep % STL == 0)
 	{
+
 		Processor* shortest = getShortestProcessor();
 		Processor* longest = getLongestProcessor();
 		Process* toMove;
