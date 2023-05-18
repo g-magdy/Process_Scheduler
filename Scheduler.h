@@ -17,6 +17,7 @@ private:
 	Queue<Process*> blockedList;
 	Queue<Process*> terminatedList;
 	Queue<Pair<int, std::string>> killList;
+	Queue<Process*> tempStore;
 	int currentTimeStep;
 	int numberOfProcesses;
 	UI* pUI;
