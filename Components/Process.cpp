@@ -2,8 +2,9 @@
 
 Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPUT(ct)
 {
-	ResponseT = TerminationT = TurnRoundT = WaitingT = -1; // they are not givn real values yet
+	ResponseT = TerminationT = TurnRoundT = -1; // they are not givn real values yet
 	totalIOD = FinishedCPUT = servedIODuration = 0;
+	WaitingT = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
 	myChild = myParent = nullptr;
@@ -91,7 +92,11 @@ void Process::setTerminationT(int tt)
 {
 	TerminationT = tt;
 	TurnRoundT = TerminationT - ArrivalT;
-	WaitingT = TurnRoundT - CPUT;
+	//WaitingT = TurnRoundT - CPUT;
+	// what if the process was killed or an orphan which his parent was terminated ?
+	// the turn around time in this case will be smaller than CPUT (it did not finish execution)
+	WaitingT = tt - ArrivalT - FinishedCPUT; // tt is the current time step
+	WaitingT = (WaitingT > 0) ? WaitingT : 0;
 }
 
 int Process::getTerminationT() const

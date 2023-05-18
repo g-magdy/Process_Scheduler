@@ -323,9 +323,9 @@ void Scheduler::createOutputFile()
 	outF << "Avg WT = " << AVGWaitingT << ','
 		<< setw(10) << "Avg RT = "<< AVGResponseT 
 		<<','<<setw(10)<<"Avg TRT = "<< AVGTurnRoundT<<endl;
-	outF << "Migration %: " << setw(10) << "RTF= " 
+	outF << "Migration %: " << '\t' << "RTF= "
 		<< 100.00 * SucssefulMigration.first/ numberOfProcesses
-		<< "%," << setw(10)<< "MaxW = "
+		<< "%," << '\t' << "MaxW = "
 		<< 100.00 * SucssefulMigration.second / numberOfProcesses
 		<< "%" << endl;	
 	stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
