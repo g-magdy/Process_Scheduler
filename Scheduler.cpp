@@ -341,14 +341,14 @@ void Scheduler::createOutputFile()
 	outF << "Processors Load " << endl;
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
-		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< setw(10);
+		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< '\t';
 	}
 	outF << endl<<endl;
 	outF << "Processors Utiliz" << endl;
 	AVGUtilisation = 0;
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
-		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << setw(10);
+		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << '\t';
 		AVGUtilisation += processorsGroup[i]->calcPUtil();
 	}
 	outF << endl;
