@@ -85,6 +85,8 @@ void Scheduler::run()
 bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
 {
 	Processor* pShortest = nullptr;
+	if (p->getMyParent())
+		kind = FCFS_T;
 	
 	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
@@ -441,6 +443,8 @@ bool Scheduler::steal()
 
 		Processor* shortest = getShortestProcessor();
 		Processor* longest = getLongestProcessor();
+		if (!shortest || !longest)
+			return false;
 		Process* toMove;
 		bool stealFlag = false;
 		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
@@ -578,29 +582,36 @@ void Scheduler::serveIO()
 
 Processor* Scheduler::getShortestProcessor()
 {
-	Processor* shortest = processorsGroup[0];
+	Processor* pShortest = nullptr;
 
-	for (int i = 1; i < numberOfCPUs; i++)
+	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
-		if (shortest->getExpectedFinishT() > processorsGroup[i]->getExpectedFinishT())
+		if (processorsGroup[i]->getCPUstate() != STOP)
 		{
-			shortest = processorsGroup[i];
+			if (pShortest == nullptr) // if i haven't seen an FCFS yet
+				pShortest = processorsGroup[i];
+			else // compare with what I have currently
+				pShortest = (processorsGroup[i]->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? processorsGroup[i] : pShortest;
 		}
 
 	}
-	return shortest;
+	return pShortest;
 }
 
 Processor* Scheduler::getLongestProcessor()
 {
-	Processor* longest = processorsGroup[0];
-	for (int i = 1; i < numberOfCPUs; i++)
+	Processor* pLongest = nullptr;
+
+	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
-		if (longest->getExpectedFinishT() < processorsGroup[i]->getExpectedFinishT())
+		if (processorsGroup[i]->getCPUstate() != STOP)
 		{
-			longest = processorsGroup[i];
+			if (pLongest == nullptr) // if i haven't seen an FCFS yet
+				pLongest = processorsGroup[i];
+			else // compare with what I have currently
+				pLongest = (processorsGroup[i]->getExpectedFinishT() > pLongest->getExpectedFinishT()) ? processorsGroup[i] : pLongest;
 		}
 
 	}
-	return longest;
+	return pLongest;
 }
