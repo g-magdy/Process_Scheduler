@@ -16,6 +16,7 @@ private:
 	Queue<Process*> newList;
 	Queue<Process*> blockedList;
 	Queue<Process*> terminatedList;
+	Queue<Process*> overHeatWaitingList;
 	Queue<Pair<int, std::string>> killList;
 	int currentTimeStep;
 	int numberOfProcesses;
@@ -27,6 +28,7 @@ private:
 	int randHelper;
   
 	int num_FCFS, num_SJF, num_RR;
+	int overHeatingPropability, overHeatingTimeSteps;
   
 	int numOfForkedProcess;
 	int numOfKilledProcess;
@@ -62,12 +64,15 @@ public:
 	// loops on processorsGroup in O(n) and calls pushToRDY(ptr)
 	// of the CPU with least expectedfinishTime
 	// if the kind is by default set to any CPU
-	void moveToShortestRDY(Process* ptr, CPU_TYPE kind = NoCPU);
+	bool moveToShortestRDY(Process* ptr, CPU_TYPE kind = NoCPU, bool moveToWaitingList = true);
 	
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);
 	int getTimeStep() const;
 	Process* createChild( int ct, Process* parent);
+	//OverHeating Parameters
+	int getOverHeatingPropability();
+	int getOverHeatingTimeSteps();
 
 	// takes a process pointer, and a DESTINATION (specific CPU type)
 	bool migrate(Process*, CPU_TYPE);

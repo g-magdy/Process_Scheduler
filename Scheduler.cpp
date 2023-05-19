@@ -39,46 +39,33 @@ void Scheduler::run()
 	createOutputFile();
 }
 
-void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
+bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind, bool moveToWaitingList)
 {
-	Processor* shortestFCFS, * shortestSJF, * shortestRR;
-	shortestFCFS = shortestSJF = shortestRR = nullptr; // initially I can't assume
+	Processor* pShortest = nullptr;
+	if (p->getMyParent())
+		kind = FCFS_T;
+	
 	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
-		Processor* pCPU = processorsGroup[i];
-		if (pCPU->getMyType() == FCFS_T)
+		if (processorsGroup[i]->getCPUstate() != STOP && (processorsGroup[i]->getMyType() == kind || kind == NoCPU))
 		{
-			if (shortestFCFS == nullptr) // if i haven't seen an FCFS yet
-				shortestFCFS = pCPU;
+			if (pShortest == nullptr) // if i haven't seen an FCFS yet
+				pShortest = processorsGroup[i];
 			else // compare with what I have currently
-				shortestFCFS = (pCPU->getExpectedFinishT() < shortestFCFS->getExpectedFinishT()) ? pCPU : shortestFCFS;
-		}
-		else if (pCPU->getMyType() == SJF_T)
-		{
-			if (shortestSJF == nullptr) // if i haven't seen an SJF yet
-				shortestSJF = pCPU;
-			else
-				shortestSJF = (pCPU->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? pCPU : shortestSJF;
-		}
-		else // RR CPU
-		{
-			if (shortestRR == nullptr) // if i haven't seen an RR yet
-				shortestRR = pCPU;
-			else
-				shortestRR = (pCPU->getExpectedFinishT() < shortestRR->getExpectedFinishT()) ? pCPU : shortestRR;
+				pShortest = (processorsGroup[i]->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? processorsGroup[i] : pShortest;
 		}
 	}
-	if (kind == FCFS_T)
-		shortestFCFS->pushToRDY(p);
-	else if (kind == SJF_T)
-		shortestSJF->pushToRDY(p);
-	else if (kind == RR_T)
-		shortestRR->pushToRDY(p);
-	else // kind is any general CPU
+
+	if (pShortest)
 	{
-		Processor* pShortest = (shortestFCFS->getExpectedFinishT() <= shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
-		pShortest = (shortestRR->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
 		pShortest->pushToRDY(p);
+		return true;
+	}
+	else
+	{
+		if(moveToWaitingList)
+			overHeatWaitingList.push(p);
+		return false;
 	}
 }
 
@@ -120,6 +107,16 @@ int Scheduler::getTimeStep() const
     return currentTimeStep;
 }
 
+int Scheduler::getOverHeatingPropability()
+{
+	return overHeatingPropability;
+}
+
+
+int Scheduler::getOverHeatingTimeSteps()
+{
+	return overHeatingTimeSteps;
+}
 
 Process* Scheduler::createChild(int ct, Process* parent)
 {
@@ -179,22 +176,6 @@ void Scheduler::simulation()
 			processorsGroup[i]->scheduleAlgo(currentTimeStep);
 		}
 
-		/*for (int i = 0; i < numberOfCPUs; i++) {
-			double randNum = random();
-			if (randNum >= 1 && randNum <= 15)
-			{
-				processorsGroup[i]->movetoBLK();
-			}
-			if (randNum >= 20 && randNum <= 30)
-			{
-				processorsGroup[i]->movetoMyRDY();
-			}
-			if (randNum >= 50 && randNum <= 60)
-			{
-				processorsGroup[i]->movetoTRM();
-			}
-		}*/
-
 		ptr = nullptr;
 		double randNum = random();
 		if (randNum <= 10)
@@ -237,7 +218,7 @@ void Scheduler::readInputFile()
 		// read into buffers
 		myInputFile >> num_FCFS >> num_SJF >> num_RR;
 		myInputFile >> timeSliceofRR;
-		myInputFile >> minTimeToFinish >> MaxWait >> stealLimit >> forkProb;
+		myInputFile >> minTimeToFinish >> MaxWait >> stealLimit >> forkProb >> overHeatingPropability >> overHeatingTimeSteps;
 		myInputFile >> numProcesses;
 		// setdata memebers of scheduler
 		numberOfCPUs = num_FCFS + num_SJF + num_RR;
@@ -364,6 +345,18 @@ void Scheduler::update()
 		moveToShortestRDY(ptr);
 	}
 
+	while (overHeatWaitingList.isEmpty() == false)
+	{
+		ptr = overHeatWaitingList.Front();
+		if (moveToShortestRDY(ptr,NoCPU,false))
+		{
+			overHeatWaitingList.pop();
+			ptr = nullptr;
+		}
+		else
+			break;
+	}
+
 	// call scheduleAlgo function for all CPUs
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
@@ -396,6 +389,8 @@ bool Scheduler::steal()
 
 		Processor* shortest = getShortestProcessor();
 		Processor* longest = getLongestProcessor();
+		if (!shortest || !longest)
+			return false;
 		Process* toMove;
 		bool stealFlag = false;
 		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
@@ -418,7 +413,7 @@ bool Scheduler::steal()
 							if (!toMove->getMyParent()) {
 								shortest->pushToRDY(toMove);
 								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-								for (int j = i-1; j <=0; j--)
+								for (int j = i-1; j >=0; j--)
 								{
 									fcfsP->pushTopOfRDY(forkedProcess[j]);
 								}
@@ -533,29 +528,34 @@ void Scheduler::serveIO()
 
 Processor* Scheduler::getShortestProcessor()
 {
-	Processor* shortest = processorsGroup[0];
+	Processor* pShortest = nullptr;
 
-	for (int i = 1; i < numberOfCPUs; i++)
+	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
 	{
-		if (shortest->getExpectedFinishT() > processorsGroup[i]->getExpectedFinishT())
+		if (processorsGroup[i]->getCPUstate() != STOP)
 		{
-			shortest = processorsGroup[i];
+			if (pShortest == nullptr) // if i haven't seen an FCFS yet
+				pShortest = processorsGroup[i];
+			else // compare with what I have currently
+				pShortest = (processorsGroup[i]->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? processorsGroup[i] : pShortest;
 		}
-
 	}
-	return shortest;
+	return pShortest;
 }
 
 Processor* Scheduler::getLongestProcessor()
 {
-	Processor* longest = processorsGroup[0];
-	for (int i = 1; i < numberOfCPUs; i++)
-	{
-		if (longest->getExpectedFinishT() < processorsGroup[i]->getExpectedFinishT())
-		{
-			longest = processorsGroup[i];
-		}
+	Processor* pLongest = nullptr;
 
+	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
+	{
+		if (processorsGroup[i]->getCPUstate() != STOP)
+		{
+			if (pLongest == nullptr) // if i haven't seen an FCFS yet
+				pLongest = processorsGroup[i];
+			else // compare with what I have currently
+				pLongest = (processorsGroup[i]->getExpectedFinishT() > pLongest->getExpectedFinishT()) ? processorsGroup[i] : pLongest;
+		}
 	}
-	return longest;
+	return pLongest;
 }

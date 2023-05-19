@@ -9,6 +9,7 @@ private:
 	std::string ID;
 	const CPU_TYPE CPUtype;									//enum for cpu type
 	CPU_STATE CPUstate;
+	int overHeatingTimeSteps;
 
 protected:
 	Process* runningProcess; // each processor type can access its running process
@@ -23,6 +24,8 @@ protected:
 	void setCPUstate(CPU_STATE state);						//still not sure about its implementation
 
 	virtual void printRDYList() = 0;
+
+	bool overHeat();
 
 public:
 	Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s);		//non default constructor define total cputime =0

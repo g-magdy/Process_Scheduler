@@ -6,44 +6,46 @@ SJF::SJF(Scheduler* pscheduler, std::string s):Processor(pscheduler, SJF_T, s)
 
 void SJF::scheduleAlgo(int currentTimeStep)
 {
-	if (!runningProcess) {
-
-		if (pullFromRDY(runningProcess)) {
-			// sets the response time if this is the first time the process is handled
-			runningProcess->setProcessState(RUN);
-			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-		}
-		else {
-			totalIdleT++;
-		}
-
-	}
-	if (runningProcess)
+	if (overHeat() == false)
 	{
-		totalBusyT++;
-		runningProcess->updateFinishedCPUT();
+		if (!runningProcess) {
 
-		Pair<int, int> p;
-		if (runningProcess->peekNextIOR(p)) {
-
-			if (p.first == runningProcess->getFinishedCPUT())
-			{
-				pScheduler->moveToBLK(runningProcess);
-				runningProcess = nullptr;
-
+			if (pullFromRDY(runningProcess)) {
+				// sets the response time if this is the first time the process is handled
+				runningProcess->setProcessState(RUN);
+				runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
 			}
+			else {
+				totalIdleT++;
+			}
+
 		}
-		
-		if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
+		if (runningProcess)
 		{
-				pScheduler->moveToTRM(runningProcess);
-				runningProcess = nullptr;
+			totalBusyT++;
+			runningProcess->updateFinishedCPUT();
+
+			Pair<int, int> p;
+			if (runningProcess->peekNextIOR(p)) {
+
+				if (p.first == runningProcess->getFinishedCPUT())
+				{
+					pScheduler->moveToBLK(runningProcess);
+					runningProcess = nullptr;
+
+				}
+			}
+		
+			if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
+			{
+					pScheduler->moveToTRM(runningProcess);
+					runningProcess = nullptr;
+			}
+
 		}
 
+		updateCPUstate();
 	}
-
-	updateCPUstate();
-	//I want to delete this method updateCPUTs();
 }
 
 bool SJF::pullFromRDY(Process*& p)
