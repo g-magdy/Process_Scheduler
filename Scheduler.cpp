@@ -212,7 +212,7 @@ void Scheduler::readInputFile()
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
-	ifstream myInputFile("SampleInputFile1.txt");
+	ifstream myInputFile("SampleInputFile5.txt");
 	if (myInputFile.is_open())
 	{
 		// read into buffers
@@ -275,7 +275,7 @@ void Scheduler::readInputFile()
 
 void Scheduler::createOutputFile()
 {
-	ofstream outF("sampleOutput1.txt", ios::out);
+	ofstream outF("sampleOutput5.txt", ios::out);
 	outF << setw(10) << left << "TT" << setw(10) << "PID" << setw(10) << "AT"<<setw(10)<<"CT"
 		<< setw(10) << "IO_D" << setw(10) << "WT" << setw(10) << "RT"
 		<< setw(10) << "TRT" << endl;
