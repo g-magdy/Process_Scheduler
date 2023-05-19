@@ -161,8 +161,15 @@
     <Text Include="SampleInputFile3.txt" />
     <Text Include="SampleInputFile4.txt" />
     <Text Include="SampleInputFile2.txt" />
+    <Text Include="SampleInputFile5.txt" />
+    <Text Include="SampleInputFile6.txt" />
+    <Text Include="sampleOutput.txt" />
     <Text Include="sampleOutput1.txt" />
     <Text Include="sampleOutput2.txt" />
+    <Text Include="sampleOutput3.txt" />
+    <Text Include="sampleOutput4.txt" />
+    <Text Include="sampleOutput5.txt" />
+    <Text Include="sampleOutput6.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
