@@ -220,15 +220,6 @@ Scheduler::~Scheduler()
 	}
 	delete[]processorsGroup;
 	delete pUI;
-
-	while (!tempStore.isEmpty())
-	{
-		// multiple pointers that point to the same process object
-		// problem : deleting twice the process through different pointers
-		Process* toDel;
-		tempStore.pop(toDel);
-		delete toDel;
-	}
 }
 
 void Scheduler::readInputFile()
@@ -312,8 +303,8 @@ void Scheduler::createOutputFile()
 			<< setw(10) << ptr->getTotalIOD() << setw(10) << ptr->getWaitingT()
 			<< setw(10) << ptr->getResponseT() << setw(10) << ptr->getTurnRoundT()
 			<< endl;
-		tempStore.push(ptr);
 		terminatedList.pop();
+		delete ptr;
 	}
 	outF << "Processes:" << numberOfProcesses << endl;
 	AVGWaitingT = AVGWaitingT / numberOfProcesses;
