@@ -55,11 +55,11 @@ void RRprocessor::scheduleAlgo(int currentTimeStep)
 				runningProcess = nullptr;
 			}
 
-			//chek for the time slice if it has ended or not
+			//check for the time slice if it has ended or not
 			if (totalBusyT % timeSlice == 0)
 				if (runningProcess)
 				{
-					/// TODO: Process migration is handled in this part
+					//Process migration is handled in this part
 					pushToRDY(runningProcess);
 					runningProcess = nullptr;
 				}

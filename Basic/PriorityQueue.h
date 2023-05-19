@@ -134,7 +134,7 @@ inline ItemType PriorityQueue<ItemType>::peek() const
 {
     if (isEmpty())
         throw "empty";
-    return head->getData(); /// TODO : Unhandled exception ! if the queue is empty
+    return head->getData();
 }
 
 template<class ItemType>
