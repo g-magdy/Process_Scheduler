@@ -397,9 +397,16 @@ void Scheduler::update()
 		moveToShortestRDY(ptr);
 	}
 
-	while (overHeatWaitingList.pop(ptr) && moveToShortestRDY(ptr))
+	while (overHeatWaitingList.isEmpty() == false)
 	{
+		ptr = overHeatWaitingList.Front();
+		if (moveToShortestRDY(ptr))
+		{
 		overHeatWaitingList.pop();
+			ptr = nullptr;
+	}
+		else
+			break;
 	}
 
 	// call scheduleAlgo function for all CPUs
