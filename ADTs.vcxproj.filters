@@ -107,5 +107,6 @@
     <Text Include="SampleInputFile3.txt" />
     <Text Include="SampleInputFile4.txt" />
     <Text Include="SampleInputFile2.txt" />
+    <Text Include="sampleOutput2.txt" />
   </ItemGroup>
 </Project>
