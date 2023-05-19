@@ -16,6 +16,7 @@ private:
 	Queue<Process*> newList;
 	Queue<Process*> blockedList;
 	Queue<Process*> terminatedList;
+	Queue<Process*> overHeatWaitingList;
 	Queue<Pair<int, std::string>> killList;
 	int currentTimeStep;
 	int numberOfProcesses;
@@ -63,7 +64,7 @@ public:
 	// loops on processorsGroup in O(n) and calls pushToRDY(ptr)
 	// of the CPU with least expectedfinishTime
 	// if the kind is by default set to any CPU
-	void moveToShortestRDY(Process* ptr, CPU_TYPE kind = NoCPU);
+	bool moveToShortestRDY(Process* ptr, CPU_TYPE kind = NoCPU);
 	
 	void moveToBLK(Process* ptr);
 	void moveToTRM(Process* ptr);
