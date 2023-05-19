@@ -7,7 +7,7 @@ Process::Process(std::string id, int inAT, int ct) : ArrivalT(inAT), ID(id), CPU
 	WaitingT = 0;
 	currentState = NEW;
 	handlingCPU = NoCPU;
-	myChild = myParent = nullptr;
+	myChild = mySecondChild = myParent = nullptr;
 }
 
 Process::Process(const Process& origin)
@@ -23,7 +23,7 @@ Process::Process(const Process& origin)
 	TurnRoundT = origin.TurnRoundT;
 	WaitingT = origin.WaitingT;
 	IOList = origin.IOList;
-	myChild = myParent = nullptr;      //what should I set this to ?
+	myChild = mySecondChild = myParent = nullptr;      //what should I set this to ?
 	servedIODuration = 0;
 }
 
@@ -165,9 +165,19 @@ Process* Process::getMyChild()
 	return myChild;
 }
 
+Process* Process::getMySecondChild()
+{
+	return mySecondChild;
+}
+
 void Process::setMyChild(Process* ch)
 {
 	myChild = ch;
+}
+
+void Process::setMySecondChild(Process* ch2)
+{
+	mySecondChild = ch2;
 }
 
 Process* Process::getMyParent()
