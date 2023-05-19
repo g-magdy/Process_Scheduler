@@ -63,11 +63,17 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			totalIdleT++;
 		}
   
-		// forking 
-		int randN=pScheduler->random();
-		// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
-		if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
-			fork();
+
+	// forking 
+	int randN=pScheduler->random();
+	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
+	if (runningProcess && randN <= forkProbability)
+	{
+		if(!runningProcess->getMyChild())
+			fork("first");
+		else if (!runningProcess->getMySecondChild())
+			fork("second");
+	}
 
 	   updateCPUstate();
 	}
@@ -149,14 +155,18 @@ bool FCFSprocessor::kill(std::string idtoKill)
 	return false;
 }
 
-void FCFSprocessor::fork()
+void FCFSprocessor::fork(std::string childOrder)
 {
 	if (runningProcess)
 	{
 		int  ct;
 		ct = runningProcess->getCPUT() - runningProcess->getFinishedCPUT();
 		Process* child = pScheduler->createChild(ct, runningProcess);
-		runningProcess->setMyChild(child);
+
+		if (childOrder == "first")
+			runningProcess->setMyChild(child);
+		else if (childOrder == "second")
+			runningProcess->setMySecondChild(child);
 
 	}
 	

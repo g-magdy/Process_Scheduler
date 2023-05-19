@@ -84,10 +84,14 @@ void Scheduler::moveToTRM(Process* ptr)
 	calcStatiscs(ptr);
 	terminatedList.push(ptr);
 	// check if the terminated process has childred
-	if (ptr->getMyChild())
+	if (ptr->getMyChild() && ptr->getMyChild()->getProcessState() != TERM)
 	{
 		//initiate a killing process with the id of the child
 		kill(ptr->getMyChild()->getID());
+	}
+	if (ptr->getMySecondChild() && ptr->getMySecondChild()->getProcessState() != TERM)
+	{
+		kill(ptr->getMySecondChild()->getID());
 	}
 }
 
