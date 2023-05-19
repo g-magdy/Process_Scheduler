@@ -27,6 +27,7 @@ private:
 	int randHelper;
   
 	int num_FCFS, num_SJF, num_RR;
+	int overHeatingPropability, overHeatingTimeSteps;
   
 	int numOfForkedProcess;
 	int numOfKilledProcess;
@@ -68,6 +69,9 @@ public:
 	void moveToTRM(Process* ptr);
 	int getTimeStep() const;
 	Process* createChild( int ct, Process* parent);
+	//OverHeating Parameters
+	int getOverHeatingPropability();
+	int getOverHeatingTimeSteps();
 
 	// takes a process pointer, and a DESTINATION (specific CPU type)
 	bool migrate(Process*, CPU_TYPE);

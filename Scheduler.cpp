@@ -116,6 +116,16 @@ int Scheduler::getTimeStep() const
     return currentTimeStep;
 }
 
+int Scheduler::getOverHeatingPropability()
+{
+	return overHeatingPropability;
+}
+
+
+int Scheduler::getOverHeatingTimeSteps()
+{
+	return overHeatingTimeSteps;
+}
 
 Process* Scheduler::createChild(int ct, Process* parent)
 {
@@ -233,7 +243,7 @@ void Scheduler::readInputFile()
 		// read into buffers
 		myInputFile >> num_FCFS >> num_SJF >> num_RR;
 		myInputFile >> timeSliceofRR;
-		myInputFile >> minTimeToFinish >> MaxWait >> stealLimit >> forkProb;
+		myInputFile >> minTimeToFinish >> MaxWait >> stealLimit >> forkProb >> overHeatingPropability >> overHeatingTimeSteps;
 		myInputFile >> numProcesses;
 		// setdata memebers of scheduler
 		numberOfCPUs = num_FCFS + num_SJF + num_RR;
