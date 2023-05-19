@@ -212,7 +212,7 @@ void Scheduler::readInputFile()
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
-	ifstream myInputFile("SampleInputFile1.txt");
+	ifstream myInputFile("SampleInputFile4.txt");
 	if (myInputFile.is_open())
 	{
 		// read into buffers
@@ -245,11 +245,10 @@ void Scheduler::readInputFile()
 			Process* nPtr = new Process(ID, arrival_t, cpu_t);
 			for (int i = 0; i < numIO; i++)
 			{
-				/// TOTEST : read pairs (t,d),(t,d),..
 				int t, d;
 				myInputFile.ignore(6, '(');
 				myInputFile >> t;
-				myInputFile.ignore(1, ','); /// there is a problem here ?
+				myInputFile.ignore(1, ','); 
 				myInputFile >> d;
 				myInputFile.ignore();
 				Pair<int, int> IO_p;
@@ -259,7 +258,7 @@ void Scheduler::readInputFile()
 			}
 			newList.push(nPtr);
 		}
-		///TOTEST : killing signal 
+		// killing signal 
 		while (!myInputFile.eof())
 		{
 			int at;
@@ -275,7 +274,7 @@ void Scheduler::readInputFile()
 
 void Scheduler::createOutputFile()
 {
-	ofstream outF("sampleOutput1.txt", ios::out);
+	ofstream outF("sampleOutput4.txt", ios::out);
 	outF << setw(10) << left << "TT" << setw(10) << "PID" << setw(10) << "AT"<<setw(10)<<"CT"
 		<< setw(10) << "IO_D" << setw(10) << "WT" << setw(10) << "RT"
 		<< setw(10) << "TRT" << endl;
@@ -363,11 +362,10 @@ void Scheduler::update()
 		processorsGroup[i]->scheduleAlgo(currentTimeStep);
 	}
 
-	/// TODO: activate the stealing function
+	//stealing function
 	steal();
 
 	//serves IO requests of the Processes wating in the BLKList
-	/// TODO: activeate serveIO funcion
 	serveIO();
 
 	//Check for Killing signals at this time step

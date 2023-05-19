@@ -16,12 +16,11 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			while (pullFromRDY(runningProcess)) // if the ready list is not empty
 			{
 				int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
-				/// TODO: runningProcess->setWaitingTime(wait);
 			
 				if (wait > MaxW && runningProcess->getMyParent() == nullptr)
 				{
 					pScheduler->migrate(runningProcess, RR_T);
-					runningProcess = nullptr;
+					runningProcess = nullptr; // this is super important
 				}
 				else
 					break;
