@@ -17,7 +17,10 @@ void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 			/// TODO: runningProcess->setWaitingTime(wait);
 			
 			if (wait > MaxW && runningProcess->getMyParent() == nullptr)
+			{
 				pScheduler->migrate(runningProcess, RR_T);
+				runningProcess = nullptr;
+			}
 			else
 				break;
 		}

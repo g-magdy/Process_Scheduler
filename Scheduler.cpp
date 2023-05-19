@@ -2,6 +2,7 @@
 #include <fstream>
 #include<string>
 #include <Windows.h>
+#include <iomanip>
 using namespace std;
 
 void Scheduler::calcStatiscs(Process* ptr)
@@ -289,18 +290,18 @@ void Scheduler::readInputFile()
 
 void Scheduler::createOutputFile()
 {
-	ofstream outF("sampleOutput.txt", ios::out);
-	outF << "TT" << "    " << "PID" << "    " << "AT"<<"    "<<"CT"
-		<< "    " << "IO_D" << "    " << "WT" << "    " << "RT"
-		<< "    " << "TRT" << endl;
+	ofstream outF("sampleOutput1.txt", ios::out);
+	outF << setw(10) << left << "TT" << setw(10) << "PID" << setw(10) << "AT"<<setw(10)<<"CT"
+		<< setw(10) << "IO_D" << setw(10) << "WT" << setw(10) << "RT"
+		<< setw(10) << "TRT" << endl;
 
 	for (int i = 0; i < numberOfProcesses; i++)
 	{
 		Process * ptr=terminatedList.Front();
-		outF << ptr->getTerminationT() << "    " << ptr->getID() 
-			<< "    " << ptr->getArrivalT() << "    " << ptr->getCPUT() 
-			<< "    " << ptr->getTotalIOD() << "    " << ptr->getWaitingT()
-			<< "    " << ptr->getResponseT() << "    " << ptr->getTurnRoundT()
+		outF << setw(10) << left << ptr->getTerminationT() << setw(10) << ptr->getID()
+			<< setw(10) << ptr->getArrivalT() << setw(10) << ptr->getCPUT() 
+			<< setw(10) << ptr->getTotalIOD() << setw(10) << ptr->getWaitingT()
+			<< setw(10) << ptr->getResponseT() << setw(10) << ptr->getTurnRoundT()
 			<< endl;
 		terminatedList.pop();
 		delete ptr;
@@ -311,11 +312,11 @@ void Scheduler::createOutputFile()
 	float totalTurnRoundT = AVGTurnRoundT;
 	AVGTurnRoundT = AVGTurnRoundT / numberOfProcesses;
 	outF << "Avg WT = " << AVGWaitingT << ','
-		<< "    " << "Avg RT = "<< AVGResponseT 
-		<<','<<"    "<<"Avg TRT = "<< AVGTurnRoundT<<endl;
-	outF << "Migration %: " << "    " << "RTF= " 
+		<< setw(10) << "Avg RT = "<< AVGResponseT 
+		<<','<<setw(10)<<"Avg TRT = "<< AVGTurnRoundT<<endl;
+	outF << "Migration %: " << '\t' << "RTF= "
 		<< 100.00 * SucssefulMigration.first/ numberOfProcesses
-		<< "%," << "    "<< "MaxW = "
+		<< "%," << '\t' << "MaxW = "
 		<< 100.00 * SucssefulMigration.second / numberOfProcesses
 		<< "%" << endl;	
 	stealPercentage = 100.00 * numOfStolenProcess / numberOfProcesses;
@@ -331,19 +332,20 @@ void Scheduler::createOutputFile()
 	outF << "Processors Load " << endl;
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
-		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< "    ";
+		outF << "p" << i << "=" << processorsGroup[i]->calcPLoad(totalTurnRoundT) << '%,'<< '\t';
 	}
 	outF << endl<<endl;
 	outF << "Processors Utiliz" << endl;
 	AVGUtilisation = 0;
 	for (int i = 0; i < numberOfCPUs; i++)
 	{
-		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << "    ";
+		outF << "p" << i << "=" << processorsGroup[i]->calcPUtil() << '%,' << '\t';
 		AVGUtilisation += processorsGroup[i]->calcPUtil();
 	}
 	outF << endl;
 	AVGUtilisation = AVGUtilisation / numberOfCPUs;
 	outF << "Avg utilization = " << AVGUtilisation<<'%';
+	outF << endl << "Thank you Lord!";
 	outF.close();
 }
 
