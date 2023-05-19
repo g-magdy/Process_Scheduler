@@ -102,6 +102,10 @@ void Scheduler::moveToTRM(Process* ptr)
 		//initiate a killing process with the id of the child
 		kill(ptr->getMyChild()->getID());
 	}
+	if (ptr->getMySecondChild())
+	{
+		kill(ptr->getMySecondChild()->getID());
+	}
 }
 
 
