@@ -7,67 +7,70 @@ FCFSprocessor::FCFSprocessor(Scheduler* pscheduler, std::string s, int maxw, int
 
 void FCFSprocessor::scheduleAlgo(int currentTimeStep)
 {
-	if (!runningProcess) // was not running any process
+	if (overHeat() == false)
 	{
-		// more than one process can migrate
-		// I'll stop when i find a suitable one to run
-		while (pullFromRDY(runningProcess)) // if the ready list is not empty
+		if (!runningProcess) // was not running any process
 		{
-			int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
-			/// TODO: runningProcess->setWaitingTime(wait);
+			// more than one process can migrate
+			// I'll stop when i find a suitable one to run
+			while (pullFromRDY(runningProcess)) // if the ready list is not empty
+			{
+				int wait = pScheduler->getTimeStep() - runningProcess->getArrivalT() - runningProcess->getFinishedCPUT(); 
+				/// TODO: runningProcess->setWaitingTime(wait);
 			
-			if (wait > MaxW && runningProcess->getMyParent() == nullptr)
-			{
-				pScheduler->migrate(runningProcess, RR_T);
-				runningProcess = nullptr;
+				if (wait > MaxW && runningProcess->getMyParent() == nullptr)
+				{
+					pScheduler->migrate(runningProcess, RR_T);
+					runningProcess = nullptr;
+				}
+				else
+					break;
 			}
-			else
-				break;
+			if (runningProcess) // ensure that i have pulled a vaild process : thanks Ahmed :)
+			{
+				runningProcess->setProcessState(RUN);
+				runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
+			}
 		}
-		if (runningProcess) // ensure that i have pulled a vaild process : thanks Ahmed :)
-		{
-			runningProcess->setProcessState(RUN);
-			runningProcess->setResponseT(currentTimeStep - runningProcess->getArrivalT());
-		}
-	}
 	
-	if(runningProcess) // currently executing or pulled fresh from ready in line 12
-	{
-		setCPUstate(Busy); // not sure if needed
-		runningProcess->updateFinishedCPUT();
-		totalBusyT++;
-
-		// IO check
-		Pair<int, int> req;
-		if (runningProcess->peekNextIOR(req)) // if exists
+		if(runningProcess) // currently executing or pulled fresh from ready in line 12
 		{
-			if (req.first == runningProcess->getFinishedCPUT()) //right time
+			setCPUstate(Busy); // not sure if needed
+			runningProcess->updateFinishedCPUT();
+			totalBusyT++;
+
+			// IO check
+			Pair<int, int> req;
+			if (runningProcess->peekNextIOR(req)) // if exists
 			{
-				// remove the remaining time to finish the process execution from the CPU's expected finsih time
-				pScheduler->moveToBLK(runningProcess);
+				if (req.first == runningProcess->getFinishedCPUT()) //right time
+				{
+					// remove the remaining time to finish the process execution from the CPU's expected finsih time
+					pScheduler->moveToBLK(runningProcess);
+					runningProcess = nullptr;
+				}
+			}
+			// Termination check
+			if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
+			{
+				pScheduler->moveToTRM(runningProcess); // modified
 				runningProcess = nullptr;
 			}
 		}
-		// Termination check
-		if (runningProcess && runningProcess->getFinishedCPUT() >= runningProcess->getCPUT())
+		else // no running process and empty Ready list
 		{
-			pScheduler->moveToTRM(runningProcess); // modified
-			runningProcess = nullptr;
+			setCPUstate(IDLE);
+			totalIdleT++;
 		}
-	}
-	else // no running process and empty Ready list
-	{
-		setCPUstate(IDLE);
-		totalIdleT++;
-	}
   
-	// forking 
-	int randN=pScheduler->random();
-	// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
-	if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
-		fork();
+		// forking 
+		int randN=pScheduler->random();
+		// a process can fork only once so i need to make sure that it has NO child before calling fork() (i addded a '!')
+		if (runningProcess && (!runningProcess->getMyChild() && randN <= forkProbability))
+			fork();
 
-  updateCPUstate();
+	   updateCPUstate();
+	}
 }
 
 
