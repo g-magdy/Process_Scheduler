@@ -39,49 +39,6 @@ void Scheduler::run()
 	createOutputFile();
 }
 
-//void Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
-//{
-//	Processor* shortestFCFS, * shortestSJF, * shortestRR;
-//	shortestFCFS = shortestSJF = shortestRR = nullptr; // initially I can't assume
-//	for (int i = 0; i < numberOfCPUs; i++) // I chose to loop once and check on the current CPU type
-//	{
-//		Processor* pCPU = processorsGroup[i];
-//		if (pCPU->getMyType() == FCFS_T)
-//		{
-//			if (shortestFCFS == nullptr) // if i haven't seen an FCFS yet
-//				shortestFCFS = pCPU;
-//			else // compare with what I have currently
-//				shortestFCFS = (pCPU->getExpectedFinishT() < shortestFCFS->getExpectedFinishT()) ? pCPU : shortestFCFS;
-//		}
-//		else if (pCPU->getMyType() == SJF_T)
-//		{
-//			if (shortestSJF == nullptr) // if i haven't seen an SJF yet
-//				shortestSJF = pCPU;
-//			else
-//				shortestSJF = (pCPU->getExpectedFinishT() < shortestSJF->getExpectedFinishT()) ? pCPU : shortestSJF;
-//		}
-//		else // RR CPU
-//		{
-//			if (shortestRR == nullptr) // if i haven't seen an RR yet
-//				shortestRR = pCPU;
-//			else
-//				shortestRR = (pCPU->getExpectedFinishT() < shortestRR->getExpectedFinishT()) ? pCPU : shortestRR;
-//		}
-//	}
-//	if (kind == FCFS_T)
-//		shortestFCFS->pushToRDY(p);
-//	else if (kind == SJF_T)
-//		shortestSJF->pushToRDY(p);
-//	else if (kind == RR_T)
-//		shortestRR->pushToRDY(p);
-//	else // kind is any general CPU
-//	{
-//		Processor* pShortest = (shortestFCFS->getExpectedFinishT() <= shortestSJF->getExpectedFinishT()) ? shortestFCFS : shortestSJF;
-//		pShortest = (shortestRR->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? shortestRR : pShortest;
-//		pShortest->pushToRDY(p);
-//	}
-//}	
-
 bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind, bool moveToWaitingList)
 {
 	Processor* pShortest = nullptr;
@@ -214,22 +171,6 @@ void Scheduler::simulation()
 		for (int i = 0; i < numberOfCPUs; i++) {				//to fill running list of all processors
 			processorsGroup[i]->scheduleAlgo(currentTimeStep);
 		}
-
-		/*for (int i = 0; i < numberOfCPUs; i++) {
-			double randNum = random();
-			if (randNum >= 1 && randNum <= 15)
-			{
-				processorsGroup[i]->movetoBLK();
-			}
-			if (randNum >= 20 && randNum <= 30)
-			{
-				processorsGroup[i]->movetoMyRDY();
-			}
-			if (randNum >= 50 && randNum <= 60)
-			{
-				processorsGroup[i]->movetoTRM();
-			}
-		}*/
 
 		ptr = nullptr;
 		double randNum = random();
