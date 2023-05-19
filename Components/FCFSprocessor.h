@@ -16,6 +16,6 @@ public:
 	void pushTopOfRDY(Process*& p);
 	virtual void printRDYList();
 	virtual bool kill(std::string idtoKill);
-	void fork();
+	void fork(std::string);
 };
 
