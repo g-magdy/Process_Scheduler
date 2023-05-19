@@ -404,9 +404,9 @@ void Scheduler::update()
 		ptr = overHeatWaitingList.Front();
 		if (moveToShortestRDY(ptr))
 		{
-		overHeatWaitingList.pop();
+			overHeatWaitingList.pop();
 			ptr = nullptr;
-	}
+		}
 		else
 			break;
 	}
@@ -593,7 +593,6 @@ Processor* Scheduler::getShortestProcessor()
 			else // compare with what I have currently
 				pShortest = (processorsGroup[i]->getExpectedFinishT() < pShortest->getExpectedFinishT()) ? processorsGroup[i] : pShortest;
 		}
-
 	}
 	return pShortest;
 }
@@ -611,7 +610,6 @@ Processor* Scheduler::getLongestProcessor()
 			else // compare with what I have currently
 				pLongest = (processorsGroup[i]->getExpectedFinishT() > pLongest->getExpectedFinishT()) ? processorsGroup[i] : pLongest;
 		}
-
 	}
 	return pLongest;
 }

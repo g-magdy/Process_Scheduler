@@ -9,7 +9,7 @@ bool Processor::overHeat()
 		int randomNumber = pScheduler->random();
 
 		//if the randomNumber fill with in the propapility
-		if (randomNumber <= pScheduler->getOverHeatingPropability())
+		if (randomNumber <= pScheduler->getOverHeatingPropability() && randomNumber > -1)
 		{
 			//change cpu state into stop
 			CPUstate = STOP;
@@ -81,6 +81,9 @@ std::string Processor::getID()
 
 CPU_STATE Processor::getCPUstate()
 {
+	if (CPUstate == STOP)
+		return STOP;
+
 	if (runningProcess)
 		return Busy;
 	else
