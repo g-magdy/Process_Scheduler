@@ -21,7 +21,8 @@ enum CPU_TYPE
 
 enum CPU_STATE {
 	Busy,		//MEAN the procssor is excuting a process
-	IDLE		//mean the reay list is empty 
+	IDLE,		//mean the reay list is empty 
+	STOP
 };
 
 enum RunningMode

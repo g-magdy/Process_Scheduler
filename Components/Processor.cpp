@@ -2,10 +2,56 @@
 #include"../Scheduler.h"
 
 
+bool Processor::overHeat()
+{
+	if (CPUstate != STOP)
+	{
+		int randomNumber = pScheduler->random();
+
+		//if the randomNumber fill with in the propapility
+		if (randomNumber <= pScheduler->getOverHeatingPropability())
+		{
+			//change cpu state into stop
+			CPUstate = STOP;
+			//move the runnig process
+			if (runningProcess)
+			{
+				pScheduler->moveToShortestRDY(runningProcess);
+				runningProcess = nullptr;
+			}
+			//move all the process in the rdy list
+			Process* tempPtr = nullptr;
+			while (pullFromRDY(tempPtr))
+			{
+				pScheduler->moveToShortestRDY(tempPtr);
+				tempPtr = nullptr;
+			}
+			//get the heating time steps
+			overHeatingTimeSteps = pScheduler->getOverHeatingTimeSteps();
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+	{
+		overHeatingTimeSteps--;
+
+		if (overHeatingTimeSteps <= 0) //if it has spend the overheating time
+		{
+			CPUstate = IDLE;
+			return false;
+		}
+		else
+			return true;
+	}
+}
+
 Processor::Processor(Scheduler* pscheduler, CPU_TYPE type, std::string s)
 	: CPUtype(type), pScheduler(pscheduler), ID(s)
 {
 	expectedFinishT = totalBusyT = totalIdleT = 0;
+	overHeatingTimeSteps = 0;
 	runningProcess = nullptr;
 	CPUstate = IDLE;
 }
