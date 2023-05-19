@@ -82,7 +82,7 @@ void Scheduler::run()
 //	}
 //}	
 
-bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
+bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind, bool moveToWaitingList)
 {
 	Processor* pShortest = nullptr;
 	if (p->getMyParent())
@@ -106,7 +106,8 @@ bool Scheduler::moveToShortestRDY(Process* p, CPU_TYPE kind)
 	}
 	else
 	{
-		overHeatWaitingList.push(p);
+		if(moveToWaitingList)
+			overHeatWaitingList.push(p);
 		return false;
 	}
 }
@@ -402,7 +403,7 @@ void Scheduler::update()
 	while (overHeatWaitingList.isEmpty() == false)
 	{
 		ptr = overHeatWaitingList.Front();
-		if (moveToShortestRDY(ptr))
+		if (moveToShortestRDY(ptr,NoCPU,false))
 		{
 			overHeatWaitingList.pop();
 			ptr = nullptr;
@@ -467,7 +468,7 @@ bool Scheduler::steal()
 							if (!toMove->getMyParent()) {
 								shortest->pushToRDY(toMove);
 								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-								for (int j = i-1; j <=0; j--)
+								for (int j = i-1; j >=0; j--)
 								{
 									fcfsP->pushTopOfRDY(forkedProcess[j]);
 								}
