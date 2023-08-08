@@ -65,3 +65,17 @@ void UI::showStatus(Processor** CPUList, int size, Queue<Process*>& BLKList, Que
 
 	std::cout << std::endl;
 }
+
+std::string UI::getInputfilename()
+{
+	std::string name;
+	std::cout << "WELCOME TO OUR PROCESS SCHEDULER, FRIEND :)\n\n";
+	std::cout << "Enter the input-file name (without .txt extension) or enter 'd' for default: ";
+	std::cin >> name;
+
+	// default
+	if (name.compare("d") == 0)
+		name = "sample1";
+
+	return name;
+}

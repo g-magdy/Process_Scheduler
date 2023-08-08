@@ -167,6 +167,8 @@
     <Text Include="files\input\sample4.txt" />
     <Text Include="files\input\sample5.txt" />
     <Text Include="files\input\sample6.txt" />
+    <Text Include="files\output\sample1-result.txt" />
+    <Text Include="files\output\sample3-result.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

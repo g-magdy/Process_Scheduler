@@ -23,10 +23,17 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 	AVGResponseT = AVGTurnRoundT = AVGUtilisation = AVGWaitingT = 0;
 }
 	
-void Scheduler::startUp()
+bool Scheduler::startUp()
 {
-	readInputFile();
-	runningMode = pUI->startUP();
+	if (readInputFile())
+	{
+		runningMode = pUI->startUP();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Scheduler::run()
@@ -207,12 +214,14 @@ Scheduler::~Scheduler()
 	delete pUI;
 }
 
-void Scheduler::readInputFile()
+bool Scheduler::readInputFile()
 {
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
-	ifstream myInputFile("SampleInputFile6.txt");
+	inputfilename = pUI->getInputfilename();
+	string path = "./files/input/" + inputfilename + ".txt";
+	ifstream myInputFile(path);
 	if (myInputFile.is_open())
 	{
 		// read into buffers
@@ -269,12 +278,19 @@ void Scheduler::readInputFile()
 			p.second = s;
 			killList.push(p);
 		}
+		return true;
+	}
+	else
+	{
+		pUI->print("Sorry, could not open this input file!\nPlease check the file name\n");
+		return false;
 	}
 }
 
 void Scheduler::createOutputFile()
 {
-	ofstream outF("sampleOutput6.txt", ios::out);
+	string path = "./files/output/" + inputfilename + "-result.txt";
+	ofstream outF(path, ios::out);
 	outF << setw(10) << left << "TT" << setw(10) << "PID" << setw(10) << "AT"<<setw(10)<<"CT"
 		<< setw(10) << "IO_D" << setw(10) << "WT" << setw(10) << "RT"
 		<< setw(10) << "TRT" << endl;
