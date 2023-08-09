@@ -130,6 +130,7 @@
     <ClInclude Include="Basic\List.h" />
     <ClInclude Include="Basic\Node.h" />
     <ClInclude Include="Basic\PriorityQueue.h" />
+    <ClInclude Include="Basic\PriorityQueueInterface.h" />
     <ClInclude Include="Basic\Queue.h" />
     <ClInclude Include="Basic\stack.h" />
     <ClInclude Include="Components\FCFSprocessor.h" />
@@ -153,23 +154,21 @@
     <ClCompile Include="Components\UI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scheduler.cpp" />
-    <ClCompile Include="snippets.cpp" />
-    <ClCompile Include="test130323.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="SampleInputFile1.txt" />
-    <Text Include="SampleInputFile3.txt" />
-    <Text Include="SampleInputFile4.txt" />
-    <Text Include="SampleInputFile2.txt" />
-    <Text Include="SampleInputFile5.txt" />
-    <Text Include="SampleInputFile6.txt" />
-    <Text Include="sampleOutput.txt" />
-    <Text Include="sampleOutput1.txt" />
-    <Text Include="sampleOutput2.txt" />
-    <Text Include="sampleOutput3.txt" />
-    <Text Include="sampleOutput4.txt" />
-    <Text Include="sampleOutput5.txt" />
-    <Text Include="sampleOutput6.txt" />
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="files\input\sample1.txt" />
+    <Text Include="files\input\sample2.txt" />
+    <Text Include="files\input\sample3.txt" />
+    <Text Include="files\input\sample4.txt" />
+    <Text Include="files\input\sample5.txt" />
+    <Text Include="files\input\sample6.txt" />
+    <Text Include="files\output\sample1-result.txt" />
+    <Text Include="files\output\sample3-result.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
