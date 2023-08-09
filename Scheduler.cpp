@@ -486,7 +486,7 @@ void Scheduler::updateConsole()
 
 	if (numberOfProcesses <= terminatedList.size())
 	{
-		pUI->print("Simulation Ends, Output file created.");
+		pUI->print("Simulation Ends, Output file created.\n");
 	}
 }
 
