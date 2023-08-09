@@ -398,77 +398,52 @@ Processor* Scheduler::createCPU(CPU_TYPE)
 
 bool Scheduler::steal()
 {
-	if (currentTimeStep % STL == 0)
+	// steal flag to indicate whether there was at least one successeful stealing operation or not
+	bool stealFlag = false;
+
+	if (currentTimeStep % STL != 0)
+		return stealFlag;
+
+	Processor* shortest = getShortestProcessor();
+	Processor* longest = getLongestProcessor();
+	if (!shortest || !longest)
+		return stealFlag;
+
+	// Helping pointer to steal, and a temp list to store the process that can't be stolen
+	Process* toMove = NULL;
+	List<Process*> tempList;
+	double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+
+	while (stealLimit > 40)
 	{
+		if (!longest->pullFromRDY(toMove)) // the longest CPU RDY list is empty
+			break;
 
-		Processor* shortest = getShortestProcessor();
-		Processor* longest = getLongestProcessor();
-		if (!shortest || !longest)
-			return false;
-		Process* toMove;
-		bool stealFlag = false;
-		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
-		while (stealLimit > 40)
+		if (!toMove->getMyParent()) // check that this process has no parent
 		{
-			if (longest->pullFromRDY(toMove)) {
-				if (!toMove->getMyParent()) {
-					shortest->pushToRDY(toMove);
-					numOfStolenProcess++;
-					stealFlag = true;
-				}
-				else
-				{
-					Process** forkedProcess = new Process*[numOfForkedProcess];
-					forkedProcess[0] = toMove;
-					for (int i = 1; i < numOfForkedProcess; i++)
-					{
-						if (longest->pullFromRDY(toMove))
-						{
-							if (!toMove->getMyParent()) {
-								shortest->pushToRDY(toMove);
-								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-								for (int j = i-1; j >=0; j--)
-								{
-									fcfsP->pushTopOfRDY(forkedProcess[j]);
-								}
-								delete []forkedProcess;
-								numOfStolenProcess++;
-								stealFlag = true;
-								break;
-
-							}
-							else
-							{
-								forkedProcess[i] = toMove;
-
-							}
-							
-						}
-						else
-						{
-							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-							for (int j = i - 1; j >= 0; j--)
-							{
-								fcfsP->pushTopOfRDY(forkedProcess[j]);
-							}
-							delete[]forkedProcess;
-							return stealFlag;
-						}
-					}
-				}
-
-
-
-			}
-			else
-				return stealFlag;
-			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+			shortest->pushToRDY(toMove);
+			numOfStolenProcess++;
+			stealFlag = true;
 		}
+		else // this is a forked process and can't be stolen
+			tempList.push_back(toMove);
 
+		// check the steal limit again
+		if (longest->getExpectedFinishT()) // making sure it doesn't equal zero to avoid division by zero
+			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		else break;
 	}
-	else
-		return 0;
 
+	// return any process in the tempList before exiting the function
+	if (!tempList.isEmpty()) {
+		FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+		while (!tempList.isEmpty())
+		{
+			tempList.pop_front(toMove);
+			fcfsP->pushTopOfRDY(toMove);
+		}
+	}
+	return stealFlag;
 }
 
 bool Scheduler::kill()
