@@ -23,10 +23,17 @@ Scheduler::Scheduler() : processorsGroup(nullptr), currentTimeStep(0), pUI(nullp
 	AVGResponseT = AVGTurnRoundT = AVGUtilisation = AVGWaitingT = 0;
 }
 	
-void Scheduler::startUp()
+bool Scheduler::startUp()
 {
-	readInputFile();
-	runningMode = pUI->startUP();
+	if (readInputFile())
+	{
+		runningMode = pUI->startUP();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Scheduler::run()
@@ -207,12 +214,14 @@ Scheduler::~Scheduler()
 	delete pUI;
 }
 
-void Scheduler::readInputFile()
+bool Scheduler::readInputFile()
 {
 	int timeSliceofRR;
 	int minTimeToFinish, MaxWait, stealLimit, forkProb;
 	int numProcesses;
-	ifstream myInputFile("SampleInputFile5.txt");
+	inputfilename = pUI->getInputfilename();
+	string path = "./files/input/" + inputfilename + ".txt";
+	ifstream myInputFile(path);
 	if (myInputFile.is_open())
 	{
 		// read into buffers
@@ -245,11 +254,10 @@ void Scheduler::readInputFile()
 			Process* nPtr = new Process(ID, arrival_t, cpu_t);
 			for (int i = 0; i < numIO; i++)
 			{
-				/// TOTEST : read pairs (t,d),(t,d),..
 				int t, d;
 				myInputFile.ignore(6, '(');
 				myInputFile >> t;
-				myInputFile.ignore(1, ','); /// there is a problem here ?
+				myInputFile.ignore(1, ','); 
 				myInputFile >> d;
 				myInputFile.ignore();
 				Pair<int, int> IO_p;
@@ -259,7 +267,7 @@ void Scheduler::readInputFile()
 			}
 			newList.push(nPtr);
 		}
-		///TOTEST : killing signal 
+		// killing signal 
 		while (!myInputFile.eof())
 		{
 			int at;
@@ -270,12 +278,19 @@ void Scheduler::readInputFile()
 			p.second = s;
 			killList.push(p);
 		}
+		return true;
+	}
+	else
+	{
+		pUI->print("Sorry, could not open this input file!\nPlease check the file name\n");
+		return false;
 	}
 }
 
 void Scheduler::createOutputFile()
 {
-	ofstream outF("sampleOutput5.txt", ios::out);
+	string path = "./files/output/" + inputfilename + "-result.txt";
+	ofstream outF(path, ios::out);
 	outF << setw(10) << left << "TT" << setw(10) << "PID" << setw(10) << "AT"<<setw(10)<<"CT"
 		<< setw(10) << "IO_D" << setw(10) << "WT" << setw(10) << "RT"
 		<< setw(10) << "TRT" << endl;
@@ -363,11 +378,10 @@ void Scheduler::update()
 		processorsGroup[i]->scheduleAlgo(currentTimeStep);
 	}
 
-	/// TODO: activate the stealing function
+	//stealing function
 	steal();
 
 	//serves IO requests of the Processes wating in the BLKList
-	/// TODO: activeate serveIO funcion
 	serveIO();
 
 	//Check for Killing signals at this time step
@@ -384,77 +398,52 @@ Processor* Scheduler::createCPU(CPU_TYPE)
 
 bool Scheduler::steal()
 {
-	if (currentTimeStep % STL == 0)
+	// steal flag to indicate whether there was at least one successeful stealing operation or not
+	bool stealFlag = false;
+
+	if (currentTimeStep % STL != 0)
+		return stealFlag;
+
+	Processor* shortest = getShortestProcessor();
+	Processor* longest = getLongestProcessor();
+	if (!shortest || !longest)
+		return stealFlag;
+
+	// Helping pointer to steal, and a temp list to store the process that can't be stolen
+	Process* toMove = NULL;
+	List<Process*> tempList;
+	double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+
+	while (stealLimit > 40)
 	{
+		if (!longest->pullFromRDY(toMove)) // the longest CPU RDY list is empty
+			break;
 
-		Processor* shortest = getShortestProcessor();
-		Processor* longest = getLongestProcessor();
-		if (!shortest || !longest)
-			return false;
-		Process* toMove;
-		bool stealFlag = false;
-		double stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
-		while (stealLimit > 40)
+		if (!toMove->getMyParent()) // check that this process has no parent
 		{
-			if (longest->pullFromRDY(toMove)) {
-				if (!toMove->getMyParent()) {
-					shortest->pushToRDY(toMove);
-					numOfStolenProcess++;
-					stealFlag = true;
-				}
-				else
-				{
-					Process** forkedProcess = new Process*[numOfForkedProcess];
-					forkedProcess[0] = toMove;
-					for (int i = 1; i < numOfForkedProcess; i++)
-					{
-						if (longest->pullFromRDY(toMove))
-						{
-							if (!toMove->getMyParent()) {
-								shortest->pushToRDY(toMove);
-								FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-								for (int j = i-1; j >=0; j--)
-								{
-									fcfsP->pushTopOfRDY(forkedProcess[j]);
-								}
-								delete []forkedProcess;
-								numOfStolenProcess++;
-								stealFlag = true;
-								break;
-
-							}
-							else
-							{
-								forkedProcess[i] = toMove;
-
-							}
-							
-						}
-						else
-						{
-							FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
-							for (int j = i - 1; j >= 0; j--)
-							{
-								fcfsP->pushTopOfRDY(forkedProcess[j]);
-							}
-							delete[]forkedProcess;
-							return stealFlag;
-						}
-					}
-				}
-
-
-
-			}
-			else
-				return stealFlag;
-			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+			shortest->pushToRDY(toMove);
+			numOfStolenProcess++;
+			stealFlag = true;
 		}
+		else // this is a forked process and can't be stolen
+			tempList.push_back(toMove);
 
+		// check the steal limit again
+		if (longest->getExpectedFinishT()) // making sure it doesn't equal zero to avoid division by zero
+			stealLimit = (100.00 * (longest->getExpectedFinishT() - shortest->getExpectedFinishT())) / longest->getExpectedFinishT();
+		else break;
 	}
-	else
-		return 0;
 
+	// return any process in the tempList before exiting the function
+	if (!tempList.isEmpty()) {
+		FCFSprocessor* fcfsP = dynamic_cast<FCFSprocessor*>(longest);
+		while (!tempList.isEmpty())
+		{
+			tempList.pop_front(toMove);
+			fcfsP->pushTopOfRDY(toMove);
+		}
+	}
+	return stealFlag;
 }
 
 bool Scheduler::kill()
@@ -497,7 +486,7 @@ void Scheduler::updateConsole()
 
 	if (numberOfProcesses <= terminatedList.size())
 	{
-		pUI->print("Simulation Ends, Output file created.");
+		pUI->print("Simulation Ends, Output file created.\n");
 	}
 }
 

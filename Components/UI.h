@@ -17,6 +17,8 @@ public:
 									     
 	void print(std::string sr);          // Prints a string given to it with no extra spaces or "endl"
 	char getInput();
+
+	std::string getInputfilename();
 									     
 	/*template<typename T>			     
 	void print(T* ob);*/				     

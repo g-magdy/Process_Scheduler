@@ -26,6 +26,7 @@ private:
 	RunningMode runningMode;
 	int indexOfNextCPU;
 	int randHelper;
+	std::string inputfilename;
   
 	int num_FCFS, num_SJF, num_RR;
 	int overHeatingPropability, overHeatingTimeSteps;
@@ -41,7 +42,7 @@ private:
 	float  forkPercentage;
 	float  AVGUtilisation;
 	//private functions
-	void readInputFile();
+	bool readInputFile();
 	void createOutputFile();
 	void update();
 	//Process* createProcess(std::string, int, int);
@@ -58,7 +59,7 @@ private:
   
 public:
 	Scheduler();
-	void startUp();
+	bool startUp();
 	void run();
 
 	// loops on processorsGroup in O(n) and calls pushToRDY(ptr)

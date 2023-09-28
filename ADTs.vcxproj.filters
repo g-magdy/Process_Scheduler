@@ -59,14 +59,11 @@
     <ClInclude Include="Scheduler.h">
       <Filter>Scheduler</Filter>
     </ClInclude>
+    <ClInclude Include="Basic\PriorityQueueInterface.h">
+      <Filter>CPUs &amp; Processes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test130323.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="snippets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,7 +99,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="SampleInputFile1.txt" />
-    <Text Include="sampleOutput1.txt" />
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="files\input\sample1.txt" />
+    <Text Include="files\input\sample2.txt" />
+    <Text Include="files\input\sample3.txt" />
+    <Text Include="files\input\sample4.txt" />
+    <Text Include="files\input\sample5.txt" />
+    <Text Include="files\input\sample6.txt" />
+    <Text Include="files\output\sample1-result.txt" />
+    <Text Include="files\output\sample3-result.txt" />
   </ItemGroup>
 </Project>

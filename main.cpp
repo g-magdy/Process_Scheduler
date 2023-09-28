@@ -1,16 +1,11 @@
-
 #include"Scheduler.h"
 
 int main()
 {
-
 	Scheduler ProScheduler;
 
-	ProScheduler.startUp();
-	
-	//ProScheduler.simulation();
-
-	ProScheduler.run();
+	if (ProScheduler.startUp())
+		ProScheduler.run();
 
 	return 0;
 }
