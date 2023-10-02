@@ -7,5 +7,6 @@ int main()
 	if (ProScheduler.startUp())
 		ProScheduler.run();
 
+	system("pause");
 	return 0;
 }
